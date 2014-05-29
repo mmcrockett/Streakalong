@@ -1,0 +1,18 @@
+<% @page_title = "Calendar" %>
+  <div ng-controller="CalendarController" class="navbar navbar-default" style="background-color:#FFFFFF;padding:5px 5px;">
+    <%= render :partial => "common/nav_bar" %>
+    <%= render :partial => "common/item_bar" %>
+    <div style="height:5px;width:5px;"></div>
+    <div>
+      <button class="calendar-nav calendar-nav-left"></button>
+      <button class="calendar-nav calendar-nav-today"></button>
+      <button class="calendar-nav calendar-nav-right"></button>
+      <span>{{display_selected_date()}}</span>
+      <input ng-date-picker type="hidden" value=""></input>
+    </div>
+    <div style="height:5px;width:5px;"></div>
+    <div class="navbar navbar-default">
+      <div class="col-2" style="height:100px;">
+      </div>
+    </div>
+  </div>

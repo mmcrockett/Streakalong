@@ -1,0 +1,26 @@
+      <div class="navbar navbar-default" id="items">
+        <ul class="nav nav-tabs">
+          <% Item.categorized.each do |category| %>
+            <% category.each_key do |name| %>
+              <li class="<%= if ("#{name}" == "#{UserPreference.items_tab(session)}"); 'active'; end %>"><a href="#<%=name%>" data-toggle="tab"><%=name%></a></li>
+            <% end %>
+          <% end %>
+        </ul>
+        <div class="tab-content">
+        <% Item.categorized.each do |category| %>
+          <% category.each_pair do |name,list| %>
+            <div class="tab-pane <%= if ("#{name}" == "#{UserPreference.items_tab(session)}"); 'active'; end %>" id="<%=name%>">
+            <% list.each do |item| %>
+              <%= image_tag "/assets/items/#{item}.png",
+                :id => "item_#{name}_#{item}",
+                :class => "items",
+                :alt => "#{item}", 
+                :title => "#{item}",
+                "ng-draggable" => "{revert: true}"
+               %>
+            <% end %>
+            </div>
+          <% end %>
+        <% end %>
+        </div>
+      </div>

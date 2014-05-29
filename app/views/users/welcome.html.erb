@@ -1,0 +1,29 @@
+<% @page_title = "Login" %>
+  <div class="welcome" ng-controller="UsersController">
+    <div class="front-login alert alert-danger" ng-show="error">{{error}}</div>
+    <div class="col-xs-4 well front-image"></div>
+    <div ng-class="{'col-xs-4 front-login':true, 'login-top-error':error, 'login-top-no-error':!error}">
+      <form class="well">
+        <!-- <input type="hidden" class="form-control" ng-model="login_data.url" value="<%= "hello" %>"> -->
+        <input type="text" class="form-control" placeholder="Username" autofocus required ng-model="login_data.username">
+        <div class="input-mini"></div>
+        <input type="password" class="form-control" placeholder="Password" required ng-model="login_data.password">
+        <div class="input-mini"></div>
+        <button class="btn btn-lg btn-primary btn-block" type="submit" ng-click="login()">Sign in</button>
+        <div class="input-mini"></div>
+      </form>
+    </div>
+    <div ng-class="{'col-xs-4 front-login':true, 'register-top-error':error, 'register-top-no-error':!error}">
+      <form class="well">
+        <h4>New to Streakalong?</h4>
+        <input type="text" class="form-control" placeholder="Name" ng-model="register_data.name" required>
+        <div class="input-mini"></div>
+        <input type="text" class="form-control" placeholder="Username" ng-model="register_data.username" required>
+        <div class="input-mini"></div>
+        <input type="password" class="form-control" placeholder="Password" ng-model="register_data.password" required>
+        <div class="input-mini"></div>
+        <button class="btn btn-lg btn-warning btn-block" type="submit" ng-click="register()">Sign up for Streakalong</button>
+        <div class="input-mini"></div>
+      </form>
+    </div>
+  </div>

@@ -1,0 +1,12 @@
+Streakalong::Application.routes.draw do
+  root :to => redirect('/calendar')
+  match 'useritems/:id', :to => 'user_items#show', :via => [:get]
+  match 'useritems', :to => 'user_items#create', :via => [:post]
+  match 'calendar', :to => 'user_items#calendar', :via => [:get]
+  match 'streaks',  :to => 'user_items#streaks', :via => [:get]
+  match 'welcome',  :to => 'users#welcome',  :via => [:get]
+  match 'register', :to => 'users#register', :via => [:post]
+  match 'login',    :to => 'users#login',    :via => [:post]
+  match 'logout',   :to => 'users#logout',   :via => [:get]
+  match 'key',      :to => 'users#key',      :via => [:get]
+end
