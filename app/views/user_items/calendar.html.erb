@@ -2,17 +2,16 @@
   <div ng-controller="CalendarController" class="navbar navbar-default" style="background-color:#FFFFFF;padding:5px 5px;">
     <%= render :partial => "common/nav_bar" %>
     <%= render :partial => "common/item_bar" %>
-    <div style="height:5px;width:5px;"></div>
     <div>
       <button class="calendar-nav calendar-nav-left"></button>
       <button class="calendar-nav calendar-nav-today"></button>
       <button class="calendar-nav calendar-nav-right"></button>
-      <span>{{display_selected_date()}}</span>
       <input ng-date-picker type="hidden" value=""></input>
+      <span class="text-muted" style="vertical-align:top;padding-left:5px;">{{display_month_year()}}</span>
     </div>
-    <div style="height:5px;width:5px;"></div>
-    <div class="navbar navbar-default">
-      <div class="col-2" style="height:100px;">
+    <div class="navbar navbar-default container-fluid">
+      <div class="row">
+        <div ng-repeat="offset in date_offsets()" ng-init="rel_date = date_relative_to_selected(offset)" ng-class="{'col-sm-4 datebox default-border-color': true, 'hidden-xs':$last || $first, 'leftdatebox':$first, 'rightdatebox':$last, 'centerdatebox':!$first && !$last}"><%= render :partial => "day.html.erb" %></div>
       </div>
     </div>
   </div>

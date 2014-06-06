@@ -4,11 +4,40 @@
 div.tab-pane img {
   padding: 2px 2px;
 }
-div.tab-content {
-  //height: 36px;
-}
 .items {
   cursor: move;
+}
+div.datebox {
+  height: 100px;
+  border-top-style: solid;
+  border-top-width: 4px;
+  border-bottom-style: solid;
+  border-bottom-width: 4px;
+  padding: 0px;
+}
+div.dateindicator {
+  background-color: #c4f7ed;
+}
+div.default-border-color {
+  border-color: #6ad4b0;
+}
+div.leftdatebox {
+  border-left-style: solid;
+  border-left-width: 4px;
+}
+div.rightdatebox {
+  border-right-style: solid;
+  border-right-width: 4px;
+}
+div.centerdatebox {
+  border-left-style: solid;
+  border-left-width: 2px;
+  border-right-style: solid;
+  border-right-width: 2px;
+}
+div.dayindicator {
+  border-bottom-style: solid;
+  border-bottom-width: 4px;
 }
 button.calendar-nav {
   border: none;
@@ -26,7 +55,6 @@ button.calendar-nav-today {
   background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAAXNSR0IArs4c6QAAAAlwSFlzAAAXEgAAFxIBZ5/SUgAAAAd0SU1FB9oEFRAcNDbTnhwAAAAddEVYdENvbW1lbnQAQ3JlYXRlZCB3aXRoIFRoZSBHSU1Q72QlbgAAAYBJREFUKM+V0ksvQ0EUB/D/mbn3um09GtG0Gq3YeSSNBdEFX8BCWDWxtLBgx1ewJCQNS5/Awjew8KgFiYUd0UdaJN43qfZy7xyLVks1wlnOnN9k/nOGFs93Tanjb2W7jmZKfbV/sskmA9S4lsyktJ+db8rZuT2/s4uJcCzU0sbMRFWqoET9RGYA78rdzp9cFh9ccDJzlCs917orVQdEZCtnPX1QKFsLvfGlvvEej38rd3xdtpqDx/fXlcs9F7zcN9Fl+ADMR0b7fYG19H629NQILor3q1f7EbN9IRr3657K9SSJ2fBw3B/dyByevhTqwHLszexxoWxNB4c6dLOWkpkNIaeCA7ZytvMnZ9aNgBAAvEKbCQ0GDK8mZCVMLRUAAhEoEY4FDR+DBQBNyDF/VJL4ZWRDrcFus70KADisfp+xy9z4Sn+sfwPt01HA8G2kD37+HzDaZIv2mbAKvFKfi4zYygXzN8MAQUB06h4AAkKzXSeZSSkoanL4V8gClCs9fwAMdo7nahe1owAAAABJRU5ErkJggg==) no-repeat center center;
 }
 button.ui-datepicker-trigger {
-  float: right;
   border: none;
   height: 24px;
   width: 24px;
