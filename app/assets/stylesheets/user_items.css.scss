@@ -9,9 +9,10 @@ div.tab-content {
 }
 .items {
   cursor: move;
+  z-index: 9999;
 }
 div.datebox {
-  height: 100px;
+  min-height: 180px;
   border-top-style: solid;
   border-top-width: 4px;
   border-bottom-style: solid;
