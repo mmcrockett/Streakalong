@@ -6,7 +6,11 @@ app.controller('CalendarController', ['$scope', '$http', 'UserItems', function($
 
       return parts;
     } catch(e) {
-      return ["Mon", "Jan", "01", "1969"];
+      try {
+        return new Date().toDateString().split(" ");
+      } catch(e) {
+        return ["Mon", "Jan", "01", "1969"];
+      }
     }
   };
   $scope.display_month_year = function(){
