@@ -1,17 +1,30 @@
 <% @page_title = "Calendar" %>
-  <div ng-controller="CalendarController" class="navbar navbar-default" style="background-color:#FFFFFF;padding:5px 5px;">
+  <div ng-controller="CalendarController" class="navbar navbar-default" style="background-color:#FFFFFF;padding:5px 5px;" ng-init="setup_items(<%= Item::ALL.to_json %>)">
     <%= render :partial => "common/nav_bar" %>
     <%= render :partial => "common/item_bar" %>
+    <div class="streak-error">
+      <p class="small text-muted bg-danger" ng-show="error">!ERROR: {{error}}</p>
+    </div>
     <div>
       <button class="calendar-nav calendar-nav-left"></button>
       <button class="calendar-nav calendar-nav-today"></button>
       <button class="calendar-nav calendar-nav-right"></button>
       <input ng-date-picker type="hidden" value=""></input>
-      <span class="text-muted" style="vertical-align:top;padding-left:5px;">{{display_month_year()}}</span>
+      <span class="text-muted" style="vertical-align:top;padding-left:5px;">{{selected_date | date : 'MMM yyyy'}}</span>
     </div>
     <div class="navbar navbar-default container-fluid">
       <div class="row">
-        <div ng-repeat="offset in date_offsets()" ng-init="rel_date = date_relative_to_selected(offset)" ng-class="{'col-sm-4 datebox default-border-color': true, 'hidden-xs':$last || $first, 'leftdatebox':$first, 'rightdatebox':$last, 'centerdatebox':!$first && !$last}"><%= render :partial => "day.html.erb" %></div>
+        <div ng-repeat="offset in date_offsets()" ng-droppable="{hoverClass: 'daydata-active'}" ng-init="rel_date = date_relative_to_selected(offset)" ng-class="{'col-sm-4 datebox default-border-color': true, 'hidden-xs':$last || $first, 'leftdatebox':$first, 'rightdatebox':$last, 'centerdatebox':!$first && !$last}">
+          <div class="text-center text-muted default-border-color dayindicator" ng-editable>{{rel_date | date : 'EEE'}}</div>
+          <div class="text-right text-muted dateindicator" style="padding-right:4px;"><small>{{rel_date | date : 'MMM d'}}</small></div>
+          <div class="text-muted small" style="width:100%;height:100%" ng-if="!user_items[rel_date]" ng-init="get_user_items(rel_date)">
+              <%= image_tag("/assets/indicator_large.gif") %>
+          </div>
+          <div ng-repeat="item in user_items[rel_date]" class="daydata-container">
+            <%= render :partial => "common/item_image", :locals => {:category => 'daydata', :type => '{{items[item.item_id]}}', :id => '{{item.item_id}}'} %>
+            <div class="count text-center">{{item.amount}}</div>
+          </div>
+        </div>
       </div>
     </div>
   </div>

@@ -11,6 +11,17 @@ div.tab-content {
   cursor: move;
   z-index: 9999;
 }
+.daydata-active {
+  background-color: #fdffeb;
+}
+div.itemcontainer {
+  width: 32px;
+  height: 40px;
+  padding: 1px;
+  float: left;
+  position: relative;
+  top: 0px;
+}
 div.datebox {
   min-height: 180px;
   border-top-style: solid;
@@ -64,4 +75,31 @@ button.ui-datepicker-trigger {
   width: 24px;
   cursor: pointer;
   background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAAAZiS0dEAL8A8QDgf9jfJQAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB94FHBUvMW/g6WQAAAPdSURBVEjHrZW/bxxFFMc/M/vzFseX2CQOFiGisJDoaOn5W9JQISREgwSIgi4RBUhIaVwEiQ7JtBS0VhRERSSU2CjK+ZKLfb7b2x8z8x7Fnp34/AMJeKunnZ2dfd/9ft+bN4aXZoCY/8c8oCwEfOvLP395nNuYLIrJbMzxeP6cRTFehCZ4GnHUwdOIpxbfzQVPLY4v3v3gbRyPAewrAFdAu0sV9OVYVREVWvF4FUQV0aPVoEdjMxfCsnoU9FUGpgsGokpACSoEFK8BBOwc1KsQCAQ6YEVO/MxcbgPoCc27wIJgCCp4NVgJAAQDloAaunciBBGCaueiCIKonEjGCYCgMv/YYhGsMSABVcVai8V0cqF4ERwBJ6EDm4OEjsHZAF4FK4K1AaOAgBoQo1gVjOlqQ+iC+SMAFbyGuaQXMRChkpbqP9SnAbIoo6E5DfDpG+8HVCNjDMZarDGYcxw4vi/ad/E5AMYYRBUVQUPg4OCAS8vLTA4PSdMUYwx1XdPv9xkOh9y4cYO9vT1WVlY4/P0Kyes1a+8k50tkjOkSO/fXlpbo5TmokmUZIQSKoiBJEq5du0aSJFy+fJmiKOBNJeunLJKyi/q1bctoNAJVqqqirmvatqUsS7z3jEYjQgiMx2NEhMlkQtM01IcwHbenZLOLDDCGJEkwxhBHEXmeA9Dr9QBYXl4GIM9zjDGkaUqWZRgMvV5+Kh/2ZAl0Qb33Xd1bi4iQpilt25KmKSJCkiR474miiGi+PlkOtDK7GMAArXOICCJCVXUFO5lMMMYwnU7x3lPXNc45nHOUZdlJtRuhVYr3/uIkF70edk59ZWWFOI65evUqAEtLS7RteyxXFEX0+31EhEsbJRI52jZh3qr1tERAVVWMRiOccwyHQ5xzDAYDyrJkf3+f58+fM51OGQwGzGYznj17xmQy4eCPnHJg2NnZ+att2/JMBgBFUZDnOUmSsL6+TpZlrK+vE8fxcbdUVdbW1ggh0DQNs9mM3hXHeDra/+rrzz+u6/rxuUmuqoqHDx/inGNnZ4fpdMqTJ094+vQpL168YHd3lxAC1trjTbexsUFjxrNvv//mk62trZ+B+uwcAGmacvPmTeI45vr16xRFwerqKr1eD+fccdmKCGU5oyh6PHr0qL579+5nm5ubPwLT8/rUe7PZzFdVpU3TaNu26pxT77167zWEoCEEretax+Ox7u3t6YMHv+n9+/fHt27d+rA7EU/bvz7kVZW6roZ37tz56N69ez8Bk38CmG5vb/+gEJlXOuXi1hcRQgh47/3t27c3t7a2foXzO7xZAMvPmD+TwNxrIFy08G8P0Xuth8UsRwAAAABJRU5ErkJggg==) no-repeat center center;
+}
+.daydata-items {
+  cursor: move;
+}
+div.daydata-container {
+  padding: 1px 1px 1px 1px;
+  position: relative;
+  float: left;
+  top: 0;
+  width: 34px;
+  height: 40px;
+}
+div.count {
+    font-family: verdana,arial,san-serif;
+    font-size: 8px;
+    height: 8px;
+}
+div.streak-error {
+  min-height: 40px;
+  margin-bottom: 5px;
+  padding: 5px;
+}
+div.streak-error p {
+  padding: 5px;
+  margin: 0px;
+  border-top-left-radius: 3px;
+  border-top-right-radius: 3px;
 }

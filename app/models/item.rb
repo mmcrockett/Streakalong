@@ -8,4 +8,12 @@ class Item
   def self.categorized
     return [{:all => ALL}, {:recent => []}, {:foods => FOODS}, {:beverages => BEVERAGES}, {:activities => ACTIVITIES}, {:other => OTHER}]
   end
+
+  def self.name(id)
+    return ALL[id] || ""
+  end
+
+  def self.id(name)
+    return ALL.index(name) || 0
+  end
 end

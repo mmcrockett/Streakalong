@@ -1,23 +1,17 @@
       <div class="navbar navbar-default" id="items">
         <ul class="nav nav-tabs">
           <% Item.categorized.each do |category| %>
-            <% category.each_key do |name| %>
-              <li class="<%= if ("#{name}" == "#{UserPreference.items_tab(session)}"); 'active'; end %>"><a href="#<%=name%>" data-toggle="tab"><%=name%></a></li>
+            <% category.each_key do |category_name| %>
+              <li class="<%= if ("#{category_name}" == "#{UserPreference.items_tab(session)}"); 'active'; end %>"><a href="#<%=category_name%>" data-toggle="tab"><%=category_name%></a></li>
             <% end %>
           <% end %>
         </ul>
         <div class="tab-content">
         <% Item.categorized.each do |category| %>
-          <% category.each_pair do |name,list| %>
-            <div class="tab-pane <%= if ("#{name}" == "#{UserPreference.items_tab(session)}"); 'active'; end %>" id="<%=name%>">
-            <% list.each do |item| %>
-              <%= image_tag "/assets/items/#{item}.png",
-                :id => "item_#{name}_#{item}",
-                :class => "items",
-                :alt => "#{item}", 
-                :title => "#{item}",
-                "ng-draggable" => "{revert: true}"
-               %>
+          <% category.each_pair do |category_name,list| %>
+            <div class="tab-pane <%= if ("#{category_name}" == "#{UserPreference.items_tab(session)}"); 'active'; end %>" id="<%=category_name%>">
+            <% list.each do |item_type| %>
+              <%= render :partial => "common/item_image", :locals => {:category => category_name, :type => item_type, :id => Item.id(item_type)} %>
             <% end %>
             </div>
           <% end %>

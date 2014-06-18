@@ -14,20 +14,20 @@
 ActiveRecord::Schema.define(:version => 20131003193802) do
 
   create_table "user_items", :force => true do |t|
-    t.decimal  "amount",     :precision => 10, :scale => 2, :null => false
-    t.integer  "user_id",                                   :null => false
-    t.integer  "item_id",                                   :null => false
-    t.date     "date",                                      :null => false
-    t.datetime "created_at",                                :null => false
-    t.datetime "updated_at",                                :null => false
+    t.integer  "amount",     :null => false
+    t.integer  "user_id",    :null => false
+    t.integer  "item_id",    :null => false
+    t.date     "date",       :null => false
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
 
   create_table "users", :force => true do |t|
-    t.string   "name"
-    t.string   "username"
-    t.string   "hashed_password"
-    t.string   "salt"
-    t.string   "preferences"
+    t.string   "name",            :null => false
+    t.string   "username",        :null => false
+    t.string   "hashed_password", :null => false
+    t.string   "salt",            :null => false
+    t.string   "preferences",     :null => false
     t.datetime "created_at",      :null => false
     t.datetime "updated_at",      :null => false
   end
