@@ -4,7 +4,14 @@ app.directive('ngDroppable', function($compile) {
       value['drop'] = function(e, ui){
         scope.$apply(function() {
           var dragElem = jQuery(ui.draggable);
-          scope.update_amount(1, dragElem.attr('item-id'), scope.rel_date);
+          var dragDate = dragElem.data('item-date');
+
+          if (scope.rel_date != dragDate) {
+            scope.update_amount(1, dragElem.attr('item-id'), scope.rel_date);
+            if (true == scope.isDayItem(dragElem.attr('category'))) {
+              scope.update_amount(-1, dragElem.attr('item-id'), dragDate);
+            }
+          }
         });
       };
       element.droppable(value);

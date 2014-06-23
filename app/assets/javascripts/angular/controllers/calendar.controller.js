@@ -4,6 +4,15 @@ app.controller('CalendarController', ['$scope', '$http', 'UserItem', 'filterFilt
   $scope.selected_date;
   $scope.user_items = {};
   $scope.items = [];
+  $scope.isDayItem = function(category) {
+    if (true == angular.isString(category)) {
+      if ('daydata' == category) {
+        return true;
+      }
+    }
+
+    return false;
+  };
   $scope.clear_error = function() {
     $scope.error = "";
   };
@@ -16,9 +25,6 @@ app.controller('CalendarController', ['$scope', '$http', 'UserItem', 'filterFilt
   $scope.date_relative_to_selected = function(offset) {
     var day_in_millis = 24 * 60 * 60 * 1000;
     return new Date($scope.selected_date.valueOf() + day_in_millis * offset);
-  };
-  $scope.date_identifier = function(d) {
-    return d.toJSON().substr(0, 10);
   };
   $scope.date_offsets = function() {
     return [-1, 0, 1];
@@ -40,22 +46,5 @@ app.controller('CalendarController', ['$scope', '$http', 'UserItem', 'filterFilt
     } else {
       log.warning("Still loading data...");
     }
-  };
-  $scope.process_value = function(v, settings) {
-    alert('whody');
-  };
-  $scope.user_item_value = function(item, rel_date) {
-    var v = 0;
-    var date_identifier = $scope.date_identifier(rel_date);
-    var user_items_by_date = $scope.user_items[date_identifier];
-
-    if (true == angular.isObject(user_items_by_date)) {
-      var _value = user_items_by_date[item];
-      if (true == angular.isNumber(_value)) {
-        v = _value;
-      }
-    }
-
-    return v;
   };
 }]);

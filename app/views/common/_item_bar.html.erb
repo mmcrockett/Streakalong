@@ -11,7 +11,9 @@
           <% category.each_pair do |category_name,list| %>
             <div class="tab-pane <%= if ("#{category_name}" == "#{UserPreference.items_tab(session)}"); 'active'; end %>" id="<%=category_name%>">
             <% list.each do |item_type| %>
+              <span ng-dblclick="update_amount(1,<%= Item.id(item_type) %>, selected_date)">
               <%= render :partial => "common/item_image", :locals => {:category => category_name, :type => item_type, :id => Item.id(item_type)} %>
+              </span>
             <% end %>
             </div>
           <% end %>

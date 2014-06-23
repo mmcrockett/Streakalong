@@ -20,7 +20,7 @@
           <div class="text-muted small" style="width:100%;height:100%" ng-if="!user_items[rel_date]" ng-init="get_user_items(rel_date)">
               <%= image_tag("/assets/indicator_large.gif") %>
           </div>
-          <div ng-repeat="item in user_items[rel_date]" class="daydata-container">
+          <div ng-repeat="item in user_items[rel_date]" ng-if="item.amount != 0" class="daydata-container" ng-dblclick="update_amount(-1,item.item_id,rel_date)">
             <%= render :partial => "common/item_image", :locals => {:category => 'daydata', :type => '{{items[item.item_id]}}', :id => '{{item.item_id}}'} %>
             <div class="count text-center">{{item.amount}}</div>
           </div>
