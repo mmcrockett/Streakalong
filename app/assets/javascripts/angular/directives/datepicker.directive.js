@@ -9,6 +9,7 @@ app.directive('ngDatePicker', function() {
                           }
                         }).datepicker("setDate", "0");
       scope.set_display_dates(element.datepicker("getDate"));
+      scope.datepicker_element = element;
     });
   }
 });

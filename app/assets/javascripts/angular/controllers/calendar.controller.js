@@ -4,6 +4,18 @@ app.controller('CalendarController', ['$scope', '$http', 'UserItem', 'filterFilt
   $scope.display_dates = [];
   $scope.user_items = {};
   $scope.items = [];
+  $scope.datepicker_element;
+  $scope.change_date = function(offset) {
+    if (true == angular.isObject($scope.datepicker_element)) {
+      if (0 == offset) {
+        $scope.datepicker_element.datepicker("setDate", "0");
+      } else {
+        var d = $scope.datepicker_element.datepicker("getDate");
+        $scope.datepicker_element.datepicker("setDate", d.ago(-offset));
+      }
+      $scope.set_display_dates($scope.datepicker_element.datepicker("getDate"));
+    }
+  };
   $scope.isDayItem = function(category) {
     if (true == angular.isString(category)) {
       if ('daydata' == category) {

@@ -6,9 +6,9 @@
       <p class="small text-muted bg-danger" ng-show="error">!ERROR: {{error}}</p>
     </div>
     <div>
-      <button class="calendar-nav calendar-nav-left"></button>
-      <button class="calendar-nav calendar-nav-today"></button>
-      <button class="calendar-nav calendar-nav-right"></button>
+      <button class="calendar-nav calendar-nav-left" ng-click="change_date(-1)"></button>
+      <button class="calendar-nav calendar-nav-today" ng-click="change_date(0)"></button>
+      <button class="calendar-nav calendar-nav-right" ng-click="change_date(1)"></button>
       <input ng-date-picker type="hidden" value="" style="z-index:2;"></input>
       <span class="text-muted" style="vertical-align:top;padding-left:5px;">{{selected_date() | date : 'MMM yyyy'}}</span>
     </div>
