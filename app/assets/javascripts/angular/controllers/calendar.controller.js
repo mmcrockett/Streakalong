@@ -1,7 +1,7 @@
 app.controller('CalendarController', ['$scope', '$http', 'UserItem', 'filterFilter', function($scope, $http, UserItem, filter) {
   $scope.error  = "";
   $scope.filter = filter;
-  $scope.selected_date;
+  $scope.display_dates = [];
   $scope.user_items = {};
   $scope.items = [];
   $scope.isDayItem = function(category) {
@@ -22,12 +22,11 @@ app.controller('CalendarController', ['$scope', '$http', 'UserItem', 'filterFilt
   $scope.get_user_items = function(d) {
     $scope.user_items[d] = UserItem.query({date: d.getTime()});
   };
-  $scope.date_relative_to_selected = function(offset) {
-    var day_in_millis = 24 * 60 * 60 * 1000;
-    return new Date($scope.selected_date.valueOf() + day_in_millis * offset);
+  $scope.selected_date = function() {
+    return $scope.display_dates[1];
   };
-  $scope.date_offsets = function() {
-    return [-1, 0, 1];
+  $scope.set_display_dates = function(selected_date) {
+    $scope.display_dates = [selected_date.ago(1), selected_date, selected_date.ago(-1)];
   };
   $scope.update_amount = function(amt, item_id, d) {
     var date_data = $scope.user_items[d];
