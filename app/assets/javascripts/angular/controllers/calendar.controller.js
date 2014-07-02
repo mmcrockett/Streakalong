@@ -1,5 +1,4 @@
 app.controller('CalendarController', ['$scope', '$http', 'UserItem', 'filterFilter', function($scope, $http, UserItem, filter) {
-  $scope.test   = "hello";
   $scope.error  = "";
   $scope.filter = filter;
   $scope.display_dates = [];
