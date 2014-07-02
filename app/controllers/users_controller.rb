@@ -10,8 +10,7 @@ class UsersController < ApplicationController
 
     respond_to do |format|
       if user.valid?
-        session[:user_id] = user.id
-        session[:preferences] = user.preferences
+        session[:user] = user
         format.json { render json: {}, status: :accepted}
       else
         if (true == user.errors.has_key?(:password))
@@ -31,8 +30,7 @@ class UsersController < ApplicationController
 
     respond_to do |format|
       if user
-        session[:user_id] = user.id
-        session[:preferences] = user.preferences
+        session[:user] = user
         format.json { render json: {}, status: :accepted }
       else
         format.json { render json: {}, status: :unauthorized }

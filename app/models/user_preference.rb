@@ -1,7 +1,15 @@
 class UserPreference
+  ITEM_TAB = 'item_tab'
+  RECENT   = 'recent'
+
+  DEFAULTS = {
+    ITEM_TAB => 'all',
+    RECENT   => []
+  }
+
   def self.items_tab(session)
-    if ((nil != session) && (nil != session[:preferences]) && (nil != session[:preferences][:items_tab]))
-      return session[:preferences][:items_tab]
+    if (nil != @user)
+      return @user.preferences[ITEM_TAB]
     else
       return "all"
     end

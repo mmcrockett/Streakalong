@@ -9,7 +9,7 @@ class User < ActiveRecord::Base
   validates :username, :length => { :minimum => 6, :maximum => 20 }
   validates :username, :uniqueness => true
   validates :name, :presence => true
-  validates :name, :length => { :minimum => 4, :maximum => 20 }
+  validates :name, :length => { :minimum => 3, :maximum => 20 }
   validates :password, :presence => true
   validates :password, :length => { :minimum => 6, :maximum => 20 }
   validates :hashed_password, :presence => true
@@ -89,6 +89,6 @@ private
   end
 
   def set_preferences_default
-    self.preferences ||= {}
+    self.preferences = UserPreference::DEFAULTS
   end
 end

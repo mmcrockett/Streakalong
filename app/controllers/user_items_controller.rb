@@ -11,13 +11,13 @@ class UserItemsController < ApplicationController
     requested_date = Time.at(params[:date].to_i/1000).to_date()
 
     respond_to do |format|
-      format.json { render :json => UserItem.where("user_id = ? AND date = ?", @user_id, requested_date) }
+      format.json { render :json => UserItem.where("user_id = ? AND date = ?", @user.id, requested_date) }
     end
   end
 
   def create
     @user_item = UserItem.new(params[:user_item])
-    @user_item.user_id = @user_id
+    @user_item.user_id = @user.id
 
     respond_to do |format|
       if @user_item.save
@@ -30,7 +30,7 @@ class UserItemsController < ApplicationController
 
   def update
     params[:user_item].delete(:user_id)
-    @user_item = UserItem.where("id = ? AND user_id = ?", params[:id], @user_id).first
+    @user_item = UserItem.where("id = ? AND user_id = ?", params[:id], @user.id).first
 
     respond_to do |format|
       if (nil == @user_item)
