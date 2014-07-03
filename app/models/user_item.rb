@@ -14,7 +14,7 @@ class UserItem < ActiveRecord::Base
   private
   def non_zero_amount 
     if (0 > self.amount)
-        self.amount = 0
+      self.amount = 0
     end
   end
 end

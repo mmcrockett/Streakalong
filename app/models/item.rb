@@ -5,15 +5,41 @@ class Item
   OTHER      = ["weight","tobacco","toothbrush","floss","mouthwash"]
   ALL        = FOODS + BEVERAGES + ACTIVITIES + OTHER
 
-  def self.categorized
-    return [{:all => ALL}, {:recent => []}, {:foods => FOODS}, {:beverages => BEVERAGES}, {:activities => ACTIVITIES}, {:other => OTHER}]
-  end
-
   def self.name(id)
-    return ALL[id] || ""
+    name = ALL[id]
+
+    if (nil == name)
+      raise "!ERROR: Couldn't find item with id:'#{id}'."
+    end
+
+    return name
   end
 
   def self.id(name)
-    return ALL.index(name) || 0
+    name.downcase!
+
+    if ("breads & grains" == name)
+      id = ALL.index("grain")
+    elsif ("snacks" == name)
+      id = ALL.index("snack")
+    elsif ("sweets" == name)
+      id = ALL.index("sweet")
+    elsif ("meats, beans & proteins" == name)
+      id = ALL.index("protein")
+    elsif ("Sauces, Oils & Butter".downcase == name)
+      id = ALL.index("condiment")
+    elsif ("Work Out".downcase == name)
+      id = ALL.index("workout")
+    elsif ("sports drink" == name)
+      id = ALL.index("sports_drink")
+    else
+      id = ALL.index(name)
+    end
+
+    if (nil == id)
+      raise "!ERROR: Couldn't find item with name:'#{name}'."
+    end
+
+    return id
   end
 end

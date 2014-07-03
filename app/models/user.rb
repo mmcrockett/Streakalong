@@ -6,10 +6,10 @@ class User < ActiveRecord::Base
   serialize :preferences, JSON
   before_create :set_preferences_default
   validates :username, :presence => true
-  validates :username, :length => { :minimum => 6, :maximum => 20 }
+  validates :username, :length => { :minimum => 6, :maximum => 60 }
   validates :username, :uniqueness => true
   validates :name, :presence => true
-  validates :name, :length => { :minimum => 3, :maximum => 20 }
+  validates :name, :length => { :minimum => 3, :maximum => 60 }
   validates :password, :presence => true
   validates :password, :length => { :minimum => 6, :maximum => 20 }
   validates :hashed_password, :presence => true
@@ -76,6 +76,30 @@ class User < ActiveRecord::Base
     @password = pwd
     create_new_salt
     self.hashed_password = User.encrypted_password(self.password, self.salt)
+  end
+
+  def item_tab
+    return self.preferences[UserPreference::ITEM_TAB]
+  end
+
+  def recent_items
+    return self.preferences[UserPreference::RECENT]
+  end
+
+  def categorized_items
+    return [{:all => Item::ALL},{:recent => self.recent_items},{:foods  => Item::FOODS},{:beverages  => Item::BEVERAGES},{:activities => Item::ACTIVITIES},{:other => Item::OTHER}]
+  end
+
+  def preferredTab?(name)
+    if (true == name.is_a?(Symbol))
+      name = "#{name}"
+    end
+
+    if (false == name.is_a?(String))
+      raise "!ERROR: name is not a string. Type: '#{name.class}'. Value: '#{name}'."
+    end
+
+    return (self.item_tab == name)
   end
   
 private
