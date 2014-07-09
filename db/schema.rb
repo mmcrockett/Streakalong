@@ -17,6 +17,7 @@ ActiveRecord::Schema.define(:version => 20140702190831) do
     t.date     "start",      :null => false
     t.date     "end",        :null => false
     t.integer  "length",     :null => false
+    t.integer  "item_id",    :null => false
     t.integer  "user_id",    :null => false
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false

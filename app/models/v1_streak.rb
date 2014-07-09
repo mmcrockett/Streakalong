@@ -43,4 +43,15 @@ class V1Streak < ActiveRecord::Base
 
     return streak
   end
+
+  def self.get_date_obj(integer_date)
+    if (true == integer_date.is_a?(Date))
+      return integer_date
+    else
+      date_str = String(integer_date)[0, 4] + "-" + String(integer_date)[4, 2] + "-" + String(integer_date)[6, 2]
+      date_obj = Date.strptime(date_str, "%Y-%m-%d")
+
+      return date_obj
+    end
+  end
 end
