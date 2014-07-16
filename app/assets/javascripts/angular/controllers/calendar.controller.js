@@ -6,6 +6,7 @@ app.controller('CalendarController', ['$scope', '$http', 'UserItem', 'User', 'fi
   $scope.user_items = {};
   $scope.items = [];
   $scope.datepicker_element;
+  $scope.today = null;
   $scope.parse_statement = function(exp, initial_value) {
     var value = 0;
 
@@ -80,6 +81,10 @@ app.controller('CalendarController', ['$scope', '$http', 'UserItem', 'User', 'fi
     return $scope.display_dates[1];
   };
   $scope.set_display_dates = function(selected_date) {
+    if (null == $scope.today) {
+      $scope.today = new Date(selected_date);
+    }
+
     $scope.display_dates = [selected_date.ago(1), selected_date, selected_date.ago(-1)];
   };
   $scope.process_amount = function(expression, item_id, d) {
@@ -101,6 +106,13 @@ app.controller('CalendarController', ['$scope', '$http', 'UserItem', 'User', 'fi
       }
     } catch (e) {
       $scope.error = "Still loading data...";
+    }
+  };
+  $scope.is_today = function(d) {
+    if (true == angular.isObject($scope.today)) {
+      return ($scope.today.getTime() == d.getTime());
+    } else {
+      return false;
     }
   };
   $scope.is_recent = function(item_type) {

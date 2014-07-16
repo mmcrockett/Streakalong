@@ -8,7 +8,7 @@
   <%= stylesheet_link_tag "//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css", :media => "all" %>
   <%= stylesheet_link_tag "http://code.jquery.com/ui/1.10.4/themes/cupertino/jquery-ui.min.css", :media => "all" %>
   <%= javascript_include_tag "//code.jquery.com/jquery-2.1.1.min.js" %>
-  <%= javascript_include_tag "http://code.jquery.com/ui/1.10.4/jquery-ui.min.js" %>
+  <%= javascript_include_tag "http://code.jquery.com/ui/1.11.0/jquery-ui.min.js" %>
   <%= javascript_include_tag "//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js" %>
   <%= javascript_include_tag "https://ajax.googleapis.com/ajax/libs/angularjs/1.2.6/angular.min.js" %>
   <%= javascript_include_tag "https://ajax.googleapis.com/ajax/libs/angularjs/1.2.6/angular-resource.min.js" %>
@@ -21,5 +21,15 @@
 <%= yield %>
     </div>
   </div>
+  <%= javascript_tag("
+    jQuery(document).ready(
+      function() {
+        var old_gotoToday = jQuery.datepicker._gotoToday;
+        jQuery.datepicker._gotoToday = function(id) {
+          old_gotoToday.call(this,id);
+          this._selectDate(id);
+        };
+      }
+    )") %>
 </body>
 </html>
