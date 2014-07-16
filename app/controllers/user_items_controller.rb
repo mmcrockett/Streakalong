@@ -21,6 +21,7 @@ class UserItemsController < ApplicationController
 
     respond_to do |format|
       if @user_item.save
+        @user.add_preference(UserPreference::RECENT, @user_item.item_id)
         format.json { render :json => @user_item, :status => :created, :location => @user_item}
       else
         format.json { render :json => @user_item.errors, :status => :unprocessable_entity }
@@ -36,6 +37,7 @@ class UserItemsController < ApplicationController
       if (nil == @user_item)
         format.json { render :json => {}, :status => :unprocessable_entity }
       elsif (@user_item.update_attributes(params[:user_item]))
+        @user.add_preference(UserPreference::RECENT, @user_item.item_id)
         format.json { render :json => @user_item }
       else
         format.json { render :json  => user_item.errors, :status => :unprocessable_entity }

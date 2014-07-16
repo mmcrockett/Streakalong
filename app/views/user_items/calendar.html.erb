@@ -1,5 +1,5 @@
 <% @page_title = "Calendar" %>
-  <div ng-controller="CalendarController" class="navbar navbar-default" style="background-color:#FFFFFF;padding:5px 5px;" ng-init="setup_items(<%= Item::ALL.to_json %>)">
+  <div ng-controller="CalendarController" class="navbar navbar-default" style="background-color:#FFFFFF;padding:5px 5px;" ng-init="setup_items(<%= Item::ALL.to_json %>);get_recent()">
     <%= render :partial => "common/nav_bar" %>
     <%= render :partial => "common/item_bar" %>
     <div class="streak-error">
@@ -9,7 +9,7 @@
       <button class="calendar-nav calendar-nav-left" ng-click="change_date(-1)"></button>
       <button class="calendar-nav calendar-nav-today" ng-click="change_date(0)"></button>
       <button class="calendar-nav calendar-nav-right" ng-click="change_date(1)"></button>
-      <input ng-date-picker type="hidden" value="" style="z-index:2;"></input>
+      <input streakalong-ng-date-picker type="hidden" value="" style="z-index:2;"></input>
       <span class="text-muted" style="vertical-align:top;padding-left:5px;">{{selected_date() | date : 'MMM yyyy'}}</span>
     </div>
     <div class="navbar navbar-default container-fluid">

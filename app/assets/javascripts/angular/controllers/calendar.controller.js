@@ -1,5 +1,6 @@
-app.controller('CalendarController', ['$scope', '$http', 'UserItem', 'filterFilter', function($scope, $http, UserItem, filter) {
+app.controller('CalendarController', ['$scope', '$http', 'UserItem', 'User', 'filterFilter', function($scope, $http, UserItem, User, filter) {
   $scope.error  = "";
+  $scope.recent = [];
   $scope.filter = filter;
   $scope.display_dates = [];
   $scope.user_items = {};
@@ -56,12 +57,16 @@ app.controller('CalendarController', ['$scope', '$http', 'UserItem', 'filterFilt
   $scope.setup_items = function(items) {
     $scope.items = items;
   };
+  $scope.get_recent = function() {
+    recent_preference = new User();
+    recent_preference.$get_preference({name:'recent'}, function(v){$scope.recent = v.data;},function(v){$scope.error = "Sorry, there was an issue getting your recent items.";});
+  };
   $scope.get_user_item_data = function(item_id, d) {
     var date_data = $scope.user_items[d];
     var user_item_data;
 
     if (true == angular.isObject(date_data)) {
-      user_item_data = $scope.filter(date_data, {item_id: item_id})[0];
+      user_item_data = $scope.filter(date_data, {item_id: item_id}, true)[0];
     } else {
       throw "No user item data for this date: " + d;
     }
@@ -89,14 +94,17 @@ app.controller('CalendarController', ['$scope', '$http', 'UserItem', 'filterFilt
       if (true == angular.isObject(user_item)) {
         var old_amt = user_item.amount;
         user_item.amount = $scope.parse_statement(expression, old_amt);
-        user_item.$update({}, null, function(v){user_item.amount = old_amt;$scope.error = "Sorry, there was an issue saving data.";});
+        user_item.$update({}, function(v){$scope.get_recent()}, function(v){user_item.amount = old_amt;$scope.error = "Sorry, there was an issue saving data.";});
       } else {
         user_item = new UserItem({amount: $scope.parse_statement(expression, 0), date: d, item_id: item_id});
-        user_item.$save({}, function(v){$scope.user_items[d].push(user_item);},function(v){$scope.error = "Sorry, there was an issue saving data.";});
+        user_item.$save({}, function(v){$scope.user_items[d].push(user_item);$scope.get_recent()},function(v){$scope.error = "Sorry, there was an issue saving data.";});
       }
     } catch (e) {
       $scope.error = "Still loading data...";
     }
+  };
+  $scope.is_recent = function(item_type) {
+    return (0 != $scope.filter($scope.recent, item_type, true).length);
   };
   /*
   $scope.test = function() {

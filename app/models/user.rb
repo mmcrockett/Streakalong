@@ -10,8 +10,9 @@ class User < ActiveRecord::Base
   validates :username, :uniqueness => true
   validates :name, :presence => true
   validates :name, :length => { :minimum => 3, :maximum => 60 }
-  validates :password, :presence => true
-  validates :password, :length => { :minimum => 6, :maximum => 20 }
+  validates :password, :presence => true, :on => :create
+  validates :password, :length => { :minimum => 6, :maximum => 20 }, :on => :create
+  validates :salt, :presence => true
   validates :hashed_password, :presence => true
 
   def self.public_key
@@ -83,11 +84,17 @@ class User < ActiveRecord::Base
   end
 
   def recent_items
-    return self.preferences[UserPreference::RECENT]
+    recent_items = []
+
+    self.preferences[UserPreference::RECENT].sort.each do |item_id|
+      recent_items << Item.name(item_id)
+    end
+
+    return recent_items
   end
 
   def categorized_items
-    return [{:all => Item::ALL},{:recent => self.recent_items},{:foods  => Item::FOODS},{:beverages  => Item::BEVERAGES},{:activities => Item::ACTIVITIES},{:other => Item::OTHER}]
+    return [{:all => Item::ALL},{UserPreference::RECENT => Item::ALL},{:foods  => Item::FOODS},{:beverages  => Item::BEVERAGES},{:activities => Item::ACTIVITIES},{:other => Item::OTHER}]
   end
 
   def preferredTab?(name)
@@ -100,6 +107,47 @@ class User < ActiveRecord::Base
     end
 
     return (self.item_tab == name)
+  end
+
+  def get_preference(k)
+    value = nil
+
+    if (true == UserPreference::DEFAULTS.include?(k))
+      if (UserPreference::RECENT == k)
+        value = self.recent_items()
+      else
+        value = self.preferences[k]
+      end
+    end
+
+    return value
+  end
+
+  def add_preference(k,v,autosave=true)
+    if (true == UserPreference::DEFAULTS.include?(k))
+      if (UserPreference::RECENT == k)
+        remove_elements = nil
+
+        if (true == v.is_a?(String))
+          v = Item.id(v)
+        end
+
+        self.preferences[k].delete(v)
+        self.preferences[k] << v
+
+        remove_elements = self.preferences[k].size - UserPreference::MAX_RECENT
+
+        if (0 < remove_elements)
+          self.preferences[k] = self.preferences[k].drop(remove_elements)
+        end
+      else
+        self.preferences[k] = v
+      end
+
+      if (true == autosave)
+        self.save
+      end
+    end
   end
   
 private

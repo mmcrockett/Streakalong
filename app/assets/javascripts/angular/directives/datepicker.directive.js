@@ -1,6 +1,6 @@
-app.directive('ngDatePicker', function() {
+app.directive('streakalongNgDatePicker', function() {
   return function (scope, element, attrs) {
-    scope.$watch(attrs.ngDatePicker, function (value) {
+    scope.$watch(attrs.streakalongNgDatePicker, function (value) {
       element.datepicker({showOn: 'button'
                           ,buttonText: ''
                           ,showButtonPanel: true

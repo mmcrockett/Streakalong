@@ -9,6 +9,8 @@ Streakalong::Application.routes.draw do
   match 'welcome',  :to => 'users#welcome',  :via => [:get]
   match 'register', :to => 'users#register', :via => [:post]
   match 'login',    :to => 'users#login',    :via => [:post]
+  match 'preference', :to => 'users#set_preference', :via => [:put]
+  match 'preference', :to => 'users#get_preference', :via => [:get]
   match 'logout',   :to => 'users#logout',   :via => [:get]
   match 'key',      :to => 'users#key',      :via => [:get]
 end
