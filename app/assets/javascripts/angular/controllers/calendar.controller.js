@@ -1,4 +1,4 @@
-app.controller('CalendarController', ['$scope', '$http', 'UserItem', 'User', 'filterFilter', function($scope, $http, UserItem, User, filter) {
+app.controller('CalendarController', ['$scope', '$http', '$interval', 'UserItem', 'User', 'filterFilter', function($scope, $http, $interval, UserItem, User, filter) {
   $scope.error  = "";
   $scope.recent = [];
   $scope.filter = filter;
@@ -43,6 +43,22 @@ app.controller('CalendarController', ['$scope', '$http', 'UserItem', 'User', 'fi
       $scope.set_display_dates($scope.datepicker_element.datepicker("getDate"));
     }
   };
+  $scope.change_current_date = function() {
+    if (true == angular.isObject($scope.datepicker_element)) {
+      var now = new Date();
+      now.setHours(0,0,0,0);
+
+      if (false == $scope.is_today(now)) {
+        var currentSelectedDate = $scope.datepicker_element.datepicker("getDate");
+
+        if (true == $scope.is_today(currentSelectedDate)) {
+          $scope.change_date(1);
+        }
+
+        $scope.today = new Date(now);
+      }
+    }
+  };
   $scope.isDayItem = function(category) {
     if (true == angular.isString(category)) {
       if ('daydata' == category) {
@@ -56,6 +72,7 @@ app.controller('CalendarController', ['$scope', '$http', 'UserItem', 'User', 'fi
     $scope.error = "";
   };
   $scope.setup_items = function(items) {
+    $interval($scope.change_current_date, 1000*60*15);
     $scope.items = items;
   };
   $scope.get_recent = function() {
