@@ -84,7 +84,7 @@ app.controller('CalendarController', ['$scope', '$http', '$interval', 'UserItem'
     var user_item_data;
 
     if (true == angular.isObject(date_data)) {
-      user_item_data = $scope.filter(date_data, {item_id: item_id}, true)[0];
+      user_item_data = $scope.filter(date_data, {item_id: parseInt(item_id)}, true)[0];
     } else {
       throw "No user item data for this date: " + d;
     }
