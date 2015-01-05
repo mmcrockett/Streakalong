@@ -1,17 +1,16 @@
 <% @page_title = "Streaks" %>
   <div ng-controller="StreaksController" class="navbar navbar-default" style="background-color:#FFFFFF;padding:5px 5px;" ng-init="setup_items(<%= Item::ALL.to_json %>);get_recent()">
     <%= render :partial => "common/nav_bar" %>
-    <%= render :partial => "common/item_bar" %>
     <div class="streak-error">
       <p class="small text-muted bg-danger" ng-show="error">!ERROR: {{error}}</p>
     </div>
     <div>
-      <button class="calendar-nav calendar-nav-left" ng-click="change_date(-1)"></button>
-      <button class="calendar-nav calendar-nav-today" ng-click="change_date(0)"></button>
-      <button class="calendar-nav calendar-nav-right" ng-click="change_date(1)"></button>
-      <input streakalong-ng-date-picker type="hidden" value="" style="z-index:2;"></input>
-      <span class="text-muted" style="vertical-align:top;padding-left:5px;">{{selected_date() | date : 'MMM yyyy'}}</span>
+      <div class="btn-group" style="vertical-align:top;">
+        <button type="button" ng-class="{'btn btn-xs btn-default':true, 'active':(time_grouping_preference == grouping)}" ng-repeat="grouping in time_groupings" ng-click="switch_grouping(grouping)">{{grouping}}</button>
+      </div>
+      <%= render :partial => "datepicker" %>
     </div>
+    <div google-chart chart="chart"></div>
     <div class="navbar navbar-default container-fluid">
       <div class="row">
         <div ng-repeat="rel_date in display_dates" streakalong-ng-droppable="{hoverClass: 'daydata-active'}" ng-class="{'col-sm-4 datebox default-border-color': true, 'hidden-xs':$last || $first, 'leftdatebox':$first, 'rightdatebox':$last, 'centerdatebox':!$first && !$last}">

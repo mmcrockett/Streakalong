@@ -1,46 +1,40 @@
-app.controller('CalendarController', ['$scope', '$http', '$interval', '$timeout', 'UserItem', 'User', 'filterFilter', function($scope, $http, $interval, $timeout, UserItem, User, filter) {
-  $scope.thinking = 0;
-  var user_item_success = function(response) {
-    $scope.thinking -= 1;
-    $scope.get_recent();
-  };
-  var user_item_failure = function(response) {
-    response.config.data.amount = response.config.data.previous_amount;
-    response.config.data.previous_amount = undefined;
-    response.config.data.error = true;
-    console.error(response.config.data)
-    $scope.error = "Sorry, there was an issue saving data for '" + $scope.items[response.config.data.item_id] + "'.";
-    $scope.thinking -= 1;
-  };
-  $scope.save_items = function() {
-    angular.forEach($scope.user_items, function(obj, d) {
-      angular.forEach($scope.filter(obj, {previous_amount: '!!'}), function(user_item, i) {
-        $scope.thinking += 1;
-        if (true == angular.isNumber(user_item.id)) {
-          user_item.$update({}, user_item_success, user_item_failure);
-        } else {
-          user_item.$save({}, user_item_success, user_item_failure);
-        }
-      });
-    });
-  };
-  timeout = null;
-  $scope.debounce_save_items = function() {
-    if (timeout) {
-      $timeout.cancel(timeout);
-    }
-    timeout = $timeout($scope.save_items, 2000);
-  };
+app.controller('StreaksController', ['$scope', '$http', 'UserItem', 'User', 'filterFilter', function($scope, $http, UserItem, User, filter) {
+    var chart1 = {};
+    chart1.type = "PieChart";
+    chart1.data = [
+       ['Component', 'cost'],
+       ['Software', 50000],
+       ['Hardware', 80000]
+      ];
+    chart1.data.push(['Services',20000]);
+    chart1.options = {
+        displayExactValues: true,
+        width: 400,
+        height: 200,
+        is3D: true,
+        chartArea: {left:10,top:10,bottom:0,height:"100%"}
+    };
+
+    chart1.formatters = {
+      number : [{
+        columnNum: 1,
+        pattern: "$ #,##0.00"
+      }]
+    };
+
+    $scope.chart = chart1;
+  $scope.time_groupings = ['All', 'Year', 'Month', 'Week']
+  $scope.time_grouping_preference = 'Year';
   $scope.error  = "";
   $scope.recent = [];
   $scope.filter = filter;
   $scope.display_dates = [];
   $scope.user_items = {};
-  $scope.dirty_user_item = 0;
   $scope.items = [];
   $scope.datepicker_element;
-  $scope.today = null;
-  $scope.$watch('dirty_user_item', $scope.debounce_save_items);
+  $scope.switch_grouping = function(group) {
+    $scope.time_grouping_preference = group;
+  };
   $scope.parse_statement = function(exp, initial_value) {
     var value = 0;
 
@@ -77,22 +71,6 @@ app.controller('CalendarController', ['$scope', '$http', '$interval', '$timeout'
       $scope.set_display_dates($scope.datepicker_element.datepicker("getDate"));
     }
   };
-  $scope.change_current_date = function() {
-    if (true == angular.isObject($scope.datepicker_element)) {
-      var now = new Date();
-      now.setHours(0,0,0,0);
-
-      if (false == $scope.is_today(now)) {
-        var currentSelectedDate = $scope.datepicker_element.datepicker("getDate");
-
-        if (true == $scope.is_today(currentSelectedDate)) {
-          $scope.change_date(1);
-        }
-
-        $scope.today = new Date(now);
-      }
-    }
-  };
   $scope.isDayItem = function(category) {
     if (true == angular.isString(category)) {
       if ('daydata' == category) {
@@ -106,7 +84,6 @@ app.controller('CalendarController', ['$scope', '$http', '$interval', '$timeout'
     $scope.error = "";
   };
   $scope.setup_items = function(items) {
-    $interval($scope.change_current_date, 1000*60*15);
     $scope.items = items;
   };
   $scope.get_recent = function() {
@@ -118,7 +95,7 @@ app.controller('CalendarController', ['$scope', '$http', '$interval', '$timeout'
     var user_item_data;
 
     if (true == angular.isObject(date_data)) {
-      user_item_data = $scope.filter(date_data, {item_id: parseInt(item_id)}, true)[0];
+      user_item_data = $scope.filter(date_data, {item_id: item_id}, true)[0];
     } else {
       throw "No user item data for this date: " + d;
     }
@@ -126,56 +103,33 @@ app.controller('CalendarController', ['$scope', '$http', '$interval', '$timeout'
     return user_item_data;
   };
   $scope.get_user_items = function(d) {
-    UserItem.query({date: d.getTime()}, function(v){$scope.user_items[d] = v;}, function(e){$scope.error = "Couldn't load data.";});
+    $scope.user_items[d] = UserItem.query({date: d.getTime()});
   };
   $scope.selected_date = function() {
     return $scope.display_dates[1];
   };
   $scope.set_display_dates = function(selected_date) {
-    if (null == $scope.today) {
-      $scope.today = new Date(selected_date);
-    }
-
     $scope.display_dates = [selected_date.ago(1), selected_date, selected_date.ago(-1)];
   };
   $scope.process_amount = function(expression, item_id, d) {
-    if (0 == $scope.thinking) {
-      var amount = -99;
-      var user_item;
+    var amount = -99;
+    var user_item;
 
-      $scope.clear_error();
+    $scope.clear_error();
 
-      try {
-        user_item = $scope.get_user_item_data(item_id, d);
+    try {
+      user_item = $scope.get_user_item_data(item_id, d);
 
-        if (false == angular.isObject(user_item)) {
-          user_item = new UserItem({amount: 0, date: d, item_id: item_id});
-          $scope.user_items[d].push(user_item);
-        }
-
-        if (false == angular.isNumber(user_item.previous_amount)) {
-          user_item.previous_amount = user_item.amount;
-        }
-
-        user_item.amount = $scope.parse_statement(expression, user_item.amount);
-
-        if (user_item.previous_amount === user_item.amount) {
-          user_item.previous_amount = undefined;
-        }
-
-        $scope.dirty_user_item += 1;
-      } catch (e) {
-        $scope.error = "Still loading data...";
+      if (true == angular.isObject(user_item)) {
+        var old_amt = user_item.amount;
+        user_item.amount = $scope.parse_statement(expression, old_amt);
+        user_item.$update({}, function(v){$scope.get_recent()}, function(v){user_item.amount = old_amt;$scope.error = "Sorry, there was an issue saving data.";});
+      } else {
+        user_item = new UserItem({amount: $scope.parse_statement(expression, 0), date: d, item_id: item_id});
+        user_item.$save({}, function(v){$scope.user_items[d].push(user_item);$scope.get_recent()},function(v){$scope.error = "Sorry, there was an issue saving data.";});
       }
-    } else {
-      $scope.error = "Busy saving data...";
-    }
-  };
-  $scope.is_today = function(d) {
-    if (true == angular.isObject($scope.today)) {
-      return ($scope.today.getTime() == d.getTime());
-    } else {
-      return false;
+    } catch (e) {
+      $scope.error = "Still loading data...";
     }
   };
   $scope.is_recent = function(item_type) {
