@@ -11,6 +11,11 @@ group :assets do
   gem 'uglifier', '>= 1.0.3'
 end
 
+group :staging, :production do
+  gem 'mysql2'
+  gem 'activerecord-mysql2-adapter'
+end
+
 group :development do
   gem 'capistrano',  '3.2.1'
   gem 'capistrano-rails', '~> 1.1'
