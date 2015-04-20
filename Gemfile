@@ -1,7 +1,6 @@
 source 'https://rubygems.org'
 
 gem 'rails', '3.2.13'
-gem 'therubyracer', :platforms => :ruby
 
 # Gems used only for assets and not required
 # in production environments by default.
@@ -13,10 +12,10 @@ end
 
 group :staging, :production do
   gem 'mysql2'
-  gem 'activerecord-mysql2-adapter'
+  gem 'therubyracer', :platforms => :ruby
 end
 
-group :development do
+group :development, :test do
   gem 'capistrano',  '3.2.1'
   gem 'capistrano-rails', '~> 1.1'
   gem 'capistrano-rvm'
