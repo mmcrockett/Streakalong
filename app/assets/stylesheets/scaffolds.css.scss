@@ -2,11 +2,6 @@ body {
   font-family: verdana, arial, helvetica, sans-serif;
   font-size: 13px;
   line-height: 18px;
-}
-
-div#main {
-  min-height: 960px;
-  width: 100%;
   background: #7db9e8;
   background: -moz-radial-gradient(center, ellipse cover,  #7db9e8 0%, #65a1d4 25%, #428bca 100%);
   background: -webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(0%,#7db9e8), color-stop(25%,#65a1d4), color-stop(100%,#428bca));
@@ -15,6 +10,11 @@ div#main {
   background: -ms-radial-gradient(center, ellipse cover,  #7db9e8 0%,#65a1d4 25%,#428bca 100%);
   background: radial-gradient(ellipse at center,  #7db9e8 0%,#65a1d4 25%,#428bca 100%);
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#7db9e8', endColorstr='#428bca',GradientType=1 );
+}
+
+div#main {
+  min-height: 960px;
+  width: 100%;
 }
 
 p, ol, ul, td {
