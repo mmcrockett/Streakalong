@@ -22,7 +22,7 @@
           <div class="text-muted small" style="width:100%;height:100%;" ng-if="!user_items[rel_date]" ng-init="get_user_items(rel_date)">
               <%= image_tag("/assets/indicator_large.gif", :style => "margin-left:42%;margin-top:32px;") %>
           </div>
-          <div ng-repeat="item in user_items[rel_date]" ng-if="item.amount != 0" ng-class="{'daydata-container': true, 'bg-danger': item.error}" ng-dblclick="process_amount('-1',item.item_id,rel_date)">
+          <div ng-repeat="item in user_items[rel_date] | orderBy:'item_id'" ng-if="item.amount != 0" ng-class="{'daydata-container': true, 'bg-danger': item.error}" ng-dblclick="process_amount('-1',item.item_id,rel_date)">
             <%= render :partial => "common/item_image", :locals => {:category => 'daydata', :type => '{{items[item.item_id]}}', :id => '{{item.item_id}}'} %>
             <div class="count text-center" title="click to edit" item-id="{{item.item_id}}" streakalong-ng-editable>
             </div>
