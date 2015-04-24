@@ -3,6 +3,7 @@ app.controller('CalendarController', ['$scope', '$http', '$interval', '$timeout'
   var user_item_success = function(response) {
     $scope.thinking -= 1;
     $scope.get_recent();
+    $scope.process_queue_item(response);
   };
   var user_item_failure = function(response) {
     response.config.data.amount = response.config.data.previous_amount;
@@ -33,6 +34,7 @@ app.controller('CalendarController', ['$scope', '$http', '$interval', '$timeout'
   };
   $scope.error  = "";
   $scope.recent = [];
+  $scope.expression_queue = {};
   $scope.filter = filter;
   $scope.display_dates = [];
   $scope.user_items = {};
@@ -114,6 +116,11 @@ app.controller('CalendarController', ['$scope', '$http', '$interval', '$timeout'
     recent_preference.$get_preference({name:'recent'}, function(v){$scope.recent = v.data;},function(v){$scope.error = "Sorry, there was an issue getting your recent items.";});
   };
   $scope.get_user_item_data = function(item_id, d) {
+    if (true == angular.isString(d)) {
+      d = new Date(Date.parse(d));
+      d = d.ago(-d.getTimezoneOffset()/60/24);
+    }
+
     var date_data = $scope.user_items[d];
     var user_item_data;
 
@@ -138,37 +145,56 @@ app.controller('CalendarController', ['$scope', '$http', '$interval', '$timeout'
 
     $scope.display_dates = [selected_date.ago(1), selected_date, selected_date.ago(-1)];
   };
-  $scope.process_amount = function(expression, item_id, d) {
-    if (0 == $scope.thinking) {
-      var amount = -99;
-      var user_item;
+  $scope.queue_expression = function(user_item, expression) {
+    if (false == angular.isObject($scope.expression_queue[user_item])) {
+      $scope.expression_queue[user_item] = [];
+    }
 
-      $scope.clear_error();
+    $scope.expression_queue[user_item].push(expression);
+  };
+  $scope.process_queue_item = function(user_item) {
+    var expressions = $scope.expression_queue[user_item];
 
-      try {
-        user_item = $scope.get_user_item_data(item_id, d);
-
-        if (false == angular.isObject(user_item)) {
-          user_item = new UserItem({amount: 0, date: d, item_id: item_id});
-          $scope.user_items[d].push(user_item);
-        }
-
-        if (false == angular.isNumber(user_item.previous_amount)) {
-          user_item.previous_amount = user_item.amount;
-        }
-
-        user_item.amount = $scope.parse_statement(expression, user_item.amount);
-
-        if (user_item.previous_amount === user_item.amount) {
-          user_item.previous_amount = undefined;
-        }
-
+    if (true == angular.isObject(expressions)) {
+      angular.forEach(expressions, function(exp, i) {
+        $scope.process_amount(exp, user_item.item_id, user_item.date);
         $scope.dirty_user_item += 1;
-      } catch (e) {
-        $scope.error = "Still loading data...";
+      });
+
+      $scope.expression_queue[user_item] = [];
+    }
+  };
+  $scope.process_amount = function(expression, item_id, d) {
+    var amount = -99;
+    var user_item;
+
+    $scope.clear_error();
+
+    try {
+      user_item = $scope.get_user_item_data(item_id, d);
+
+      if (false == angular.isObject(user_item)) {
+        user_item = new UserItem({amount: 0, date: d, item_id: item_id});
+        $scope.user_items[d].push(user_item);
       }
-    } else {
-      $scope.error = "Busy saving data...";
+
+      if (false == angular.isNumber(user_item.previous_amount)) {
+        user_item.previous_amount = user_item.amount;
+      }
+
+      user_item.amount = $scope.parse_statement(expression, user_item.amount);
+
+      if (user_item.previous_amount === user_item.amount) {
+        user_item.previous_amount = undefined;
+      }
+
+      if (0 == $scope.thinking) {
+        $scope.dirty_user_item += 1;
+      } else {
+        $scope.queue_expression(user_item, expression);
+      }
+    } catch (e) {
+      $scope.error = "Still loading data...";
     }
   };
   $scope.is_today = function(d) {
