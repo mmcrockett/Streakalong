@@ -13,6 +13,10 @@
 
 ActiveRecord::Schema.define(:version => 20140702190831) do
 
+  create_table "item_types", :force => true do |t|
+    t.string "name", :null => false
+  end
+
   create_table "streaks", :force => true do |t|
     t.date     "start",      :null => false
     t.date     "end",        :null => false
