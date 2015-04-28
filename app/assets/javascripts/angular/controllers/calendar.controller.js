@@ -168,6 +168,8 @@ app.controller('CalendarController', ['$scope', '$http', '$interval', '$timeout'
     var amount = -99;
     var user_item;
 
+    item_id = parseInt(item_id);
+
     $scope.clear_error();
 
     try {
