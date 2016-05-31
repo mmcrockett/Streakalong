@@ -1,4 +1,4 @@
-Streakalong::Application.routes.draw do
+Rails.application.routes.draw do
   root :to => redirect('/calendar')
   resources :user_items
   match 'calendar', :to => 'user_items#calendar', :via => [:get]
