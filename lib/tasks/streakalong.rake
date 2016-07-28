@@ -1,11 +1,11 @@
 namespace :streakalong do
   desc "Export Database"
   task(:export_database => :environment) do
-    for user_item in UserItem.find(:all)
+    for user_item in UserItem.all
       puts "INSERT INTO user_items (id, date, amount, item_id, user_id) VALUES (#{user_item.id}, #{user_item.date}, #{user_item.amount}, #{user_item.item_id}, #{user_item.user_id});"
     end
 
-    for s in Streak.find(:all)
+    for s in Streak.all
       puts "INSERT INTO streaks (id, start, end, length, user_id, item_id) VALUES (#{s.id}, #{s.start}, #{s.end}, #{s.length}, #{s.user_id}, #{s.item_id});"
     end
   end
@@ -57,37 +57,13 @@ namespace :streakalong do
     end
   end
 
-  desc "Convert User Items from V1"
-  task(:convert_v1_user_items => :environment) do
-    latest_user_item_date = UserItem.maximum(:date)
-    V1UserItem.where("date >= ? AND user_id <> 584", latest_user_item_date.strftime("%Y%m%d")).each do |user_item_old|
-      new_item_id = Item.id(V1Item.find(user_item_old.item_id).title)
-      new_user_id = User.where("username = ?", V1User.find(user_item_old.user_id).username).first.id
-      new_date    = Date.strptime("#{user_item_old.date}", "%Y%m%d")
-      user_item_new = UserItem.where("item_id = ? AND user_id = ? AND date = ?", new_item_id, new_user_id, new_date).first
-
-      if (nil == user_item_new)
-        user_item_new = UserItem.new()
-      end
-
-      user_item_new.amount  = user_item_old.count.to_i
-      user_item_new.user_id = new_user_id
-      user_item_new.item_id = new_item_id
-      user_item_new.date    = new_date
-
-      if (false == user_item_new.save())
-        raise "!ERROR: Unable to save user item. #{user_item_new.errors.full_messages}."
-      end
-    end
-  end
-
   desc "Process Streaks"
   task(:process_streaks => :environment) do
     latest_streak_date = Streak.maximum(:end)
     user_items         = nil
 
     if (nil == latest_streak_date)
-      user_items = UserItem.find(:all)
+      user_items = UserItem.all
     else
       user_items = UserItem.where("updated_at >= ?", latest_streak_date.yesterday())
     end

@@ -42,4 +42,16 @@ class Item
 
     return id
   end
+
+  def self.categorized_items
+    categorized_items = []
+    categorized_items << {:all => Item::ALL}
+    categorized_items << {Preference::RECENT => Item::ALL}
+    categorized_items << {:foods  => Item::FOODS}
+    categorized_items << {:beverages  => Item::BEVERAGES}
+    categorized_items << {:activities => Item::ACTIVITIES}
+    categorized_items << {:other => Item::OTHER}
+
+    return categorized_items
+  end
 end

@@ -11,5 +11,5 @@
 // GO AFTER THE REQUIRES BELOW.
 //
 //= require date_extension.js
-//= require angular_app.js
+//= require streakalong_angular_app.js
 //= require_tree .

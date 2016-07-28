@@ -1,31 +1,51 @@
-app.controller('UsersController', ['$scope', '$http', 'User', function($scope, $http, User) {
-  $scope.crypt       = new JSEncrypt();
-  $http.get('/key.json').then(function(result) {$scope.crypt.setKey(result.data);});
+app.controller('UsersController', ['$scope', 'User', function($scope, User) {
   $scope.reset_data = function() {
     $scope.login_data = {password: ""};
     $scope.register_data = {password: ""};
     $scope.error = "";
   };
   $scope.reset_data();
-  $scope.login = function() {
-    var user = new User($scope.login_data);
-    user.$login({password: $scope.crypt.encrypt(user.password)}, function(v){location.reload(true);}, function(v){$scope.reset_data();$scope.error = "Username or password incorrect.";});
+  $scope.reload = function(v) {
+    location.reload(true);
   };
-  $scope.register = function() {
-    var user = new User($scope.register_data);
-    user.$register(
-      {password: $scope.crypt.encrypt(user.password)},
-      function(v){location.reload(true);},
-      function(v){
+  $scope.login = function() {
+    User.get($scope.login_data)
+    .$promise
+    .then($scope.reload)
+    .catch(
+      function(e) {
         $scope.reset_data();
-        angular.forEach(v.data, function(v, k) {
-            if ("" !== $scope.error) {
-              $scope.error += " AND ";
-            }
-            $scope.error += k + " " + v[0];
-          }
-        );
+
+        if (401 == e.status) {
+          $scope.error = "Username or password incorrect.";
+        } else {
+          $scope.error = "Sorry, something went wrong...";
+        }
       }
     );
+  };
+  $scope.build_registration_error_message = function(e) {
+    angular.forEach(e.data, function(e, k) {
+        if ("" !== $scope.error) {
+          $scope.error += " AND ";
+        }
+        $scope.error += k + " " + e[0];
+      }
+    );
+  };
+  $scope.register = function() {
+    User.save($scope.register_data)
+    .$promise
+    .then($scope.reload)
+    .catch(
+      function(e) {
+        $scope.reset_data();
+        if (422 == e.status) {
+          $scope.build_registration_error_message(e);
+        } else {
+          $scope.error = "Sorry, something went awry...";
+        }
+      }
+    )
   };
 }]);
