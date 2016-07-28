@@ -1,15 +1,9 @@
-# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  name: MyString
-  username: MyString
-  hashed_password: MyString
-  salt: MyString
-  temp: 1
-
-two:
-  name: MyString
-  username: MyString
-  hashed_password: MyString
-  salt: MyString
-  temp: 1
+  id: 1
+  name: Bob Bobberson
+  username: bbobberson
+  hashed_password: 5e67074d616ea1b273d11b0d512171d6f3aab231
+  salt: 702769803399600.6687368534156103
+  preferences: '{"item_tab":"activities","recent":[1,2,3]}'

@@ -1,0 +1,36 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  id: 1
+  amount: 1
+  user_id: 1
+  item_id: 1
+  date: 2016-06-06
+
+two:
+  id: 2
+  amount: 2
+  user_id: 1
+  item_id: 2
+  date: 2016-06-07
+
+three:
+  id: 3
+  amount: 3
+  user_id: 2
+  item_id: 3
+  date: 2016-06-06
+
+four:
+  id: 4
+  amount: 4
+  user_id: 1
+  item_id: 4
+  date: 2016-06-06
+
+five:
+  id: 5
+  amount: 4
+  user_id: 1
+  item_id: 5
+  date: 2016-06-05
