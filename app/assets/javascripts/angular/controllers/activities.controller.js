@@ -37,6 +37,7 @@ function(
     angular.forEach($scope.activities, function(obj, d) {
       angular.forEach($scope.filter(obj, {previous_amount: '!!'}), function(activity, i) {
         $scope.thinking += 1;
+        $scope.preferences.save_recent();
         activity.$save().then(activity_success).catch(activity_failure);
       });
     });
