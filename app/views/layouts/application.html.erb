@@ -1,3 +1,32 @@
+<% if (true == Rails.env.development?) %>
+  <% minified = "" %>
+<% else %>
+  <% minified = ".min" %>
+<% end %>
+
+<% versions = {
+  :angular => "1.5.7",
+  :underscore => "1.8.3",
+  :bootstrap  => "3.1.1"
+}
+%>
+<% stylesheet_libraries = [
+  "//netdna.bootstrapcdn.com/bootstrap/#{versions[:bootstrap]}/css/bootstrap#{minified}.css",
+  "https://code.jquery.com/ui/1.10.4/themes/cupertino/jquery-ui#{minified}.css",
+  "application"
+]
+%>
+<% javascript_libraries = [
+  "//code.jquery.com/jquery-2.1.1#{minified}.js",
+  "//cdnjs.cloudflare.com/ajax/libs/underscore.js/#{versions[:underscore]}/underscore#{minified.gsub('.','-')}.js",
+  "https://code.jquery.com/ui/1.11.0/jquery-ui#{minified}.js",
+  "//netdna.bootstrapcdn.com/bootstrap/#{versions[:bootstrap]}/js/bootstrap#{minified}.js",
+  "https://ajax.googleapis.com/ajax/libs/angularjs/#{versions[:angular]}/angular#{minified}.js",
+  "https://ajax.googleapis.com/ajax/libs/angularjs/#{versions[:angular]}/angular-resource#{minified}.js",
+  "https://bouil.github.io/angular-google-chart/ng-google-chart.js",
+  "application"
+]
+%> 
 <!DOCTYPE html>
 <html ng-app="Streakalong">
 <head>
@@ -6,24 +35,15 @@
   <link rel="shortcut icon"  type="image/x-icon" href="/favicon.ico">
   <title>Streak Along : <%= @page_title %> - Helping you stay healthy.</title>
   <% angular_version = "1.5.7" %>
+  <% underscore_version = "1.8.3" %>
 
-  <% if (true == Rails.env.development?) %>
-    <% minified = "" %>
-  <% else %>
-    <% minified = ".min" %>
+
+  <% stylesheet_libraries.each do |library| %>
+    <%= stylesheet_link_tag "#{library}", :media => "all" %>
   <% end %>
-
-  <%= stylesheet_link_tag    "application", :media => "all" %>
-  <%= stylesheet_link_tag "//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap#{minified}.css", :media => "all" %>
-  <%= stylesheet_link_tag "https://code.jquery.com/ui/1.10.4/themes/cupertino/jquery-ui#{minified}.css", :media => "all" %>
-  <%= javascript_include_tag "//code.jquery.com/jquery-2.1.1#{minified}.js" %>
-  <%= javascript_include_tag "https://underscorejs.org/underscore#{minified.gsub('.','-')}.js" %>
-  <%= javascript_include_tag "https://code.jquery.com/ui/1.11.0/jquery-ui#{minified}.js" %>
-  <%= javascript_include_tag "//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap#{minified}.js" %>
-  <%= javascript_include_tag "https://ajax.googleapis.com/ajax/libs/angularjs/#{angular_version}/angular#{minified}.js" %>
-  <%= javascript_include_tag "https://ajax.googleapis.com/ajax/libs/angularjs/#{angular_version}/angular-resource#{minified}.js" %>
-  <%= javascript_include_tag "https://bouil.github.io/angular-google-chart/ng-google-chart.js" %>
-  <%= javascript_include_tag "application" %>
+  <% javascript_libraries.each do |library| %>
+    <%= javascript_include_tag "#{library}" %>
+  <% end %>
   <%= csrf_meta_tags %>
 </head>
 <body>
