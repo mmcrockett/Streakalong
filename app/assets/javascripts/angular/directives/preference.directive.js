@@ -32,6 +32,7 @@ app.directive('streakalongNgPreference', ['$log', 'Preference', function(Logger,
 
       if (true == angular.isObject(preference)) {
         if (true == angular.isObject(preferences)) {
+          preferences = _.extend(preferences, preference);
           preferences.$save().then(preferences.success).catch(preferences.failure);
         } else {
           Logger.error("preferences object from parent is invalid '" + preferences + "'.");
