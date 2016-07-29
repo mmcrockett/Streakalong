@@ -48,14 +48,6 @@ class User < ActiveRecord::Base
     process_password
   end
 
-  #def preferences=(preferences)
-    #@preferences = Preference.new(preferences)
-  #end
-
-  #def preferences
-    #return @preferences
-  #end
-
 private
   def self.encrypted_password(password, salt)
     if (false == password.is_a?(String))
@@ -74,7 +66,7 @@ private
 
   def initialize_preferences
     if (false == self.preferences.is_a?(Preference))
-      self.preferences = Preference.new
+      self.preferences = Preference.new({})
     end
   end
 
