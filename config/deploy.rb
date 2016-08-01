@@ -1,6 +1,6 @@
 # config valid only for Capistrano 3.1
 require 'thor'
-lock '3.2.1'
+lock '3.6.0'
 
 set :application, 'streakalong'
 set :repo_url, 'git@github.com:mmcrockett/Streakalong.git'

@@ -31,7 +31,7 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 # gem 'capistrano-rails', group: :development
 group :staging, :production do
   gem 'mysql2'
-  #gem 'therubyracer', :platforms => :ruby
+  gem 'therubyracer', :platforms => :ruby
 end
 
 group :development, :test do
