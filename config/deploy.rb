@@ -43,11 +43,11 @@ namespace :deploy do
     end
   end
 
-  desc 'Copy database configuration'
+  desc 'copy database configuration'
   task :copy_db_config do
     on roles(:app), in: :sequence, wait: 5 do
       if test("[ -f #{shared_path.join('config.yml')} ]")
-        execute :cp, shared_path.join('config.yml'), release_path.join('config/database.yml')
+        execute :cp, shared_path.join('config.yml'), release_path.join('config').join('database.yml')
       end
     end
   end
@@ -62,9 +62,19 @@ namespace :deploy do
     end
   end
 
+  desc 'Create a new secret'
+  task :create_secret do
+    on roles(:app), in: :sequence, wait: 5 do
+      within release_path do
+        execute :rake, 'secret', '>', release_path.join('config').join("streakalong.#{fetch(:rails_env)}.secret.token")
+      end
+    end
+  end
+
   after :publishing, :restart
   before :restart, :htaccess
   before :migrate, :copy_db_config
+  before "assets:precompile", :create_secret
 
   after :restart, :clear_cache do
     on roles(:web), in: :groups, limit: 3, wait: 10 do
