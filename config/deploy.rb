@@ -56,7 +56,8 @@ namespace :deploy do
   task :htaccess do
     on roles(:test), in: :sequence, wait: 5 do
       if test("[ -f #{release_path.join('.htaccess')} ]")
-        execute :sed, '-i', 's/streakalong/testsa/g', release_path.join('.htaccess')
+        execute :sed, '-i', 's/streakalong.com/test.streakalong.com/g', release_path.join('.htaccess')
+        execute :sed, '-i', '"s/\/streakalong\//\/testsa\//g"', release_path.join('.htaccess')
         execute :echo, '"SetEnv RAILS_ENV staging"', '>>', release_path.join('.htaccess')
       end
     end

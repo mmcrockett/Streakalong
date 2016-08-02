@@ -1,1 +1,8 @@
 PassengerRuby /home/streakalong/.rvm/gems/ruby-2.1.3/wrappers/ruby
+RewriteEngine On
+RewriteCond %{HTTPS} !=on
+RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+SSLOptions +StrictRequire
+SSLRequireSSL
+SSLRequire %{HTTP_HOST} eq "streakalong.com"
+ErrorDocument 403 https://streakalong.com
