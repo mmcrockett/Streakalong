@@ -14,7 +14,10 @@
           <% category.each_pair do |category_name,list| %>
             <div class="tab-pane <%= if (true == @user.preferences.preferredTab?(category_name)); 'active'; end %>" id="<%=category_name%>">
             <% list.each do |item_type| %>
-              <span ng-dblclick="process_amount('+1',<%= Item.id(item_type) %>, selected_date())" <%= if (Preference::RECENT == category_name); "ng-if=is_recent(#{Item.id(item_type)})"; end %>>
+              <span
+                ng-dblclick="(false == is_touch) && process_amount('+1',<%= Item.id(item_type) %>, selected_date())"
+                ng-click="(true == is_touch) && process_amount('+1',<%= Item.id(item_type) %>, selected_date())"
+                <%= if (Preference::RECENT == category_name); "ng-if=is_recent(#{Item.id(item_type)})"; end %>>
               <%= render :partial => "common/item_image", :locals => {:category => category_name, :type => item_type, :id => Item.id(item_type)} %>
               </span>
             <% end %>

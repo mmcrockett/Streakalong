@@ -10,10 +10,12 @@
       <button class="calendar-nav calendar-nav-today" ng-click="change_date(0)"></button>
       <button class="calendar-nav calendar-nav-right" ng-click="change_date(1)"></button>
       <%= render :partial => "common/datepicker" %>
+      <streakalong-ng-device-mode ng-is-touch="is_touch"/>
       <div class="calendar-nav" style="float:right;margin-right:10px;" ng-show="(0 != thinking)">
         <span class="small text-warning text-bold">saving...</span>
       </div>
     </div>
+        {{device_mode}}
     <div class="navbar navbar-default container-fluid">
       <div class="row">
         <div ng-repeat="rel_date in display_dates" streakalong-ng-droppable="{hoverClass: 'daydata-active'}" ng-class="{'col-sm-4 datebox default-border-color': true, 'hidden-xs':$last || $first, 'leftdatebox':$first, 'rightdatebox':$last, 'centerdatebox':!$first && !$last, 'today':is_today(rel_date)}">
@@ -22,18 +24,24 @@
           <div class="text-muted small" style="width:100%;height:100%;" ng-if="!activities[rel_date]" ng-init="load_activities(rel_date)">
               <%= image_tag("/assets/indicator_large.gif", :style => "margin-left:42%;margin-top:32px;") %>
           </div>
-          <div ng-repeat="item in activities[rel_date] | orderBy:'item_id'" ng-if="item.amount != 0" ng-class="{'daydata-container': true, 'bg-danger': item.error}" ng-dblclick="process_amount('-1',item.item_id,rel_date)">
+          <div
+            ng-repeat="item in activities[rel_date] | orderBy:'item_id'"
+            ng-if="item.amount != 0"
+            ng-class="{'daydata-container': true, 'bg-danger': item.error}"
+            ng-dblclick="(false == is_touch) && process_amount('-1',item.item_id,rel_date)"
+            ng-click="(true == is_touch) && process_amount('-1',item.item_id,rel_date)">
             <%= render :partial => "common/item_image", :locals => {:category => 'daydata', :type => '{{items[item.item_id]}}', :id => '{{item.item_id}}'} %>
-            <div class="count text-center" title="click to edit" item-id="{{item.item_id}}" streakalong-ng-editable>
-            </div>
+            <streakalong-ng-editable ng-disable-editable="is_touch" ng-item="item" ng-date="rel_date" ng-process-amount="process_amount(expression, item_id, d)">
           </div>
         </div>
       </div>
     </div>
   </div>
   <script type="text/ng-template" id="streakalong-ng-editable-template">
-    <span ng-hide="editorEnabled">{{item.amount}}</span>
-    <form class="streakalong-edit" ng-show="editorEnabled">
-      <input autocomplete="off" name="value" style="width:30px;" value="{{item.amount}}">
-    </form>
+      <div class="count text-center" title="click to edit">
+      <span ng-hide="editorEnabled">{{item.amount}}</span>
+      <form class="streakalong-edit" ng-show="editorEnabled">
+        <input autocomplete="off" name="value" style="width:30px;" value="{{item.amount}}">
+      </form>
+    </div>
   </script>

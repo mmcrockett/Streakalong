@@ -17,11 +17,11 @@ function(
 ) {
   $scope.thinking = 0;
   $scope.preferences = null;
-  var activity_success = function(response) {
+  $scope.activity_success = function(response) {
     $scope.thinking -= 1;
     $scope.process_queue_item(response);
   };
-  var activity_failure = function(response) {
+  $scope.activity_failure = function(response) {
     response.config.data.amount = response.config.data.previous_amount;
     response.config.data.previous_amount = undefined;
     response.config.data.error = true;
@@ -38,7 +38,7 @@ function(
       angular.forEach($scope.filter(obj, {previous_amount: '!!'}), function(activity, i) {
         $scope.thinking += 1;
         $scope.preferences.save_recent();
-        activity.$save().then(activity_success).catch(activity_failure);
+        activity.$save().then($scope.activity_success).catch($scope.activity_failure);
       });
     });
   };

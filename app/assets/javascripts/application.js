@@ -11,5 +11,6 @@
 // GO AFTER THE REQUIRES BELOW.
 //
 //= require date_extension.js
+//= require fastclick
 //= require streakalong_angular_app.js
 //= require_tree .
