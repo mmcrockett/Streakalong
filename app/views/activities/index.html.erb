@@ -10,7 +10,7 @@
       <button class="calendar-nav calendar-nav-today" ng-click="change_date(0)"></button>
       <button class="calendar-nav calendar-nav-right" ng-click="change_date(1)"></button>
       <%= render :partial => "common/datepicker" %>
-      <streakalong-ng-device-mode ng-is-touch="is_touch"/>
+      <streakalong-ng-device-mode ng-is-touch="is_touch"></streakalong-ng-device-mode>
       <div class="calendar-nav" style="float:right;margin-right:10px;" ng-show="(0 != thinking)">
         <span class="small text-warning text-bold">saving...</span>
       </div>
