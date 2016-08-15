@@ -6,9 +6,9 @@
       <p class="small text-muted bg-danger" ng-show="error">!ERROR: {{error}}</p>
     </div>
     <div>
-      <button class="calendar-nav calendar-nav-left" ng-click="change_date(-1)"></button>
-      <button class="calendar-nav calendar-nav-today" ng-click="change_date(0)"></button>
-      <button class="calendar-nav calendar-nav-right" ng-click="change_date(1)"></button>
+      <button class="btn btn-default glyphicon glyphicon-chevron-left calendar-nav" ng-click="change_date(-1)"></button>
+      <button class="btn btn-default glyphicon glyphicon-home calendar-nav" ng-click="change_date(0)"></button>
+      <button class="btn btn-default glyphicon glyphicon-chevron-right calendar-nav" ng-click="change_date(1)"></button>
       <%= render :partial => "common/datepicker" %>
       <streakalong-ng-device-mode ng-is-touch="is_touch"></streakalong-ng-device-mode>
       <div class="calendar-nav" style="float:right;margin-right:10px;" ng-show="(0 != thinking)">
