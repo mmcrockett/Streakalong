@@ -1,5 +1,4 @@
 class Streak < ActiveRecord::Base
-  attr_accessible :end, :length, :start
   belongs_to :user
   before_save :calculate_length
 
