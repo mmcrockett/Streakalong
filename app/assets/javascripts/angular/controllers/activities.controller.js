@@ -1,20 +1,25 @@
 app.controller('ActivitiesController', [
 '$scope',
 '$http',
-'$interval',
 '$timeout',
 'Activity',
+'DateHelper',
 'filterFilter',
 '$log',
 function(
   $scope,
   $http,
-  $interval,
   $timeout,
   Activity,
+  DateHelper,
   filter,
   Logger
 ) {
+  $scope.date_helper = new DateHelper();
+  $scope.$watch('date_helper.selectedDate', function () {
+    $scope.date_helper.set_display_dates($scope.date_helper);
+  });
+
   $scope.thinking = 0;
   $scope.preferences = null;
   $scope.activity_success = function(response) {
@@ -30,7 +35,6 @@ function(
     $scope.thinking -= 1;
   };
   $scope.initialize = function(items) {
-    $interval($scope.change_current_date, 1000*60*15);
     $scope.setup_items(items);
   };
   $scope.save_items = function() {
@@ -52,12 +56,9 @@ function(
   $scope.error  = "";
   $scope.expression_queue = {};
   $scope.filter = filter;
-  $scope.display_dates = [];
   $scope.activities = {};
   $scope.dirty_activity = 0;
   $scope.items = [];
-  $scope.datepicker_element;
-  $scope.today = null;
   $scope.$watch('dirty_activity', $scope.debounce_save_items);
   $scope.parse_statement = function(exp, initial_value) {
     var value = 0;
@@ -83,33 +84,6 @@ function(
     }
 
     return value;
-  };
-  $scope.change_date = function(offset) {
-    if (true == angular.isObject($scope.datepicker_element)) {
-      if (0 == offset) {
-        $scope.datepicker_element.datepicker("setDate", "0");
-      } else {
-        var d = $scope.datepicker_element.datepicker("getDate");
-        $scope.datepicker_element.datepicker("setDate", d.ago(-offset));
-      }
-      $scope.set_display_dates($scope.datepicker_element.datepicker("getDate"));
-    }
-  };
-  $scope.change_current_date = function() {
-    if (true == angular.isObject($scope.datepicker_element)) {
-      var now = new Date();
-      now.setHours(0,0,0,0);
-
-      if (false == $scope.is_today(now)) {
-        var currentSelectedDate = $scope.datepicker_element.datepicker("getDate");
-
-        if (true == $scope.is_today(currentSelectedDate)) {
-          $scope.change_date(1);
-        }
-
-        $scope.today = new Date(now);
-      }
-    }
   };
   $scope.isDayItem = function(category) {
     if (true == angular.isString(category)) {
@@ -157,16 +131,6 @@ function(
         Logger.error("Failure '" + d + "' '" + e + "'.");
       }
     ).finally();
-  };
-  $scope.selected_date = function() {
-    return $scope.display_dates[1];
-  };
-  $scope.set_display_dates = function(selected_date) {
-    if (null == $scope.today) {
-      $scope.today = new Date(selected_date);
-    }
-
-    $scope.display_dates = [selected_date.ago(1), selected_date, selected_date.ago(-1)];
   };
   $scope.queue_expression = function(activity, expression) {
     Logger.debug("Queueing expression '" + expression + "'.");
@@ -223,13 +187,6 @@ function(
       }
     } catch (e) {
       $scope.error = "Still loading data...";
-    }
-  };
-  $scope.is_today = function(d) {
-    if (true == angular.isObject($scope.today)) {
-      return ($scope.today.getTime() == d.getTime());
-    } else {
-      return false;
     }
   };
   $scope.is_recent = function(item_type) {

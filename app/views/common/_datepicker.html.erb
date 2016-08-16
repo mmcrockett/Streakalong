@@ -1,2 +1,10 @@
-      <input streakalong-ng-date-picker type="hidden" value="" style="z-index:2;"></input>
-      <span class="text-muted" style="vertical-align:top;padding-left:5px;">{{selected_date() | date : 'MMMM dd, yyyy'}}</span>
+      <button type="button" class="btn btn-default glyphicon glyphicon-calendar calendar-nav" ng-click="date_helper.show_datepicker()"></button>
+      <span
+        class="text-muted"
+        uib-datepicker-popup
+        ng-model="date_helper.selectedDate"
+        is-open="date_helper.isOpen"
+        ng-required="true"
+        ng-init="date_helper.initialize()"
+        datepicker-append-to-body="true"
+      >{{date_helper.selectedDate | date : 'MMMM dd, yyyy'}}</span>
