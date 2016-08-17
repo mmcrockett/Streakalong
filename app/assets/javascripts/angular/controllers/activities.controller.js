@@ -16,9 +16,7 @@ function(
   Logger
 ) {
   $scope.date_helper = new DateHelper();
-  $scope.$watch('date_helper.selectedDate', function () {
-    $scope.date_helper.set_display_dates($scope.date_helper);
-  });
+  $scope.$watch('date_helper.selectedDate', $scope.date_helper.set_display_dates);
 
   $scope.thinking = 0;
   $scope.preferences = null;
