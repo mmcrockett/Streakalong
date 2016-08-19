@@ -25,6 +25,7 @@ app.controller('UsersController', ['$scope', 'User', function($scope, User) {
     );
   };
   $scope.build_registration_error_message = function(e) {
+    $scope.error = "";
     angular.forEach(e.data, function(e, k) {
         if ("" !== $scope.error) {
           $scope.error += " AND ";

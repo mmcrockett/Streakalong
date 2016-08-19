@@ -15,6 +15,10 @@ function(
   filter,
   Logger
 ) {
+  $scope.INVALID_STATEMENT  = _.constant("Sorry, but we couldn't understand. Only +- and numbers are allowed. Reverting your value.");
+  $scope.TOO_LONG_STATEMENT = _.constant("Your entry was too long. Reverting your value.");
+  $scope.MAX_STATEMENT_SIZE = _.constant(50);
+
   $scope.date_helper = new DateHelper();
   $scope.$watch('date_helper.selectedDate', $scope.date_helper.set_display_dates);
 
@@ -63,25 +67,25 @@ function(
 
     exp = exp.replace(/\s*/, '');
 
-    if (50 < exp.length) {
+    if ($scope.MAX_STATEMENT_SIZE() < exp.length) {
       value = initial_value;
-      $scope.error = "Your entry was too long. Reverting your value."
+      $scope.error = $scope.TOO_LONG_STATEMENT();
     } else if (0 == exp.length) {
       value = 0;
-    } else if (null == exp.match(/^[\d+-]+$/)) {
+    } else if (null == exp.match(/^[\d.+-]+$/)) {
       value = initial_value;
-      $scope.error = "Sorry, but we couldn't understand. Only +- and numbers are allowed. Reverting your value.";
+      $scope.error = $scope.INVALID_STATEMENT();
     } else {
-      angular.forEach(exp.match(/[+-]?\d+/g), function(stmt, i) {
+      angular.forEach(exp.match(/[+-]?[\d.]+/g), function(stmt, i) {
         if ((0 == i) && (null != stmt.match(/[+-]/))) {
           value = initial_value;
         }
 
-        value += parseInt(stmt, 10);
+        value += parseFloat(stmt);
       });
     }
 
-    return value;
+    return Math.round(value);
   };
   $scope.isDayItem = function(category) {
     if (true == angular.isString(category)) {
@@ -194,27 +198,4 @@ function(
       return false;
     }
   };
-  /*
-  $scope.test = function() {
-    var tests = [];
-    tests.push({expression:"1", outcome:1});
-    tests.push({expression:"5000", outcome:5000});
-    tests.push({expression:"50.38", outcome:88});
-    tests.push({expression:"+10", outcome:17});
-    tests.push({expression:"-11", outcome:-4});
-    tests.push({expression:"1+9-8", outcome:2});
-    tests.push({expression:"50+9-8", outcome:51});
-    tests.push({expression:"+9-8", outcome:8});
-    tests.push({expression:"-9-8", outcome:-10});
-    tests.push({expression:"50-+-+-10+9--8++6", outcome:47});
-
-    angular.forEach(tests, function(test, i) {
-      var result = $scope.parse_statement(test.expression, 7);
-      if (test.outcome != result) {
-        throw "Test: '" + test.expression + "'\nExpected: '" + test.outcome + "'\nGot: '" + result + "'";
-      }
-    });
-  };
-  $scope.test();
-  */
 }]);
