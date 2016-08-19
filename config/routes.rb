@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  mount JasmineRails::Engine => '/specs' if defined?(JasmineRails)
   root 'activities#index'
   match 'welcome',  :to => 'users#welcome', :via => [:get]
   match 'users',    :to => 'users#create',  :via => [:post]
