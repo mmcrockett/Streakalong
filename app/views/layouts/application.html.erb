@@ -1,38 +1,3 @@
-<% if (true == Rails.env.development?) %>
-  <% minified = "" %>
-<% else %>
-  <% minified = ".min" %>
-<% end %>
-
-<% versions = {
-  :angular => "1.5.7",
-  :underscore => "1.8.3",
-  :bootstrap  => "3.3.7",
-  :angular_ui => "2.0.2",
-  :angular_local_storage => "0.2.7"
-}
-%>
-<% stylesheet_libraries = [
-  "https://maxcdn.bootstrapcdn.com/bootstrap/#{versions[:bootstrap]}/css/bootstrap#{minified}.css",
-  "https://maxcdn.bootstrapcdn.com/bootstrap/#{versions[:bootstrap]}/css/bootstrap-theme#{minified}.css",
-  "https://code.jquery.com/ui/1.10.4/themes/cupertino/jquery-ui#{minified}.css",
-  "application"
-]
-%>
-<% javascript_libraries = [
-  "//code.jquery.com/jquery-2.1.1#{minified}.js",
-  "//cdnjs.cloudflare.com/ajax/libs/underscore.js/#{versions[:underscore]}/underscore#{minified.gsub('.','-')}.js",
-  "https://code.jquery.com/ui/1.11.0/jquery-ui#{minified}.js",
-  "https://maxcdn.bootstrapcdn.com/bootstrap/#{versions[:bootstrap]}/js/bootstrap#{minified}.js",
-  "https://ajax.googleapis.com/ajax/libs/angularjs/#{versions[:angular]}/angular#{minified}.js",
-  "https://ajax.googleapis.com/ajax/libs/angularjs/#{versions[:angular]}/angular-resource#{minified}.js",
-  "https://bouil.github.io/angular-google-chart/ng-google-chart.js",
-  "https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/#{versions[:angular_ui]}/ui-bootstrap#{minified}.js",
-  "https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/#{versions[:angular_ui]}/ui-bootstrap-tpls#{minified}.js",
-  "https://cdnjs.cloudflare.com/ajax/libs/angular-local-storage/#{versions[:angular_local_storage]}/angular-local-storage#{minified}.js",
-  "application"
-]
-%> 
 <!DOCTYPE html>
 <html ng-app="Streakalong">
 <head>
@@ -40,16 +5,9 @@
   <meta name="viewport" content="width=device-width" />
   <link rel="shortcut icon"  type="image/x-icon" href="/favicon.ico">
   <title>Streak Along : <%= @page_title %> - Helping you stay healthy.</title>
-  <% angular_version = "1.5.7" %>
-  <% underscore_version = "1.8.3" %>
 
-
-  <% stylesheet_libraries.each do |library| %>
-    <%= stylesheet_link_tag "#{library}", :media => "all" %>
-  <% end %>
-  <% javascript_libraries.each do |library| %>
-    <%= javascript_include_tag "#{library}" %>
-  <% end %>
+  <%= render :partial => "common/header/header_includes" %>
+  <%= javascript_include_tag("application") %>
   <%= csrf_meta_tags %>
 </head>
 <body>
