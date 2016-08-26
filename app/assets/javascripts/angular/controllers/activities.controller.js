@@ -23,6 +23,7 @@ function(
   $scope.$watch('date_helper.selectedDate', $scope.date_helper.set_display_dates);
 
   $scope.thinking = 0;
+  $scope.calories = -2000;
   $scope.preferences = null;
   $scope.activity_success = function(response) {
     $scope.thinking -= 1;
