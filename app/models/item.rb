@@ -16,6 +16,10 @@ class Item
   end
 
   def self.id(name)
+    if (true == name.is_a?(Symbol))
+      name = name.to_s
+    end
+
     name.downcase!
 
     if ("breads & grains" == name)
