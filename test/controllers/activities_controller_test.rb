@@ -9,7 +9,8 @@ class ActivitiesControllerTest < ActionController::TestCase
       @activities << {:id => activity.id, :amount => activity.amount, :date => activity.date, :item_id => activity.item_id}
     end
 
-    @june_sixth_ms = (Date.new(2016, 6, 6).to_time.to_i * 1000)
+    @june_sixth    = Date.new(2016, 6, 6)
+    @june_sixth_ms = (@june_sixth.to_time.to_i * 1000)
   end
 
   test "json index should get activities for that date" do
@@ -20,6 +21,32 @@ class ActivitiesControllerTest < ActionController::TestCase
 
     assert_response :success
     assert_equal(JSON.parse(@activities.to_json), JSON.parse(@response.body))
+  end
+
+  test "json calories should get calories for that date" do
+    request_json
+    logged_in
+
+    activity_date_with_changed_weight = Date.new(2016, 7, 2)
+    activity_date_with_changed_weight_ms = (activity_date_with_changed_weight.to_time.to_i * 1000)
+    activity_2016_07_02 = activities(:u1_a1)
+
+    get :calories, {:date => activity_date_with_changed_weight_ms}
+
+    assert_response :success
+    assert_equal(JSON.parse({:date => activity_date_with_changed_weight, :kcalest => activity_2016_07_02.kcalest}.to_json), JSON.parse(@response.body))
+  end
+
+  test "json calories should return a default when no activities on that date" do
+    request_json
+    logged_in
+    no_activity_date = Date.new(2000, 6, 6)
+    no_activity_date_ms = (no_activity_date.to_time.to_i * 1000)
+
+    get :calories, {:date => no_activity_date_ms}
+
+    assert_response :success
+    assert_equal(JSON.parse({:date => no_activity_date, :kcalest => CalorieFormula.new.daily_kcal}.to_json), JSON.parse(@response.body))
   end
 
   test "index should get" do

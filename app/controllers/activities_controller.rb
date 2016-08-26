@@ -5,9 +5,16 @@ class ActivitiesController < ApplicationController
   # GET /activities
   # GET /activities.json
   def index
-    requested_date = Time.at(params[:date].to_i/1000).utc.to_date()
+    @activities = @user.activities.where("date = ?", requested_date())
+  end
 
-    @activities = @user.activities.where("date = ?", requested_date)
+  def calories
+    @activity = @user.activities.where("date = ?", requested_date()).first
+
+    if (nil == @activity)
+      @activity = @user.activities.new
+      @activity.date = requested_date()
+    end
   end
 
   # POST /activities
@@ -33,5 +40,10 @@ class ActivitiesController < ApplicationController
         format.json { render json: @activity.errors, status: :unprocessable_entity }
       end
     end
+  end
+
+  private
+  def requested_date
+    return Time.at(params[:date].to_i/1000).utc.to_date()
   end
 end

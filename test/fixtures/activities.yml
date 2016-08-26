@@ -35,36 +35,51 @@ five:
   item_id: 5
   date: 2016-06-05
 
-u2_a0:
+u1_a1:
   id: 6
+  amount: 160
+  user_id: 1
+  item_id: 5
+  date: 2016-07-02
+
+u1_w0:
+  id: 7
+  amount: 90
+  user_id: 1
+  item_id: <%= Item.id(:weight) %>
+  date: 2016-07-01
+
+
+u2_a0:
+  id: 100
   amount: 160
   user_id: 2
   item_id: 5
   date: 2016-06-25
 
 u2_w0:
-  id: 7
+  id: 101
   amount: 90
   user_id: 2
   item_id: <%= Item.id(:weight) %>
   date: 2016-07-01
 
 u2_a1:
-  id: 8
+  id: 102
   amount: 160
   user_id: 2
   item_id: 5
   date: 2016-07-02
 
 u2_w1:
-  id: 9
+  id: 103
   amount: 60
   user_id: 2
   item_id: <%= Item.id(:weight) %>
   date: 2016-07-10
 
 u2_a2:
-  id: 10
+  id: 104
   amount: 160
   user_id: 2
   item_id: 5

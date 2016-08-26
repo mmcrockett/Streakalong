@@ -8,5 +8,6 @@ Rails.application.routes.draw do
   match 'preferences', :to => 'preferences#index', :via => [:get]
   match 'preferences', :to => 'preferences#create', :via => [:post]
   match 'activities', :to => 'activities#index', :via => [:get]
+  match 'calories',   :to => 'activities#calories', :via => [:get]
   match 'activities', :to => 'activities#create', :via => [:post]
 end

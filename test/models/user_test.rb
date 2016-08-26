@@ -175,7 +175,7 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test "user can load their activities" do
-    assert_equal(4, @user.activities.length)
+    assert_equal(6, @user.activities.length)
   end
 
   test "user can register and authenticate" do 
