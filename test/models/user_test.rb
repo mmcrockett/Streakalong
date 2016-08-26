@@ -214,4 +214,20 @@ class UserTest < ActiveSupport::TestCase
     user = User.authenticate('testperson', registered_user.hashed_password)
     assert_nil(user)
   end
+
+  test "age is nil if no birthday" do
+    assert_nil(@user.age)
+  end
+
+  test "age is correct" do
+    expected_age  = 25
+    birthday = Date.today.change(:year => (Date.today.year - expected_age))
+    @user.birthday = birthday
+
+    assert_equal(expected_age, @user.age)
+    @user.birthday = birthday.yesterday
+    assert_equal(expected_age, @user.age)
+    @user.birthday = birthday.tomorrow
+    assert_equal(expected_age - 1, @user.age)
+  end
 end

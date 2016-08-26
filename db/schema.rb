@@ -42,6 +42,9 @@ ActiveRecord::Schema.define(version: 201606062308301) do
     t.string   "preferences",     null: false
     t.datetime "created_at",      null: false
     t.datetime "updated_at",      null: false
+    t.date     "birthday"
+    t.string   "gender"
+    t.integer  "height"
   end
 
   create_table "v1_healthscores", force: :cascade do |t|

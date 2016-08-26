@@ -48,6 +48,19 @@ class User < ActiveRecord::Base
     process_password
   end
 
+  def age
+    age = nil
+
+    if (true == self.birthday.is_a?(Date))
+      age = Date.today.year - self.birthday.year
+      if (Date.today < (birthday + age.years))
+        age -= 1
+      end
+    end
+
+    return age
+  end
+
 private
   def self.encrypted_password(password, salt)
     if (false == password.is_a?(String))

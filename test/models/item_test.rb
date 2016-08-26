@@ -33,4 +33,15 @@ class ItemTest < ActiveSupport::TestCase
       assert(h[h.keys.first])
     end
   end
+
+  test "symbol gets translated to string" do
+    Item::ALL.each do |name|
+      name_sym = name.to_sym
+      assert_not_equal(name_sym, name)
+      assert(name_sym.to_s == name)
+      assert(Item.id(name_sym))
+      assert_equal(Item.id(name_sym), Item.id(name.upcase.to_sym))
+      assert_equal(Item.id(name_sym), Item.id(name.downcase.to_sym))
+    end
+  end
 end
