@@ -1,6 +1,12 @@
 require 'test_helper'
 
 class ActivitiesControllerTest < ActionController::TestCase
+  def activity_from_response()
+    json_object = JSON.parse(@response.body)
+
+    return Activity.new(json_object)
+  end
+
   setup do
     @activities = []
     @activity   = activities(:one)
@@ -83,7 +89,7 @@ class ActivitiesControllerTest < ActionController::TestCase
 
     assert_response :success
 
-    response_object = Activity.new(JSON.parse(@response.body))
+    response_object = activity_from_response()
     assert_equal(@activity.date, response_object.date)
     assert_equal(@activity.amount, response_object.amount)
     assert_equal(@activity.item_id, response_object.item_id)
@@ -99,7 +105,7 @@ class ActivitiesControllerTest < ActionController::TestCase
 
     assert_response :success
 
-    response_object = Activity.new(JSON.parse(@response.body))
+    response_object = activity_from_response()
     assert_equal(@activity.date, response_object.date)
     assert_equal(@activity.amount, response_object.amount)
     assert_equal(@activity.item_id, response_object.item_id)
@@ -124,7 +130,7 @@ class ActivitiesControllerTest < ActionController::TestCase
 
     assert_response :success
 
-    response_object = Activity.new(JSON.parse(@response.body))
+    response_object = activity_from_response()
     assert_equal(@activity.date, response_object.date)
     assert_equal(@activity.amount + 1, response_object.amount)
     assert_equal(@activity.item_id, response_object.item_id)
@@ -140,7 +146,7 @@ class ActivitiesControllerTest < ActionController::TestCase
 
     assert_response :success
 
-    response_object = Activity.new(JSON.parse(@response.body))
+    response_object = activity_from_response()
     assert_equal(@activity.date, response_object.date)
     assert_equal(@activity.amount + 1, response_object.amount)
     assert_equal(@activity.item_id, response_object.item_id)

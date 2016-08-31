@@ -5,6 +5,7 @@ Rails.application.routes.draw do
   match 'users',    :to => 'users#create',  :via => [:post]
   match 'users',    :to => 'users#login',   :via => [:get]
   match 'logout',   :to => 'users#logout',  :via => [:get]
+  match 'items',    :to => 'items#index', :via => [:get]
   match 'preferences', :to => 'preferences#index', :via => [:get]
   match 'preferences', :to => 'preferences#create', :via => [:post]
   match 'activities', :to => 'activities#index', :via => [:get]

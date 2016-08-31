@@ -50,6 +50,6 @@ class CalorieFormula
   end
 
   def daily_kcal
-    return ((self.weight_component + self.height_component + self.age_component + self.gender_component) * SEDENTARY_ACTIVITY_MULTIPLIER).ceil.round(-1)
+    return -((self.weight_component + self.height_component + self.age_component + self.gender_component) * SEDENTARY_ACTIVITY_MULTIPLIER).ceil.round(-1)
   end
 end

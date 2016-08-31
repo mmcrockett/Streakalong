@@ -4,6 +4,35 @@ class Item
   ACTIVITIES = ["walk","run","workout","bicycle","swim"]
   OTHER      = ["weight","tobacco","toothbrush","floss","mouthwash"]
   ALL        = FOODS + BEVERAGES + ACTIVITIES + OTHER
+  CALORIES   = {
+                 "fruit"        => 100,
+                 "vegetable"    => 50,
+                 "dairy"        => 150,
+                 "grain"        => 200,
+                 "protein"      => 150,
+                 "fried"        => 150,
+                 "sweet"        => 250,
+                 "snack"        => 150,
+                 "condiment"    => 50,
+                 "soda"         => 150,
+                 "diet_soda"    => 0,
+                 "sports_drink" => 125,
+                 "coffee"       => 50,
+                 "tea"          => 25,
+                 "juice"        => 100,
+                 "water"        => 0,
+                 "alcohol"      => 150,
+                 "walk"         => -100,
+                 "run"          => -200,
+                 "workout"      => -150,
+                 "bicycle"      => -200,
+                 "swim"         => -200,
+                 "weight"       => 0,
+                 "tobacco"      => 0,
+                 "toothbrush"   => 0,
+                 "floss"        => 0,
+                 "mouthwash"    => 0
+  }
 
   def self.name(id)
     name = ALL[id]
@@ -45,6 +74,10 @@ class Item
     end
 
     return id
+  end
+
+  def self.kcal(name)
+    return CALORIES[name]
   end
 
   def self.categorized_items

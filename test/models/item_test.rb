@@ -44,4 +44,10 @@ class ItemTest < ActiveSupport::TestCase
       assert_equal(Item.id(name_sym), Item.id(name.downcase.to_sym))
     end
   end
+
+  test "kcal returns valid data for all types." do
+    Item::ALL.each do |name|
+      assert(-300 <= Item.kcal(name))
+    end
+  end
 end

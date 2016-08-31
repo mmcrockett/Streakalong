@@ -1,6 +1,6 @@
 class CalorieFormulaTest < ActiveSupport::TestCase
   test "If no values use defaults" do
-    assert_equal(2000, CalorieFormula.new().daily_kcal)
+    assert_equal(-2000, CalorieFormula.new().daily_kcal)
   end
 
   test "It uses 'ceil' and round to the 10s digit" do
@@ -16,7 +16,7 @@ class CalorieFormulaTest < ActiveSupport::TestCase
     unrounded_expectation *= CalorieFormula::SEDENTARY_ACTIVITY_MULTIPLIER
 
     assert(unrounded_expectation != person.daily_kcal)
-    assert_equal(unrounded_expectation.ceil.round(-1), person.daily_kcal)
+    assert_equal(-unrounded_expectation.ceil.round(-1), person.daily_kcal)
   end
 
   test "gender is honored" do

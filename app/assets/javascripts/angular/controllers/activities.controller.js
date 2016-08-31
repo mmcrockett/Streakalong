@@ -3,6 +3,8 @@ app.controller('ActivitiesController', [
 '$http',
 '$timeout',
 'Activity',
+'Calories',
+'Item',
 'DateHelper',
 'filterFilter',
 '$log',
@@ -11,6 +13,8 @@ function(
   $http,
   $timeout,
   Activity,
+  Calories,
+  Item,
   DateHelper,
   filter,
   Logger
@@ -23,29 +27,61 @@ function(
   $scope.$watch('date_helper.selectedDate', $scope.date_helper.set_display_dates);
 
   $scope.thinking = 0;
-  $scope.calories = -2000;
   $scope.preferences = null;
   $scope.activity_success = function(response) {
-    $scope.thinking -= 1;
     $scope.process_queue_item(response);
   };
   $scope.activity_failure = function(response) {
-    response.config.data.amount = response.config.data.previous_amount;
-    response.config.data.previous_amount = undefined;
-    response.config.data.error = true;
-    Logger.error(response.config.data)
-    $scope.error = "Sorry, there was an issue saving data for '" + $scope.items[response.config.data.item_id] + "'.";
-    $scope.thinking -= 1;
+    var activity = response.config.data;
+    activity.amount = activity.previous_amount;
+    activity.previous_amount = undefined;
+    activity.error = true;
+    Logger.error(activity)
+    $scope.error = "Sorry, there was an issue saving data for '" + $scope.find_item(activity.item_id).name + "' on '" + activity.date + "'.";
+  };
+  $scope.calories = function(d) {
+    var base_value = $scope.calorie_base[d];
+    var date_data  = $scope.activities[d];
+    var value      = null;
+
+    if (true == angular.isNumber(base_value)) {
+      value = base_value;
+
+      angular.forEach(date_data, function(activity, i) {
+        var item_data = $scope.find_item(activity.item_id);
+
+        if (true == angular.isObject(item_data)) {
+          value += activity.amount * item_data.kcal;
+        }
+      })
+    }
+
+    return value;
   };
   $scope.initialize = function(items) {
-    $scope.setup_items(items);
+    Item
+    .query({})
+    .$promise
+    .then(
+      function(items){
+        $scope.items = items;
+      }
+    ).catch(
+      function(e){
+        $scope.error = "Couldn't load items.";
+        Logger.error("Failure '" + d + "' '" + e + "'.");
+      }
+    ).finally();
+  };
+  $scope.find_item = function(id) {
+    return _.findWhere($scope.items, {id:id});
   };
   $scope.save_items = function() {
     angular.forEach($scope.activities, function(obj, d) {
       angular.forEach($scope.filter(obj, {previous_amount: '!!'}), function(activity, i) {
         $scope.thinking += 1;
         $scope.preferences.save_recent();
-        activity.$save().then($scope.activity_success).catch($scope.activity_failure);
+        activity.$save().then($scope.activity_success).catch($scope.activity_failure).finally(function(){$scope.thinking -= 1;});
       });
     });
   };
@@ -60,6 +96,7 @@ function(
   $scope.expression_queue = {};
   $scope.filter = filter;
   $scope.activities = {};
+  $scope.calorie_base = {};
   $scope.dirty_activity = 0;
   $scope.items = [];
   $scope.$watch('dirty_activity', $scope.debounce_save_items);
@@ -100,9 +137,6 @@ function(
   $scope.clear_error = function() {
     $scope.error = "";
   };
-  $scope.setup_items = function(items) {
-    $scope.items = items;
-  };
   $scope.get_activity = function(item_id, d) {
     if (true == angular.isString(d)) {
       d = new Date(Date.parse(d));
@@ -134,6 +168,19 @@ function(
         Logger.error("Failure '" + d + "' '" + e + "'.");
       }
     ).finally();
+    Calories
+    .get({date: d.getTime()})
+    .$promise
+    .then(
+      function(calorie_data){
+        $scope.calorie_base[d] = calorie_data.kcalest;
+      }
+    ).catch(
+      function(e){
+        $scope.error = "Couldn't load calorie data.";
+        Logger.error("Failure '" + d + "' '" + e + "'.");
+      }
+    ).finally();
   };
   $scope.queue_expression = function(activity, expression) {
     Logger.debug("Queueing expression '" + expression + "'.");
@@ -161,7 +208,11 @@ function(
 
     item_id = parseInt(item_id);
 
-    $scope.preferences.add_recent(item_id);
+    if (true == angular.isObject($scope.preferences)) {
+      $scope.preferences.add_recent(item_id);
+    } else {
+      Logger.warn('preferences object is not initialized.');
+    }
 
     $scope.clear_error();
 
