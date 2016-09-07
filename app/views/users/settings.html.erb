@@ -4,11 +4,23 @@
     <div class="streak-error">
       <p class="small text-muted bg-danger" ng-show="error">!ERROR: {{error}}</p>
     </div>
+    <% if (false == @user.complete_or_ignore?) %>
+      <div class="row">
+        <div class="col-sm-2"></div>
+        <div
+          ng-hide="preferences.ignore_incomplete_settings"
+          uib-alert
+          class="alert alert-warning alert-dismissible col-sm-8"
+          close="ignore_incomplete_settings()" >
+          <strong>Help Us!</strong> Personalize your calorie calculation by entering additional information.
+        </div>
+      </div>
+    <% end %>
       <form class="form-horizontal">
         <div class="form-group">
           <label for="units" class="col-sm-2 control-label">units</label>
           <div class="col-sm-8">
-            <select streakalong-ng-preference="'<%= Preference::UNITS %>'" ng-preference-model="preferences.units" class="form-control" ng-model="preferences.units" ng-options="unit for unit in <%= Preference::VALID_UNITS %>">
+            <select id="units" streakalong-ng-preference="'<%= Preference::UNITS %>'" ng-preference-model="preferences.units" class="form-control" ng-model="preferences.units" ng-options="unit for unit in <%= Preference::VALID_UNITS %>">
             </select>
           </div>
         </div>
@@ -47,7 +59,7 @@
                 is-open="datepicker.opened"
               />
               <span class="input-group-btn">
-                <button type="button" class="btn btn-default" ng-click="datepicker.show()"><i class="glyphicon glyphicon-calendar"></i></button>
+                <button id="birthday" type="button" class="btn btn-default" ng-click="datepicker.show()"><i class="glyphicon glyphicon-calendar"></i></button>
               </span>
             </div>
           </div>
@@ -55,7 +67,7 @@
         <div class="form-group">
           <label for="gender" class="col-sm-2 control-label">gender</label>
           <div class="col-sm-8">
-            <select class="form-control" ng-model="settings.gender" ng-options="gender for gender in ['male', 'female']">
+            <select id="gender" class="form-control" ng-model="settings.gender" ng-options="gender for gender in ['male', 'female']">
               <option value="">unicorn</option>
             </select>
           </div>

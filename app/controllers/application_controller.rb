@@ -38,7 +38,11 @@ class ApplicationController < ActionController::Base
 
   def streakalong_redirect
     if (true == @user.is_a?(User))
-      return_url = '/activities'
+      if (true == @user.complete_or_ignore?)
+        return_url = '/activities'
+      else
+        return_url = '/settings'
+      end
 
       if (nil != session[:return_url])
         return_url = session[:return_url]

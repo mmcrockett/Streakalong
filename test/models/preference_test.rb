@@ -39,14 +39,16 @@ class PreferenceTest < ActiveSupport::TestCase
     assert_equal(@defaults.to_json, p.to_json)
   end
 
-  test "item_tab, units and recent allow [] assignments" do
+  test "item_tab, units, ignore settings and recent allow [] assignments" do
     p = Preference.new
     p[Preference::RECENT] = [3]
     p[Preference::ITEM_TAB] = 'other'
     p[Preference::UNITS] = Preference::VALID_UNITS.last
+    p[Preference::IGNORE_INCOMPLETE_SETTINGS] = true
     assert_equal([3], p.recent)
     assert_equal('other', p.item_tab)
     assert_equal("#{Preference::VALID_UNITS.last}", p.units)
+    assert_equal(true, p.ignore_incomplete_settings)
   end
 
   test "item_tab, units and recent allow assignments" do
@@ -54,9 +56,11 @@ class PreferenceTest < ActiveSupport::TestCase
     p.recent = [3]
     p.item_tab = 'other'
     p.units    = Preference::VALID_UNITS.last
+    p.ignore_incomplete_settings = true
     assert_equal([3], p.recent)
     assert_equal('other', p.item_tab)
     assert_equal("#{Preference::VALID_UNITS.last}", p.units)
+    assert_equal(true, p.ignore_incomplete_settings)
   end
 
   test "during assignment classes must match or they're ignored" do
@@ -65,10 +69,12 @@ class PreferenceTest < ActiveSupport::TestCase
     p.recent = 3
     p.item_tab = 9
     p.units    = 9
+    p.ignore_incomplete_settings = 7
 
     assert_equal([], p.recent)
     assert_equal("all", p.item_tab)
     assert_equal("imperial", p.units)
+    assert_equal(false, p.ignore_incomplete_settings)
   end
 
   test "imperial? and metric? return correct values" do

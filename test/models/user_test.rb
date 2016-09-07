@@ -230,4 +230,32 @@ class UserTest < ActiveSupport::TestCase
     @user.birthday = birthday.tomorrow
     assert_equal(expected_age - 1, @user.age)
   end
+
+  test "complete identifies when all settings are entered" do
+    assert_not(@user.complete?)
+    @user.gender = :male
+    assert_not(@user.complete?)
+    @user.birthday = "2000-01-01"
+    assert_not(@user.complete?)
+    @user.height = 100
+    assert(@user.complete?)
+    @user.height = nil
+    @user.preferences.ignore_incomplete_settings = true
+    assert_not(@user.complete?)
+  end
+
+  test "complete_or_ignore identifies when all settings are entered or we are ignoring whether settings are entered" do
+    assert_not(@user.complete_or_ignore?)
+    @user.gender = :male
+    assert_not(@user.complete_or_ignore?)
+    @user.birthday = "2000-01-01"
+    assert_not(@user.complete_or_ignore?)
+    @user.height = 100
+    assert(@user.complete?)
+    assert(@user.complete_or_ignore?)
+    @user.height = nil
+    @user.preferences.ignore_incomplete_settings = true
+    assert_not(@user.complete?)
+    assert(@user.complete_or_ignore?)
+  end
 end

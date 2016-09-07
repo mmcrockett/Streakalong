@@ -94,12 +94,30 @@ class UsersControllerTest < ActionController::TestCase
   end
 
   test "should redirect to activities if already logged in" do
+    logged_in(2)
+
+    post :login, { password: 'somepassword', username: ''}
+
+    assert_equal(2, assigns['user'].id)
+    assert_redirected_to('/activities')
+  end
+
+  test "should redirect to acitivities if already logged in and settings are incomplete and ignore_incomplete_settings is true" do
+    logged_in(3)
+
+    post :login, { password: 'somepassword', username: 'bbobberson'}
+
+    assert_equal(3, assigns['user'].id)
+    assert_redirected_to('/activities')
+  end
+
+  test "should redirect to settings if already logged in and settings are incomplete" do
     logged_in
 
     post :login, { password: 'somepassword', username: 'bbobberson'}
 
     assert_equal(1, assigns['user'].id)
-    assert_redirected_to('/activities')
+    assert_redirected_to('/settings')
   end
 
   test "should redirect to specific url if supplied and if already logged in" do

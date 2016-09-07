@@ -61,6 +61,14 @@ class User < ActiveRecord::Base
     return age
   end
 
+  def complete_or_ignore?
+    return ((true == self.complete?) || (true == self.preferences.ignore_incomplete_settings))
+  end
+
+  def complete?
+    return ((nil != self.birthday) && (nil != self.height) && (nil != self.gender))
+  end
+
 private
   def self.encrypted_password(password, salt)
     if (false == password.is_a?(String))

@@ -62,6 +62,19 @@ function(
       $scope.settings.birthday = new Date($scope.settings.birthday);
     }
   };
+  $scope.ignore_incomplete_settings = function() {
+    if (true == angular.isDefined($scope.preferences.ignore_incomplete_settings)) {
+      $scope.preferences.ignore_incomplete_settings = true;
+      $scope.preferences.$save()
+      .catch(
+        function(e){
+          $scope.error = "Couldn't save ignore-incomplete-settings.";
+          Logger.error("Failure '" + e + "'.");
+        });
+    }
+
+    return true;
+  };
   $scope.save = function() {
     if ($scope.IMPERIAL_KEY() == $scope.preferences.units) {
       $scope.set_metric_height();

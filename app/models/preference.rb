@@ -2,6 +2,7 @@ class Preference
   ITEM_TAB = 'item_tab'
   RECENT   = 'recent'
   UNITS    = 'units'
+  IGNORE_INCOMPLETE_SETTINGS = 'ignore_incomplete_settings'
   MAX_RECENT = 16
 
   IMPERIAL_UNITS = :imperial.to_s
@@ -12,7 +13,8 @@ class Preference
   DEFAULTS = {
     ITEM_TAB => :all,
     RECENT   => [],
-    UNITS    => VALID_UNITS.first
+    UNITS    => VALID_UNITS.first,
+    IGNORE_INCOMPLETE_SETTINGS => false
   }
 
   def initialize(values = {})
@@ -41,6 +43,8 @@ class Preference
       self.recent = v
     elsif ("#{Preference::UNITS}" == k)
       self.units = v
+    elsif ("#{Preference::IGNORE_INCOMPLETE_SETTINGS}" == k)
+      self.ignore_incomplete_settings = v
     else
       Rails.logger.warn("Ignoring key that isn't a known preference '#{k}'.")
     end
@@ -60,6 +64,18 @@ class Preference
 
   def to_json
     @preferences.to_json
+  end
+
+  def ignore_incomplete_settings
+    return self[Preference::IGNORE_INCOMPLETE_SETTINGS]
+  end
+
+  def ignore_incomplete_settings=(v)
+    if (true == [true, false].include?(v))
+      @preferences[Preference::IGNORE_INCOMPLETE_SETTINGS] = v
+    end
+
+    return self
   end
 
   def units

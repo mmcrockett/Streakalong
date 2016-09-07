@@ -18,3 +18,11 @@ two:
   gender: 'male'
   height: 180
   preferences: '{"item_tab":"activities","recent":[1,2,3],"units":"metric"}'
+
+three:
+  id: 3
+  name: Rob Robberson
+  username: rrobberson
+  hashed_password: 5e67074d616ea1b273d11b0d512171d6f3aab231
+  salt: 702769803399600.6687368534156103
+  preferences: '{"item_tab":"activities","recent":[1,2,3],"units":"imperial","ignore_incomplete_settings":true}'
