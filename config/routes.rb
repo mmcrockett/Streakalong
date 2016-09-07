@@ -4,6 +4,8 @@ Rails.application.routes.draw do
   match 'welcome',  :to => 'users#welcome', :via => [:get]
   match 'users',    :to => 'users#create',  :via => [:post]
   match 'users',    :to => 'users#login',   :via => [:get]
+  match 'settings', :to => 'users#settings', :via => [:get]
+  match 'settings', :to => 'users#update', :via => [:post]
   match 'logout',   :to => 'users#logout',  :via => [:get]
   match 'items',    :to => 'items#index', :via => [:get]
   match 'preferences', :to => 'preferences#index', :via => [:get]

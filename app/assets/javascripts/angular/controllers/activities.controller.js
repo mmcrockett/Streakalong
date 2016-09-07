@@ -1,6 +1,5 @@
 app.controller('ActivitiesController', [
 '$scope',
-'$http',
 '$timeout',
 'Activity',
 'Calories',
@@ -10,7 +9,6 @@ app.controller('ActivitiesController', [
 '$log',
 function(
   $scope,
-  $http,
   $timeout,
   Activity,
   Calories,
@@ -58,7 +56,7 @@ function(
 
     return value;
   };
-  $scope.initialize = function(items) {
+  $scope.initialize = function() {
     Item
     .query({})
     .$promise

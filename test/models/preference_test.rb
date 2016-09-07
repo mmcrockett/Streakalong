@@ -39,12 +39,24 @@ class PreferenceTest < ActiveSupport::TestCase
     assert_equal(@defaults.to_json, p.to_json)
   end
 
-  test "item_tab and recent allow assignments" do
+  test "item_tab, units and recent allow [] assignments" do
+    p = Preference.new
+    p[Preference::RECENT] = [3]
+    p[Preference::ITEM_TAB] = 'other'
+    p[Preference::UNITS] = Preference::VALID_UNITS.last
+    assert_equal([3], p.recent)
+    assert_equal('other', p.item_tab)
+    assert_equal("#{Preference::VALID_UNITS.last}", p.units)
+  end
+
+  test "item_tab, units and recent allow assignments" do
     p = Preference.new
     p.recent = [3]
     p.item_tab = 'other'
+    p.units    = Preference::VALID_UNITS.last
     assert_equal([3], p.recent)
     assert_equal('other', p.item_tab)
+    assert_equal("#{Preference::VALID_UNITS.last}", p.units)
   end
 
   test "during assignment classes must match or they're ignored" do
@@ -52,9 +64,24 @@ class PreferenceTest < ActiveSupport::TestCase
 
     p.recent = 3
     p.item_tab = 9
+    p.units    = 9
 
     assert_equal([], p.recent)
     assert_equal("all", p.item_tab)
+    assert_equal("imperial", p.units)
+  end
+
+  test "units only takes known types as values and ignoring others" do
+    p = Preference.new
+
+    Preference::VALID_UNITS.each do |type|
+      p.units = type
+      assert_equal("#{type}", p.units)
+    end
+
+    v = p.units
+    p.units = "notvalid"
+    assert_equal(v, p.units)
   end
 
   test "item_tab only takes known categories as values and ignoring others" do
@@ -140,10 +167,5 @@ class PreferenceTest < ActiveSupport::TestCase
     assert_nil(p[:a])
     assert_nil(p[:b])
     assert_nil(o[:c])
-  end
-
-  test "item_tab_setting_for should return objects that can be passed back as preferences" do
-    p = Preference.new
-    assert_equal({Preference::ITEM_TAB => 'other'}, p.item_tab_setting_for('other'))
   end
 end

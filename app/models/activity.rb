@@ -3,7 +3,6 @@ class Activity < ActiveRecord::Base
   validates :amount, :numericality => {:greater_than_or_equal_to => 0}
 
   LB_TO_KG = 1/2.205
-  IN_TO_CM = 2.54
 
   def weight_at_the_time
     weight = nil

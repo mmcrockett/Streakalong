@@ -2,7 +2,7 @@
         <ul class="nav nav-tabs">
           <% Item.categorized_items.each do |category| %>
             <% category.each_key do |category_name| %>
-              <li streakalong-ng-preference='<%= @user.preferences.item_tab_setting_for(category_name).to_json %>'
+              <li streakalong-ng-preference="'<%= Preference::ITEM_TAB %>'" ng-preference-value="<%= category_name %>"
             ng-class="{'active':(preferences.item_tab == '<%= category_name %>')}">
                     <a href="#<%=category_name%>" data-toggle="tab"><%=category_name%></a>
               </li>

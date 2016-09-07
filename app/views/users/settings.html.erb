@@ -1,0 +1,70 @@
+<% @page_title = "Settings" %>
+  <div ng-controller="SettingsController" class="navbar navbar-default" style="background-color:#FFFFFF;padding:5px 5px;" ng-init="initialize('<%= Preference::IMPERIAL_UNITS %>')">
+    <%= render :partial => "common/nav_bar" %>
+    <div class="streak-error">
+      <p class="small text-muted bg-danger" ng-show="error">!ERROR: {{error}}</p>
+    </div>
+      <form class="form-horizontal">
+        <div class="form-group">
+          <label for="units" class="col-sm-2 control-label">units</label>
+          <div class="col-sm-8">
+            <select streakalong-ng-preference="'<%= Preference::UNITS %>'" ng-preference-model="preferences.units" class="form-control" ng-model="preferences.units" ng-options="unit for unit in <%= Preference::VALID_UNITS %>">
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="name" class="col-sm-2 control-label">name</label>
+          <div class="col-sm-8">
+            <input type="text" class="form-control" id="name" placeholder="name" ng-model="settings.name">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-2 control-label">height</label>
+          <div class="col-sm-8">
+            <div class="input-group" ng-show="IMPERIAL_KEY() == preferences.units">
+              <input type="text" class="form-control" placeholder="feet" ng-model="height_ft">
+              <div class="input-group-addon">ft</div>
+              <input type="text" class="form-control" placeholder="inches" ng-model="height_in">
+              <div class="input-group-addon">in</div>
+            </div>
+            <div class="input-group" ng-show="'<%= Preference::VALID_UNITS.last %>' == preferences.units">
+              <input type="text" class="form-control" placeholder="centimeters" ng-model="settings.height" ng-change="set_imperial_height()">
+              <div class="input-group-addon">cm</div>
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="birthday" class="col-sm-2 control-label">birthday</label>
+          <div class="col-sm-8">
+            <div class="input-group">
+              <input
+                type="text"
+                class="form-control"
+                uib-datepicker-popup="MM/dd/yyyy"
+                alt-input-formats="['M!/d!/yyyy']"
+                ng-model="settings.birthday"
+                datepicker-options="{datepickerMode:'year'}"
+                is-open="datepicker.opened"
+              />
+              <span class="input-group-btn">
+                <button type="button" class="btn btn-default" ng-click="datepicker.show()"><i class="glyphicon glyphicon-calendar"></i></button>
+              </span>
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="gender" class="col-sm-2 control-label">gender</label>
+          <div class="col-sm-8">
+            <select class="form-control" ng-model="settings.gender" ng-options="gender for gender in ['male', 'female']">
+              <option value="">unicorn</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-sm-offset-2 col-sm-10">
+            <button type="submit" ng-disabled="saving" ng-click="save()" class="btn btn-primary">Save</button>
+            <span ng-show="saving" class="small text-warning text-bold">saving...</span>
+          </div>
+        </div>
+      </form>
+  </div>

@@ -1,11 +1,18 @@
 class Preference
   ITEM_TAB = 'item_tab'
   RECENT   = 'recent'
+  UNITS    = 'units'
   MAX_RECENT = 16
+
+  IMPERIAL_UNITS = :imperial.to_s
+  METRIC_UNITS   = :metric.to_s
+
+  VALID_UNITS = [IMPERIAL_UNITS, METRIC_UNITS]
 
   DEFAULTS = {
     ITEM_TAB => :all,
-    RECENT   => []
+    RECENT   => [],
+    UNITS    => VALID_UNITS.first
   }
 
   def initialize(values = {})
@@ -32,6 +39,8 @@ class Preference
       self.item_tab = v
     elsif ("#{Preference::RECENT}" == k)
       self.recent = v
+    elsif ("#{Preference::UNITS}" == k)
+      self.units = v
     else
       Rails.logger.warn("Ignoring key that isn't a known preference '#{k}'.")
     end
@@ -51,6 +60,28 @@ class Preference
 
   def to_json
     @preferences.to_json
+  end
+
+  def units
+    return self[Preference::UNITS]
+  end
+
+  def units=(v)
+    v = "#{v}"
+
+    if (true == matching_type?(Preference::UNITS, v))
+      if (true == VALID_UNITS.include?(v))
+        @preferences[Preference::UNITS] = v
+      else
+        Rails.logger.warn("Ignoring units because invalid unit type '#{v}'.")
+      end
+    end
+
+    return self
+  end
+
+  def metric?
+    return (:metric == self.units)
   end
 
   def item_tab=(v)
@@ -74,14 +105,6 @@ class Preference
 
   def item_tab
     return self[Preference::ITEM_TAB]
-  end
-
-  def item_tab_setting_for(tab_name)
-    if (nil == tab_name)
-      tab_name = ""
-    end
-
-    return {Preference::ITEM_TAB => tab_name}
   end
 
   def recent=(v)

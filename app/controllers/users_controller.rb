@@ -1,7 +1,7 @@
 class UsersController < ApplicationController
   before_filter :streakalong_load_user, :except => [:logout]
   before_filter :streakalong_authorize, :except => [:login, :create, :welcome, :logout]
-  before_filter :streakalong_redirect,  :except => [:logout]
+  before_filter :streakalong_redirect,  :except => [:logout, :update, :settings]
 
   def create
     user = User.register(params[:username], params[:password], params[:name])
@@ -12,6 +12,16 @@ class UsersController < ApplicationController
         format.json { render json: {}, status: :accepted}
       else
         format.json { render json: user.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
+  def update
+    respond_to do |format|
+      if (true == @user.update(user_params))
+        format.json { render :settings }
+      else
+        format.json { render json: @user.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -38,6 +48,6 @@ class UsersController < ApplicationController
   private
   # Never trust parameters from the scary internet, only allow the white list through.
   def user_params
-    params.require(:user).permit(:name, :username, :hashed_password, :salt, :preferences)
+    params.require(:user).permit(:name, :gender, :height, :birthday)
   end
 end

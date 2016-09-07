@@ -2,9 +2,6 @@ class PreferencesController < ApplicationController
   before_filter :streakalong_load_user
   before_filter :streakalong_authorize
 
-  def index
-  end
-
   def create
     @user.preferences = preference_params
     respond_to do |format|

@@ -1,7 +1,8 @@
+<% links = [:activities, :streaks, :settings, :logout] %>
       <div class="navbar navbar-default" id="nav-bar">
         <ul class="nav navbar-nav">
-          <li style="width:33%"><a href="/activities">activities</a></li>
-          <li style="width:33%"><a href="/streaks">streaks</a></li>
-          <li style="width:33%"><a href="/logout">logout</a></li>
+        <% links.each do |link| %>
+          <li style="width:<%= (100 / links.size).floor %>%"><a href="/<%= link %>"><%= link %></a></li>
+        <% end %>
         </ul>
       </div>

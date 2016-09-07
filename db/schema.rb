@@ -24,6 +24,19 @@ ActiveRecord::Schema.define(version: 201606062308301) do
 
   add_index "activities", ["user_id"], name: "index_activities_on_user_id"
 
+  create_table "backup_users", force: :cascade do |t|
+    t.string   "name",            null: false
+    t.string   "username",        null: false
+    t.string   "hashed_password", null: false
+    t.string   "salt",            null: false
+    t.string   "preferences",     null: false
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
+    t.integer  "birthday"
+    t.string   "gender"
+    t.integer  "height"
+  end
+
   create_table "streaks", force: :cascade do |t|
     t.date     "start",      null: false
     t.date     "end",        null: false
@@ -43,6 +56,19 @@ ActiveRecord::Schema.define(version: 201606062308301) do
     t.datetime "created_at",      null: false
     t.datetime "updated_at",      null: false
     t.date     "birthday"
+    t.string   "gender"
+    t.integer  "height"
+  end
+
+  create_table "users_tmp", force: :cascade do |t|
+    t.string   "name",            null: false
+    t.string   "username",        null: false
+    t.string   "hashed_password", null: false
+    t.string   "salt",            null: false
+    t.string   "preferences",     null: false
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
+    t.datetime "birthday"
     t.string   "gender"
     t.integer  "height"
   end

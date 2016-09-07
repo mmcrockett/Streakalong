@@ -19,6 +19,37 @@ class UsersControllerTest < ActionController::TestCase
     assert_equal({}, JSON.parse(@response.body))
   end
 
+  test "should get settings" do
+    request_json
+    logged_in
+
+    get :settings
+
+    assert_response :success
+    assert_equal({"name"=>"Bob Bobberson", "height"=>nil, "birthday"=>nil, "gender"=>nil}, JSON.parse(@response.body))
+  end
+
+  test "update should set settings" do
+    request_json
+    logged_in
+
+    post :update, {"name"=>"Bob Bobberson", "height"=>180, "birthday"=>nil, "gender"=>"male"}
+
+    assert_response :success
+    assert_equal({"name"=>"Bob Bobberson", "height"=>180, "birthday"=>nil, "gender"=>"male"}, JSON.parse(@response.body))
+  end
+
+  test "should be logged in to see settings" do
+    get :settings
+    assert_redirected_to(:action => "welcome")
+
+    request_json
+    get :settings
+    assert_response :unauthorized
+    post :settings
+    assert_response :unauthorized
+  end
+
   test "failure on create should report json error." do
     request_json
 

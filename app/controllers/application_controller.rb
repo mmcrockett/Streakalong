@@ -2,6 +2,14 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
 
   private
+  def requested_time(unix_epoch)
+    return Time.at(unix_epoch.to_i/1000).utc
+  end
+
+  def requested_date(unix_epoch)
+    return requested_time(unix_epoch).to_date()
+  end
+
   def streakalong_load_user
     if (nil == @user)
       if (true == session[:user_id].is_a?(Integer))
