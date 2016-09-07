@@ -80,8 +80,12 @@ class Preference
     return self
   end
 
+  def imperial?
+    return (false == self.metric?)
+  end
+
   def metric?
-    return (:metric == self.units)
+    return (METRIC_UNITS == self.units)
   end
 
   def item_tab=(v)

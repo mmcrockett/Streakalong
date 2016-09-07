@@ -44,7 +44,7 @@ u1_a1:
 
 u1_w0:
   id: 7
-  amount: 90
+  amount: 200
   user_id: 1
   item_id: <%= Item.id(:weight) %>
   date: 2016-07-01

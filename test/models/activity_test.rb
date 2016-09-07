@@ -31,6 +31,19 @@ class ActivityTest < ActiveSupport::TestCase
     assert_equal(60, activity_2016_07_12.weight_at_the_time)
   end
 
+  test "kcalest returns calculation for weight and converts imperial units correctly" do
+    user = users(:one)
+    activity_2016_06_05 = activities(:five)
+    activity_2016_07_02 = activities(:u1_a1)
+    weight_activity_2016_07_01 = activities(:u1_w0)
+    user_calorie_default_lb = CalorieFormula.new({:height => user.height, :gender => user.gender, :age => user.age})
+    user_calorie_200lb      = CalorieFormula.new({:height => user.height, :gender => user.gender, :age => user.age, :weight => (200/Activity::LB_IN_KG).ceil})
+
+    assert_equal(user_calorie_default_lb.daily_kcal, activity_2016_06_05.kcalest)
+    assert_equal(user_calorie_200lb.daily_kcal, weight_activity_2016_07_01.kcalest)
+    assert_equal(user_calorie_200lb.daily_kcal, activity_2016_07_02.kcalest)
+  end
+
   test "kcalest returns calculation for weight" do
     user = users(:two)
     activity_2016_06_25 = activities(:u2_a0)

@@ -71,6 +71,18 @@ class PreferenceTest < ActiveSupport::TestCase
     assert_equal("imperial", p.units)
   end
 
+  test "imperial? and metric? return correct values" do
+    p = Preference.new
+
+    assert(p.imperial?)
+    assert_not(p.metric?)
+
+    p.units = Preference::METRIC_UNITS
+
+    assert(p.metric?)
+    assert_not(p.imperial?)
+  end
+
   test "units only takes known types as values and ignoring others" do
     p = Preference.new
 
