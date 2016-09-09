@@ -11,6 +11,7 @@ class ApplicationController < ActionController::Base
   end
 
   def streakalong_load_user
+    #debugger
     if (nil == @user)
       if (true == session[:user_id].is_a?(Integer))
         @user = User.find_by({:id => session[:user_id]})
@@ -38,16 +39,15 @@ class ApplicationController < ActionController::Base
 
   def streakalong_redirect
     if (true == @user.is_a?(User))
-      if (true == @user.complete_or_ignore?)
-        return_url = '/activities'
-      else
+      if (false == @user.complete_or_ignore?)
         return_url = '/settings'
+      elsif (nil != session[:return_url])
+        return_url = session[:return_url]
+      else
+        return_url = '/activities'
       end
 
-      if (nil != session[:return_url])
-        return_url = session[:return_url]
-        session.delete(:return_url)
-      end
+      session.delete(:return_url)
 
       respond_to do |format|
         format.html { redirect_to(return_url) }

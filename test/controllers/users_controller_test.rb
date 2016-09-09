@@ -67,7 +67,7 @@ class UsersControllerTest < ActionController::TestCase
   test "should login user" do
     request_json
 
-    post :login, { password: 'somepassword', username: 'bbobberson'}
+    post :login, credentials()
 
     assert_response :success
     assert_equal(1, session[:user_id])
@@ -96,7 +96,7 @@ class UsersControllerTest < ActionController::TestCase
   test "should redirect to activities if already logged in" do
     logged_in(2)
 
-    post :login, { password: 'somepassword', username: ''}
+    get :welcome
 
     assert_equal(2, assigns['user'].id)
     assert_redirected_to('/activities')
@@ -105,7 +105,7 @@ class UsersControllerTest < ActionController::TestCase
   test "should redirect to acitivities if already logged in and settings are incomplete and ignore_incomplete_settings is true" do
     logged_in(3)
 
-    post :login, { password: 'somepassword', username: 'bbobberson'}
+    get :welcome
 
     assert_equal(3, assigns['user'].id)
     assert_redirected_to('/activities')
@@ -114,19 +114,29 @@ class UsersControllerTest < ActionController::TestCase
   test "should redirect to settings if already logged in and settings are incomplete" do
     logged_in
 
-    post :login, { password: 'somepassword', username: 'bbobberson'}
+    get :welcome
 
     assert_equal(1, assigns['user'].id)
     assert_redirected_to('/settings')
   end
 
-  test "should redirect to specific url if supplied and if already logged in" do
+  test "should redirect to settings if redirect supplied and if already logged in but is incomplete" do
     logged_in
     @request.session[:return_url] = ('/streaks')
 
-    post :login, { password: 'somepassword', username: 'bbobberson'}
+    get :welcome
 
     assert_equal(1, assigns['user'].id)
+    assert_redirected_to('/settings')
+  end
+
+  test "should redirect to specific url if supplied and if already logged in and is considered 'complete'" do
+    logged_in(2)
+    @request.session[:return_url] = ('/streaks')
+
+    get :welcome
+
+    assert_equal(2, assigns['user'].id)
     assert_redirected_to('/streaks')
   end
 

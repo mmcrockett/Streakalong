@@ -15,4 +15,8 @@ class ActiveSupport::TestCase
   def logged_in(user_id = 1)
     @request.session[:user_id] = user_id
   end
+
+  def credentials(username = 'bbobberson')
+    return {:username => username, :password => 'somepassword'}
+  end
 end

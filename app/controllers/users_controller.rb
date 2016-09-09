@@ -1,7 +1,13 @@
 class UsersController < ApplicationController
   before_filter :streakalong_load_user, :except => [:logout]
   before_filter :streakalong_authorize, :except => [:login, :create, :welcome, :logout]
-  before_filter :streakalong_redirect,  :except => [:logout, :update, :settings]
+  before_filter :streakalong_redirect,  :only => [:welcome]
+
+  def welcome
+  end
+
+  def settings
+  end
 
   def create
     user = User.register(params[:username], params[:password], params[:name])
