@@ -4,12 +4,13 @@
 # is considered to be the first unless any hosts have the primary
 # property set.  Don't declare `role :all`, it's a meta role.
 
-role :app, %w{test.streakalong.com}
-role :web, %w{test.streakalong.com}
-role :db,  %w{test.streakalong.com}
+role :app, %w{streakalong.com}
+role :web, %w{streakalong.com}
+role :db,  %w{streakalong.com}
 
 set :password, "#{Thor::Basic.new.ask(:password, :echo => false)}"
-set :deploy_to, '~/test.streakalong.com'
+set :deploy_to, '/home/streakalong/streakalong.com'
+set :tmp_dir, '/home/streakalong/tmp'
 
 
 # Extended Server Syntax
@@ -18,7 +19,7 @@ set :deploy_to, '~/test.streakalong.com'
 # server list. The second argument is a, or duck-types, Hash and is
 # used to set extended properties on the server.
 
-server 'fanduel.mmcrockett.com', user: 'fanduel', roles: %w{web app}, password: fetch(:password)
+server 'streakalong.com', user: 'streakalong', roles: %w{web app production}, password: fetch(:password)
 
 
 # Custom SSH Options
