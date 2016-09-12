@@ -55,7 +55,7 @@ div.front-login {
 
 @media only screen and (min-width:901px) {
   div.front-image {
-    background: #f5f5f5 url('/assets/screenshot.jpg') no-repeat scroll center center;
+    background: #f5f5f5 image-url('screenshot.jpg') no-repeat scroll center center;
     height: 475px;
     width: 558px;
   }

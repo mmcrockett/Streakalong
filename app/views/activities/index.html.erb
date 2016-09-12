@@ -31,7 +31,7 @@
           </div>
           <div class="text-right text-muted dateindicator" style="padding-right:4px;"><small></small></div>
           <div class="text-muted small" style="width:100%;height:100%;" ng-if="!activities[rel_date]" ng-init="load_activities(rel_date)">
-              <%= image_tag("/assets/indicator_large.gif", :style => "margin-left:42%;margin-top:32px;") %>
+              <%= image_tag("indicator_large.gif", :style => "margin-left:42%;margin-top:32px;") %>
           </div>
           <div
             ng-repeat="item in activities[rel_date] | orderBy:'item_id'"
