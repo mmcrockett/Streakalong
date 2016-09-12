@@ -4,5 +4,5 @@ RewriteCond %{HTTPS} !=on
 RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 SSLOptions +StrictRequire
 SSLRequireSSL
-SSLRequire %{HTTP_HOST} eq "streakalong.com"
-ErrorDocument 403 https://streakalong.com
+SSLRequire %{HTTP_HOST} eq "www.streakalong.com"
+ErrorDocument 403 https://www.streakalong.com
