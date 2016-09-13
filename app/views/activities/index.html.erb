@@ -39,7 +39,7 @@
             ng-class="{'daydata-container': true, 'bg-danger': item.error}"
             ng-dblclick="(false == is_touch) && process_amount('-1',item.item_id,rel_date)"
             ng-click="(true == is_touch) && process_amount('-1',item.item_id,rel_date)">
-            <%= render :partial => "common/item_image", :locals => {:category => 'daydata', :type => '{{find_item(item.item_id).name}}', :id => '{{item.item_id}}'} %>
+            <%= render :partial => "common/item_image", :locals => {:category => 'daydata', :type => '{{find_item(item.item_id).name}}', :id => '{{item.item_id}}', :image_src => '{{find_item(item.item_id).image_src}}'} %>
             <streakalong-ng-editable ng-disable-editable="is_touch" ng-item="item" ng-date="rel_date" ng-process-amount="process_amount(expression, item_id, d)">
           </div>
         </div>

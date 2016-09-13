@@ -18,7 +18,7 @@
                 ng-dblclick="(false == is_touch) && process_amount('+1',<%= Item.id(item_type) %>, date_helper.selectedDate)"
                 ng-click="(true == is_touch) && process_amount('+1',<%= Item.id(item_type) %>, date_helper.selectedDate)"
                 <%= if (Preference::RECENT == category_name); "ng-if=is_recent(#{Item.id(item_type)})"; end %>>
-              <%= render :partial => "common/item_image", :locals => {:category => category_name, :type => item_type, :id => Item.id(item_type)} %>
+                  <%= render :partial => "common/item_image", :locals => {:category => category_name, :type => item_type, :id => Item.id(item_type), :image_src => asset_path("items/#{item_type}.png")} %>
               </span>
             <% end %>
             </div>
