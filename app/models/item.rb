@@ -8,7 +8,7 @@ class Item
                  "fruit"        => 100,
                  "vegetable"    => 50,
                  "dairy"        => 150,
-                 "grain"        => 200,
+                 "grain"        => 150,
                  "protein"      => 150,
                  "fried"        => 150,
                  "sweet"        => 250,
