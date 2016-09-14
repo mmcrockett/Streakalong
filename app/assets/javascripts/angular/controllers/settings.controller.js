@@ -40,7 +40,7 @@ function(
 
       $scope.settings.height = Math.round(height_inches * $scope.CM_TO_IN());
     } else {
-      Logger.warning("Settings aren't loaded correctly. Can't save height.");
+      Logger.warn("Settings aren't loaded correctly. Can't save height.");
     }
   };
   $scope.initialize = function(imperial_key) {
