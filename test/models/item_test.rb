@@ -50,4 +50,20 @@ class ItemTest < ActiveSupport::TestCase
       assert(-300 <= Item.kcal(name))
     end
   end
+
+  test "kcal values are reasonable." do
+    base_line = -2120
+
+    base_line += (Item.kcal("fruit")) * 3
+    base_line += (Item.kcal("vegetable")) * 1
+    base_line += (Item.kcal("dairy")) * 4
+    base_line += (Item.kcal("grain")) * 6
+    base_line += (Item.kcal("protein")) * 3
+    base_line += (Item.kcal("sweet")) * 1
+    base_line += (Item.kcal("soda")) * 1
+    base_line += (Item.kcal("coffee")) * 2
+    base_line += (Item.kcal("alcohol")) * 3
+    base_line += (Item.kcal("workout")) * 2
+    assert_equal(550, base_line)
+  end
 end
