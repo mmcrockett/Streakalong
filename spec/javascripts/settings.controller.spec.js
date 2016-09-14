@@ -44,6 +44,13 @@ describe('SettingsController', function() {
     });
   });
   describe('calculate metric height', function() {
+    it('correctly sets height from height in ft and in as strings', function() {
+      $scope.settings = {height: 165};
+      $scope.height_ft = "5";
+      $scope.height_in = "11";
+      $scope.set_metric_height();
+      expect($scope.settings.height).toEqual(180);
+    });
     it('correctly sets height from height in ft and in', function() {
       $scope.settings = {height: 165};
       $scope.height_ft = 5;

@@ -36,7 +36,11 @@ function(
   };
   $scope.set_metric_height = function() {
     if (true == angular.isObject($scope.settings)) {
-      $scope.settings.height = Math.round(($scope.height_ft * $scope.IN_IN_FT() + $scope.height_in) * $scope.CM_TO_IN());
+      var height_inches = parseInt($scope.height_ft) * $scope.IN_IN_FT() + parseInt($scope.height_in);
+
+      $scope.settings.height = Math.round(height_inches * $scope.CM_TO_IN());
+    } else {
+      Logger.warning("Settings aren't loaded correctly. Can't save height.");
     }
   };
   $scope.initialize = function(imperial_key) {
@@ -59,7 +63,8 @@ function(
   };
   $scope.birthday_to_date = function() {
     if (true == angular.isString($scope.settings.birthday)) {
-      $scope.settings.birthday = new Date($scope.settings.birthday);
+      $scope.settings.birthday = new Date(Date.parse($scope.settings.birthday));
+      $scope.settings.birthday = $scope.settings.birthday.ago(-$scope.settings.birthday.getTimezoneOffset()/60/24);
     }
   };
   $scope.ignore_incomplete_settings = function() {
