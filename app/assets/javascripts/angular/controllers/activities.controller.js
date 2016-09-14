@@ -20,21 +20,34 @@ function(
   $scope.INVALID_STATEMENT  = _.constant("Sorry, but we couldn't understand. Only +- and numbers are allowed. Reverting your value.");
   $scope.TOO_LONG_STATEMENT = _.constant("Your entry was too long. Reverting your value.");
   $scope.MAX_STATEMENT_SIZE = _.constant(50);
+  $scope.SAVE_TIMEOUT= _.constant(2500);
 
   $scope.date_helper = new DateHelper();
   $scope.$watch('date_helper.selectedDate', $scope.date_helper.set_display_dates);
 
-  $scope.thinking = 0;
+  $scope.thinking = function() {
+    return _.any(
+      _.values($scope.activities),
+      function(data_array,date_value) {
+        return _.any(data_array,
+          function(item_data,i){
+            return (true == item_data.saving);
+          });
+      });
+  };
   $scope.preferences = null;
   $scope.activity_success = function(response) {
     $scope.process_queue_item(response);
   };
-  $scope.activity_failure = function(response) {
-    var activity = response.config.data;
+  $scope.activity_failure = function(response, e) {
+    var activity    = response.config.data;
+
     activity.amount = activity.previous_amount;
     activity.previous_amount = undefined;
-    activity.error = true;
-    Logger.error(activity)
+    activity.saving = false;
+    activity.error  = true;
+    $scope.expression_queue[activity.queue_id()] = [];
+    Logger.error(angular.toJson(activity));
     $scope.error = "Sorry, there was an issue saving data for '" + $scope.find_item(activity.item_id).name + "' on '" + activity.date + "'.";
   };
   $scope.calories = function(d) {
@@ -75,11 +88,14 @@ function(
     return _.findWhere($scope.items, {id:id});
   };
   $scope.save_items = function() {
+    Logger.debug("Saving!");
     angular.forEach($scope.activities, function(obj, d) {
       angular.forEach($scope.filter(obj, {previous_amount: '!!'}), function(activity, i) {
-        $scope.thinking += 1;
-        $scope.preferences.save_recent();
-        activity.$save().then($scope.activity_success).catch($scope.activity_failure).finally(function(){$scope.thinking -= 1;});
+        activity.saving = true;
+        if (true == angular.isObject($scope.preferences)) {
+          $scope.preferences.save_recent();
+        }
+        activity.$save().then($scope.activity_success).catch($scope.activity_failure);
       });
     });
   };
@@ -88,12 +104,12 @@ function(
     if (timeout) {
       $timeout.cancel(timeout);
     }
-    timeout = $timeout($scope.save_items, 2500);
+    timeout = $timeout($scope.save_items, $scope.SAVE_TIMEOUT());
   };
   $scope.error  = "";
-  $scope.expression_queue = {};
   $scope.filter = filter;
   $scope.activities = {};
+  $scope.expression_queue = {};
   $scope.calorie_base = {};
   $scope.dirty_activity = 0;
   $scope.items = [];
@@ -181,28 +197,29 @@ function(
     ).finally();
   };
   $scope.queue_expression = function(activity, expression) {
-    Logger.debug("Queueing expression '" + expression + "'.");
-    if (false == angular.isObject($scope.expression_queue[activity])) {
-      $scope.expression_queue[activity] = [];
+    var id = activity.queue_id();
+
+    if (false == angular.isObject($scope.expression_queue[id])) {
+      $scope.expression_queue[id] = [];
     }
 
-    $scope.expression_queue[activity].push(expression);
+    $scope.expression_queue[id].push(expression);
   };
   $scope.process_queue_item = function(activity) {
-    var expressions = $scope.expression_queue[activity];
+    var id = activity.queue_id();
+    var expressions = $scope.expression_queue[id];
 
-    if (true == angular.isObject(expressions)) {
+    if (true == angular.isArray(expressions)) {
       angular.forEach(expressions, function(exp, i) {
         $scope.process_amount(exp, activity.item_id, activity.date);
-        $scope.dirty_activity += 1;
       });
 
-      $scope.expression_queue[activity] = [];
+      $scope.expression_queue[id] = [];
     }
   };
   $scope.process_amount = function(expression, item_id, d) {
     var amount = -99;
-    var activity;
+    var activity = null;
 
     item_id = parseInt(item_id);
 
@@ -232,10 +249,10 @@ function(
         activity.previous_amount = undefined;
       }
 
-      if (0 == $scope.thinking) {
-        $scope.dirty_activity += 1;
-      } else {
+      if (true == activity.saving) {
         $scope.queue_expression(activity, expression);
+      } else {
+        $scope.dirty_activity += 1;
       }
     } catch (e) {
       $scope.error = "Still loading data...";

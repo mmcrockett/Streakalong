@@ -11,7 +11,7 @@
       <button type="button" class="btn btn-default glyphicon glyphicon-chevron-right calendar-nav" ng-click="date_helper.change_date(1)"></button>
       <%= render :partial => "common/datepicker" %>
       <streakalong-ng-device-mode ng-is-touch="is_touch"></streakalong-ng-device-mode>
-      <div class="calendar-nav" style="float:right;margin-right:10px;" ng-show="(0 != thinking)">
+      <div class="calendar-nav" style="float:right;margin-right:10px;" ng-show="thinking()">
         <span class="small text-warning text-bold">saving...</span>
       </div>
     </div>
