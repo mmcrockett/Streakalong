@@ -13,11 +13,16 @@ app.factory('DateHelper', ['$log', '$interval', function(Logger, $interval) {
     };
 
     this.is_today = _.bind(function(d) {
-      if (true == angular.isObject(this.today)) {
+      if ((true == angular.isDate(this.today)) && (true == angular.isDate(d))) {
         return (this.today.getTime() == d.getTime());
       } else {
+        Logger.debug("One of today or d is not a date object '" + d + "' '" + this.today + "'.");
         return false;
       }
+    }, this);
+
+    this.is_today_selected = _.bind(function() {
+      return this.is_today(this.selectedDate);
     }, this);
 
     this.show_datepicker = _.bind(function() {

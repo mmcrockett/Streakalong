@@ -7,7 +7,7 @@
     </div>
     <div>
       <button type="button" class="btn btn-default glyphicon glyphicon-chevron-left calendar-nav" ng-click="date_helper.change_date(-1)"></button>
-      <button type="button" class="btn btn-default glyphicon glyphicon-home calendar-nav" ng-click="date_helper.change_date(0)"></button>
+      <button type="button" class="btn btn-default glyphicon glyphicon-home calendar-nav" ng-click="date_helper.change_date(0)" ng-disabled="date_helper.is_today_selected()"></button>
       <button type="button" class="btn btn-default glyphicon glyphicon-chevron-right calendar-nav" ng-click="date_helper.change_date(1)"></button>
       <%= render :partial => "common/datepicker" %>
       <streakalong-ng-device-mode ng-is-touch="is_touch"></streakalong-ng-device-mode>
