@@ -25,16 +25,5 @@
         FastClick.attach(document.body);
       })
     ") %>
-  <%= javascript_tag("
-    jQuery(document).ready(
-      function() {
-        var old_gotoToday = jQuery.datepicker._gotoToday;
-        jQuery.datepicker._gotoToday = function(id) {
-          old_gotoToday.call(this,id);
-          this._selectDate(id);
-        };
-        FastClick.attach(document.body);
-      })
-    ") %>
 </body>
 </html>
