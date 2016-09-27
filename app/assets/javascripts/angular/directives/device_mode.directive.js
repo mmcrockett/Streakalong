@@ -29,7 +29,8 @@ app.directive('streakalongNgDeviceMode', ['$log', 'localStorageService', functio
     },
     restrict: 'E',
     template: '<button type="button" class="btn btn-default" ng-class="{\'active\':isTouch}" style="float:right;" ng-click="switch_device_mode()">' + 
-        '<span class="glyphicon glyphicon-phone" aria-hidden="true"></span> {{isTouch | boolean:["Touch","Mouse"]}}' + 
+        '<span class="glyphicon glyphicon-phone" aria-hidden="true"></span>' +
+        '<span class="hidden-xs">{{isTouch | boolean:["Touch","Mouse"]}}</span>' +
       '</button>',
     link: link
   };
