@@ -23,9 +23,16 @@ class ActivitiesController < ApplicationController
     save_status = false
 
     if (nil == params[:id])
-      @activity = Activity.new(params.require(:activity).permit(:amount, :item_id, :date))
-      @activity.user = @user
-      save_status = @activity.save
+      ruby_date = Activity.new(params.require(:activity).permit(:date)).date
+      @activity = @user.activities.find_by(params.require(:activity).permit(:item_id).merge({:date => ruby_date}))
+
+      if (nil != @activity)
+        save_status = @activity.update(params.require(:activity).permit(:amount))
+      else
+        @activity = Activity.new(params.require(:activity).permit(:amount, :item_id, :date))
+        @activity.user = @user
+        save_status = @activity.save
+      end
     else
       @activity = @user.activities.find_by({:id => params[:id]})
       save_status = @activity.update(params.require(:activity).permit(:amount))

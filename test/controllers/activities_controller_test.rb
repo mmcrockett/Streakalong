@@ -79,12 +79,35 @@ class ActivitiesControllerTest < ActionController::TestCase
     assert_nil(session[:return_url])
   end
 
+  test "json post should not create activity when no id present but item_id already exists for date" do
+    request_json
+    logged_in
+
+    date_as_str = @activity.date.strftime("%Y-%m-%d")
+    date_as_str = "#{date_as_str}T05:00:00.000Z"
+
+    assert_no_difference('Activity.count') do
+      post :create, { amount: @activity.amount + 1, date: date_as_str, item_id: @activity.item_id }
+    end
+
+    assert_response :success
+
+    response_object = activity_from_response()
+    assert_equal(@activity.date, response_object.date)
+    assert_equal(@activity.amount + 1, response_object.amount)
+    assert_equal(@activity.item_id, response_object.item_id)
+    assert_equal(@activity.id, response_object.id)
+  end
+
   test "json post should create activity when no id present" do
     request_json
     logged_in
 
+    date_as_str = @activity.date.strftime("%Y-%m-%d")
+    date_as_str = "#{date_as_str}T05:00:00.000Z"
+
     assert_difference('Activity.count') do
-      post :create, { amount: @activity.amount, date: @activity.date, item_id: @activity.item_id }
+      post :create, { amount: @activity.amount, date: date_as_str, item_id: @activity.item_id + 1 }
     end
 
     assert_response :success
@@ -92,7 +115,7 @@ class ActivitiesControllerTest < ActionController::TestCase
     response_object = activity_from_response()
     assert_equal(@activity.date, response_object.date)
     assert_equal(@activity.amount, response_object.amount)
-    assert_equal(@activity.item_id, response_object.item_id)
+    assert_equal(@activity.item_id + 1, response_object.item_id)
     assert(response_object.id)
     assert_not_equal(@activity.id, response_object.id)
   end
@@ -110,7 +133,7 @@ class ActivitiesControllerTest < ActionController::TestCase
     assert_equal(@activity.amount, response_object.amount)
     assert_equal(@activity.item_id, response_object.item_id)
     assert(response_object.id)
-    assert_not_equal(@activity.id, response_object.id)
+    assert_equal(@activity.id, response_object.id)
   end
 
   test "json post should fail when not logged in" do
