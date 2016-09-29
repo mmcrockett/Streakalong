@@ -20,7 +20,10 @@ function(
   $scope.INVALID_STATEMENT  = _.constant("Sorry, but we couldn't understand. Only +- and numbers are allowed. Reverting your value.");
   $scope.TOO_LONG_STATEMENT = _.constant("Your entry was too long. Reverting your value.");
   $scope.MAX_STATEMENT_SIZE = _.constant(50);
-  $scope.SAVE_TIMEOUT= _.constant(2500);
+  $scope.SAVE_TIMEOUT       = _.constant(2500);
+  $scope.REFRESH_TIMEOUT    = _.constant($scope.SAVE_TIMEOUT() * 100);
+  save_timeout = null;
+  refresh_timeout = null;
 
   $scope.date_helper = new DateHelper();
   $scope.$watch('date_helper.selectedDate', $scope.date_helper.set_display_dates);
@@ -70,6 +73,7 @@ function(
     return value;
   };
   $scope.initialize = function() {
+    $scope.reset_refresh();
     Item
     .query({})
     .$promise
@@ -99,12 +103,19 @@ function(
       });
     });
   };
-  timeout = null;
-  $scope.debounce_save_items = function() {
-    if (timeout) {
-      $timeout.cancel(timeout);
+  $scope.reset_refresh = function() {
+    if (true == angular.isObject(refresh_timeout)) {
+      $timeout.cancel(refresh_timeout);
     }
-    timeout = $timeout($scope.save_items, $scope.SAVE_TIMEOUT());
+
+    refresh_timeout = $timeout($scope.refresh_activities, $scope.REFRESH_TIMEOUT());
+  };
+  $scope.debounce_save_items = function() {
+    if (true == angular.isObject(save_timeout)) {
+      $timeout.cancel(save_timeout);
+    }
+    save_timeout    = $timeout($scope.save_items, $scope.SAVE_TIMEOUT());
+    $scope.reset_refresh();
   };
   $scope.error  = "";
   $scope.filter = filter;
@@ -169,6 +180,8 @@ function(
     return activity;
   };
   $scope.load_activities = function(d) {
+    $scope.activities[d] = null;
+
     Activity
     .query({date: d.getTime()})
     .$promise
@@ -257,6 +270,15 @@ function(
     } catch (e) {
       $scope.error = "Still loading data...";
     }
+  };
+  $scope.refresh_activities = function() {
+    Logger.debug("Refreshing activities...");
+    angular.forEach($scope.date_helper.display_dates, function(d, i) {
+      $scope.$apply(function() {
+        $scope.load_activities(d);
+      });
+    });
+    $scope.reset_refresh();
   };
   $scope.is_recent = function(item_type) {
     if (true == angular.isArray($scope.preferences.recent)) {
