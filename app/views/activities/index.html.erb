@@ -24,9 +24,13 @@
             {{rel_date | date : 'MMM d'}}
           </div>
           <div class="text-right text-muted dateindicator" style="padding-right:4px;">
-            <small ng-show="calories(rel_date)"
+            <small ng-show="(null != calories(rel_date))"
                    ng-class="{'text-danger':(calories(rel_date) >= 0), 'text-warning':(calories(rel_date) < 0 && calories(rel_date) >= -100), 'text-primary':(calories(rel_date) < -100)}">
               {{calories(rel_date)}} kCal
+            </small>
+            <small ng-show="(null == calories(rel_date))"
+                   ng-class="{'text-danger':true}">
+              --- kCal
             </small>
           </div>
           <div class="text-right text-muted dateindicator" style="padding-right:4px;"><small></small></div>
