@@ -93,6 +93,12 @@
     };
 
     Date.prototype.ago = function(days) {
-      return new Date(this.valueOf() + (24 * 60 * 60 * 1000) * -days);
+      var d = new Date(this.valueOf() + (24 * 60 * 60 * 1000) * -days);
+
+      if (d.getTimezoneOffset() != this.getTimezoneOffset()) {
+        d = new Date(d.valueOf() + ((d.getTimezoneOffset() - this.getTimezoneOffset()) * 60 * 1000));
+      }
+
+      return d;
     };
 }).call(this);
