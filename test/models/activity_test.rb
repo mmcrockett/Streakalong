@@ -17,7 +17,7 @@ class ActivityTest < ActiveSupport::TestCase
   end
 
   test "weight gets latest weight" do
-    user = users(:two)
+    user = users(:mmikerson)
     activity_2016_06_25 = activities(:u2_a0)
     weight_activity_2016_07_01 = activities(:u2_w0)
     activity_2016_07_02 = activities(:u2_a1)
@@ -32,7 +32,7 @@ class ActivityTest < ActiveSupport::TestCase
   end
 
   test "kcalest returns calculation for weight and converts imperial units correctly" do
-    user = users(:one)
+    user = users(:bbobberson)
     activity_2016_06_05 = activities(:five)
     activity_2016_07_02 = activities(:u1_a1)
     weight_activity_2016_07_01 = activities(:u1_w0)
@@ -45,7 +45,7 @@ class ActivityTest < ActiveSupport::TestCase
   end
 
   test "kcalest returns calculation for weight" do
-    user = users(:two)
+    user = users(:mmikerson)
     activity_2016_06_25 = activities(:u2_a0)
     weight_activity_2016_07_01 = activities(:u2_w0)
     activity_2016_07_02 = activities(:u2_a1)

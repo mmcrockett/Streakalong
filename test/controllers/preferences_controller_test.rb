@@ -2,7 +2,7 @@ require 'test_helper'
 
 class PreferencesControllerTest < ActionController::TestCase
   setup do
-    @user = users(:one)
+    @user = users(:bbobberson)
   end
 
   test "should get preferences if we're logged in" do

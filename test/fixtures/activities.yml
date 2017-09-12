@@ -1,86 +1,73 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  id: 1
   amount: 1
-  user_id: 1
+  user: bbobberson
   item_id: 1
   date: 2016-06-06
 
 two:
-  id: 2
   amount: 2
-  user_id: 1
+  user: bbobberson
   item_id: 2
   date: 2016-06-07
 
 three:
-  id: 3
   amount: 3
-  user_id: 2
+  user: mmikerson
   item_id: 3
   date: 2016-06-06
 
 four:
-  id: 4
   amount: 4
-  user_id: 1
+  user: bbobberson
   item_id: 4
   date: 2016-06-06
 
 five:
-  id: 5
   amount: 4
-  user_id: 1
+  user: bbobberson
   item_id: 5
   date: 2016-06-05
 
 u1_a1:
-  id: 6
   amount: 160
-  user_id: 1
+  user: bbobberson
   item_id: 5
   date: 2016-07-02
 
 u1_w0:
-  id: 7
   amount: 200
-  user_id: 1
+  user: bbobberson
   item_id: <%= Item.id(:weight) %>
   date: 2016-07-01
 
-
 u2_a0:
-  id: 100
   amount: 160
-  user_id: 2
+  user: mmikerson
   item_id: 5
   date: 2016-06-25
 
 u2_w0:
-  id: 101
   amount: 90
-  user_id: 2
+  user: mmikerson
   item_id: <%= Item.id(:weight) %>
   date: 2016-07-01
 
 u2_a1:
-  id: 102
   amount: 160
-  user_id: 2
+  user: mmikerson
   item_id: 5
   date: 2016-07-02
 
 u2_w1:
-  id: 103
   amount: 60
-  user_id: 2
+  user: mmikerson
   item_id: <%= Item.id(:weight) %>
   date: 2016-07-10
 
 u2_a2:
-  id: 104
   amount: 160
-  user_id: 2
+  user: mmikerson
   item_id: 5
   date: 2016-07-12

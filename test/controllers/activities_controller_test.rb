@@ -26,7 +26,7 @@ class ActivitiesControllerTest < ActionController::TestCase
     get :index, {:date => @june_sixth_ms}
 
     assert_response :success
-    assert_equal(JSON.parse(@activities.to_json), JSON.parse(@response.body))
+    assert_equal(Set.new(JSON.parse(@activities.to_json)), Set.new(JSON.parse(@response.body)))
   end
 
   test "json calories should get calories for that date" do

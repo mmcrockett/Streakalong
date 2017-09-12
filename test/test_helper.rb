@@ -12,7 +12,7 @@ class ActiveSupport::TestCase
     @request.headers["Accept"]     = 'application/json'
   end
 
-  def logged_in(user_id = 1)
+  def logged_in(user_id = users(:bbobberson).id)
     @request.session[:user_id] = user_id
   end
 

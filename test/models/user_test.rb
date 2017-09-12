@@ -2,7 +2,7 @@ require 'test_helper'
 
 class UserTest < ActiveSupport::TestCase
   setup do
-    @user = users(:one)
+    @user = users(:bbobberson)
   end
 
   test "username isn't blank" do

@@ -70,7 +70,7 @@ class UsersControllerTest < ActionController::TestCase
     post :login, credentials()
 
     assert_response :success
-    assert_equal(1, session[:user_id])
+    assert_equal(users(:bbobberson).id, session[:user_id])
     assert_equal({}, JSON.parse(@response.body))
   end
 
@@ -94,20 +94,20 @@ class UsersControllerTest < ActionController::TestCase
   end
 
   test "should redirect to activities if already logged in" do
-    logged_in(2)
+    logged_in(users(:mmikerson).id)
 
     get :welcome
 
-    assert_equal(2, assigns['user'].id)
+    assert_equal(users(:mmikerson).id, assigns['user'].id)
     assert_redirected_to('/activities')
   end
 
   test "should redirect to acitivities if already logged in and settings are incomplete and ignore_incomplete_settings is true" do
-    logged_in(3)
+    logged_in(users(:rrobberson).id)
 
     get :welcome
 
-    assert_equal(3, assigns['user'].id)
+    assert_equal(users(:rrobberson).id, assigns['user'].id)
     assert_redirected_to('/activities')
   end
 
@@ -116,7 +116,7 @@ class UsersControllerTest < ActionController::TestCase
 
     get :welcome
 
-    assert_equal(1, assigns['user'].id)
+    assert_equal(users(:bbobberson).id, assigns['user'].id)
     assert_redirected_to('/settings')
   end
 
@@ -126,17 +126,17 @@ class UsersControllerTest < ActionController::TestCase
 
     get :welcome
 
-    assert_equal(1, assigns['user'].id)
+    assert_equal(users(:bbobberson).id, assigns['user'].id)
     assert_redirected_to('/settings')
   end
 
   test "should redirect to specific url if supplied and if already logged in and is considered 'complete'" do
-    logged_in(2)
+    logged_in(users(:mmikerson).id)
     @request.session[:return_url] = ('/streaks')
 
     get :welcome
 
-    assert_equal(2, assigns['user'].id)
+    assert_equal(users(:mmikerson).id, assigns['user'].id)
     assert_redirected_to('/streaks')
   end
 
