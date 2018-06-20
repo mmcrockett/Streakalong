@@ -1,0 +1,59 @@
+<% @page_title = "Streaks" %>
+  <div ng-controller="StreaksController" class="navbar navbar-default" style="background-color:#FFFFFF;padding:5px 5px;" ng-init="initialize()">
+    <%= render :partial => "common/nav_bar" %>
+    <%= render :partial => "common/item_bar" %>
+    <div class="streak-error">
+      <p class="small text-muted bg-danger" ng-show="error">!ERROR: {{error}}</p>
+    </div>
+      <form class="form-horizontal">
+        <div class="form-group">
+          <div class="col-sm-8">
+            <select class="form-control" ng-model="selected_range" ng-options="range for range in RANGE_OPTIONS()">
+            </select>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div style="height:6px;width:100%"></div> 
+    <div class="navbar navbar-default container-fluid">
+      <div class="row">
+        <div ng-repeat="rel_date in date_helper.display_dates" streakalong-ng-droppable="{hoverClass: 'daydata-active'}" ng-class="{'col-sm-4 datebox default-border-color': true, 'hidden-xs':$last || $first, 'leftdatebox':$first, 'rightdatebox':$last, 'centerdatebox':!$first && !$last, 'today':date_helper.is_today(rel_date)}">
+          <div class="text-center text-muted default-border-color dayindicator">
+            {{rel_date | date : 'EEE'}} - 
+            {{rel_date | date : 'MMM d'}}
+          </div>
+          <div class="text-right text-muted dateindicator" style="padding-right:4px;">
+            <small ng-show="(null != calories(rel_date))"
+                   ng-class="{'text-danger':(calories(rel_date) >= 0), 'text-warning':(calories(rel_date) < 0 && calories(rel_date) >= -100), 'text-primary':(calories(rel_date) < -100)}">
+              {{calories(rel_date)}} kCal
+            </small>
+            <small ng-show="(null == calories(rel_date))"
+                   ng-class="{'text-danger':true}">
+              --- kCal
+            </small>
+          </div>
+          <div class="text-right text-muted dateindicator" style="padding-right:4px;"><small></small></div>
+          <div class="text-muted small" style="width:100%;height:100%;" ng-if="!activities[rel_date]" ng-init="load_activities(rel_date)">
+              <%= image_tag("indicator_large.gif", :style => "margin-left:42%;margin-top:32px;") %>
+          </div>
+          <div
+            ng-repeat="item in activities[rel_date] | orderBy:'item_id'"
+            ng-if="item.amount != 0"
+            ng-class="{'daydata-container': true, 'bg-danger': item.error}"
+            ng-dblclick="(false == is_touch) && process_amount('-1',item.item_id,rel_date)"
+            ng-click="(true == is_touch) && process_amount('-1',item.item_id,rel_date)">
+            <%= render :partial => "common/item_image", :locals => {:category => 'daydata', :type => '{{find_item(item.item_id).name}}', :id => '{{item.item_id}}', :image_src => '{{find_item(item.item_id).image_src}}'} %>
+            <streakalong-ng-editable ng-disable-editable="is_touch" ng-item="item" ng-date="rel_date" ng-process-amount="process_amount(expression, item_id, d)">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script type="text/ng-template" id="streakalong-ng-editable-template">
+      <div class="count text-center" title="click to edit">
+      <span ng-hide="editorEnabled">{{item.amount}}</span>
+      <form class="streakalong-edit" ng-show="editorEnabled">
+        <input autocomplete="off" name="value" style="width:30px;" value="{{item.amount}}">
+      </form>
+    </div>
+  </script>

@@ -83,7 +83,7 @@ class Item
   def self.categorized_items
     categorized_items = []
     categorized_items << {:all => Item::ALL}
-    categorized_items << {Preference::RECENT => Item::ALL}
+    categorized_items << {::Preference::RECENT => Item::ALL}
     categorized_items << {:foods  => Item::FOODS}
     categorized_items << {:beverages  => Item::BEVERAGES}
     categorized_items << {:activities => Item::ACTIVITIES}

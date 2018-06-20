@@ -16,4 +16,5 @@ Rails.application.routes.draw do
   match 'activities', :to => 'activities#index', :via => [:get]
   match 'calories',   :to => 'activities#calories', :via => [:get]
   match 'activities', :to => 'activities#create', :via => [:post]
+  match 'streaks',    :to => 'activities#streaks', :via => [:get]
 end
