@@ -1,0 +1,7 @@
+#!/bin/bash
+
+DTAG="$(date +%F)"
+TAG="streakalong:${DTAG}"
+TAR_FILE="/tmp/streakalong.${DTAG}.tar"
+
+ssh-add -t 1H ~/.ssh/mmcrockett.rsa && docker buildx build --tag "${TAG}" . && docker save --output "${TAR_FILE}" "${TAG}" && chmod +r "${TAR_FILE}" && scp "${TAR_FILE}" washingrving@mmcrockett.com:~/mmcrockett.com/

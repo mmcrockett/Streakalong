@@ -1,0 +1,12 @@
+version: '3'
+services:
+  streakalong:
+    build:
+      dockerfile: Dockerfile
+    command: bundle exec rails server --port=3200
+    container_name: streakalong
+    ports:
+      - "3200:3200"
+    environment:
+      RAILS_ENV: production
+
