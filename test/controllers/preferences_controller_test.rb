@@ -26,7 +26,7 @@ class PreferencesControllerTest < ActionController::TestCase
   test "should not modify preference if we're not logged in" do
     request_json
 
-    post :create, { :item_tab => 'foods' }
+    post :create, params: { :item_tab => 'foods' }
 
     assert_response :unauthorized
   end
@@ -37,7 +37,7 @@ class PreferencesControllerTest < ActionController::TestCase
 
     data = { :item_tab => 'foods', :recent => [1,2,3] }
 
-    post :create, data
+    post :create, params: data
 
     assert_response :created
 
@@ -51,7 +51,7 @@ class PreferencesControllerTest < ActionController::TestCase
     request_json
     logged_in
 
-    post :create, { :fake_pref => 'newvalueyes1' }
+    post :create, params: { :fake_pref => 'newvalueyes1' }
 
     assert_response :created
     assert_not(@response.body.include?('newvalueyes1'))

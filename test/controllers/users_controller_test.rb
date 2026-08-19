@@ -12,7 +12,7 @@ class UsersControllerTest < ActionController::TestCase
     assert_nil(session[:user_id])
 
     assert_difference('User.count') do
-      post :create, { password: 'somepassword', name: 'somename', username: 'someuser'}
+      post :create, params: { password: 'somepassword', name: 'somename', username: 'someuser'}
     end
 
     assert_response :success
@@ -33,7 +33,7 @@ class UsersControllerTest < ActionController::TestCase
     request_json
     logged_in
 
-    post :update, {"name"=>"Bob Bobberson", "height"=>180, "birthday"=>nil, "gender"=>"male"}
+    post :update, params: {"name"=>"Bob Bobberson", "height"=>180, "birthday"=>nil, "gender"=>"male"}
 
     assert_response :success
     assert_equal({"name"=>"Bob Bobberson", "height"=>180, "birthday"=>nil, "gender"=>"male"}, JSON.parse(@response.body))
@@ -56,7 +56,7 @@ class UsersControllerTest < ActionController::TestCase
     assert_nil(session[:user_id])
 
     assert_no_difference('User.count') do
-      post :create, { password: 'abc', name: 'somename', username: 'someuser'}
+      post :create, params: { password: 'abc', name: 'somename', username: 'someuser'}
     end
 
     assert_nil(assigns['user'])
@@ -67,7 +67,7 @@ class UsersControllerTest < ActionController::TestCase
   test "should login user" do
     request_json
 
-    post :login, credentials()
+    post :login, params: credentials()
 
     assert_response :success
     assert_equal(1, session[:user_id])
@@ -77,7 +77,7 @@ class UsersControllerTest < ActionController::TestCase
   test "should fail login user" do
     request_json
 
-    post :login, { password: 'badpassword', username: 'bbobberson'}
+    post :login, params: { password: 'badpassword', username: 'bbobberson'}
 
     assert_response :unauthorized
     assert_equal({}, JSON.parse(@response.body))

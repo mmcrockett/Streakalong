@@ -23,7 +23,7 @@ class ActivitiesControllerTest < ActionController::TestCase
     request_json
     logged_in
 
-    get :index, {:date => @june_sixth_ms}
+    get :index, params: {:date => @june_sixth_ms}
 
     assert_response :success
     assert_equal(JSON.parse(@activities.to_json), JSON.parse(@response.body))
@@ -37,7 +37,7 @@ class ActivitiesControllerTest < ActionController::TestCase
     activity_date_with_changed_weight_ms = (activity_date_with_changed_weight.to_time.to_i * 1000)
     activity_2016_07_02 = activities(:u1_a1)
 
-    get :calories, {:date => activity_date_with_changed_weight_ms}
+    get :calories, params: {:date => activity_date_with_changed_weight_ms}
 
     assert_response :success
     assert_equal(JSON.parse({:date => activity_date_with_changed_weight, :kcalest => activity_2016_07_02.kcalest}.to_json), JSON.parse(@response.body))
@@ -49,7 +49,7 @@ class ActivitiesControllerTest < ActionController::TestCase
     no_activity_date = Date.new(2000, 6, 6)
     no_activity_date_ms = (no_activity_date.to_time.to_i * 1000)
 
-    get :calories, {:date => no_activity_date_ms}
+    get :calories, params: {:date => no_activity_date_ms}
 
     assert_response :success
     assert_equal(JSON.parse({:date => no_activity_date, :kcalest => CalorieFormula.new.daily_kcal}.to_json), JSON.parse(@response.body))
@@ -87,7 +87,7 @@ class ActivitiesControllerTest < ActionController::TestCase
     date_as_str = "#{date_as_str}T05:00:00.000Z"
 
     assert_no_difference('Activity.count') do
-      post :create, { amount: @activity.amount + 1, date: date_as_str, item_id: @activity.item_id }
+      post :create, params: { amount: @activity.amount + 1, date: date_as_str, item_id: @activity.item_id }
     end
 
     assert_response :success
@@ -107,7 +107,7 @@ class ActivitiesControllerTest < ActionController::TestCase
     date_as_str = "#{date_as_str}T05:00:00.000Z"
 
     assert_difference('Activity.count') do
-      post :create, { amount: @activity.amount, date: date_as_str, item_id: @activity.item_id + 1 }
+      post :create, params: { amount: @activity.amount, date: date_as_str, item_id: @activity.item_id + 1 }
     end
 
     assert_response :success
@@ -124,7 +124,7 @@ class ActivitiesControllerTest < ActionController::TestCase
     request_json
     logged_in
 
-    post :create, { amount: @activity.amount, date: @activity.date, item_id: @activity.item_id, user_id: 8 }
+    post :create, params: { amount: @activity.amount, date: @activity.date, item_id: @activity.item_id, user_id: 8 }
 
     assert_response :success
 
@@ -139,7 +139,7 @@ class ActivitiesControllerTest < ActionController::TestCase
   test "json post should fail when not logged in" do
     request_json
 
-    post :create, { amount: @activity.amount, date: @activity.date, item_id: @activity.item_id }
+    post :create, params: { amount: @activity.amount, date: @activity.date, item_id: @activity.item_id }
 
     assert_response :unauthorized
     assert_nil(session[:return_url])
@@ -149,7 +149,7 @@ class ActivitiesControllerTest < ActionController::TestCase
     request_json
     logged_in
 
-    post :create, { amount: @activity.amount + 1, date: 9, item_id: 9, id: @activity.id, :user_id => 9 }
+    post :create, params: { amount: @activity.amount + 1, date: 9, item_id: 9, id: @activity.id, :user_id => 9 }
 
     assert_response :success
 
@@ -165,7 +165,7 @@ class ActivitiesControllerTest < ActionController::TestCase
     request_json
     logged_in
 
-    post :create, { amount: @activity.amount + 1, date: 9, item_id: 9, id: @activity.id, :user_id => 9 }
+    post :create, params: { amount: @activity.amount + 1, date: 9, item_id: 9, id: @activity.id, :user_id => 9 }
 
     assert_response :success
 

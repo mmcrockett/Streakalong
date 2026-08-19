@@ -24,7 +24,7 @@ class ActivityTest < ActiveSupport::TestCase
     weight_activity_2016_07_10 = activities(:u2_w1)
     activity_2016_07_12 = activities(:u2_a2)
 
-    assert_equal(nil, activity_2016_06_25.weight_at_the_time)
+    assert_nil(activity_2016_06_25.weight_at_the_time)
     assert_equal(90, weight_activity_2016_07_01.weight_at_the_time)
     assert_equal(90, activity_2016_07_02.weight_at_the_time)
     assert_equal(60, weight_activity_2016_07_10.weight_at_the_time)

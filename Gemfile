@@ -57,3 +57,8 @@ group :development do
   # Use console on exceptions pages [https://github.com/rails/web-console]
   gem "web-console"
 end
+
+group :test do
+  # ActionController::TestCase functional tests moved out of Rails core in Rails 5
+  gem "rails-controller-testing"
+end
