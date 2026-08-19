@@ -1,6 +1,6 @@
-class User < ActiveRecord::Base
+class User < ApplicationRecord
   has_many :activities
-  serialize :preferences, Preference
+  serialize :preferences, coder: Preference
   before_save :initialize_preferences
   before_save :downcase_username
   validates :username, :presence => true

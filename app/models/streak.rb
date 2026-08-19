@@ -1,4 +1,4 @@
-class Streak < ActiveRecord::Base
+class Streak < ApplicationRecord
   belongs_to :user
   before_save :calculate_length
 
