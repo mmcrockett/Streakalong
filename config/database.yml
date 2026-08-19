@@ -57,14 +57,16 @@ test:
 production:
   primary: &primary_production
     <<: *default
-    database: streakalong_production
-    username: streakalong
-    password: <%= ENV["STREAKALONG_DATABASE_PASSWORD"] %>
+    encoding: utf8
+    host: mysql.streakalong.com
+    database: streakalong_prod
+    username: streakalongprod
+    password: <%= Rails.application.credentials.mysql_password %>
   cache:
     <<: *primary_production
-    database: streakalong_production_cache
+    database: streakalong_prod_cache
     migrations_paths: db/cache_migrate
   queue:
     <<: *primary_production
-    database: streakalong_production_queue
+    database: streakalong_prod_queue
     migrations_paths: db/queue_migrate

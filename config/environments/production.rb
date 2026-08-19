@@ -25,6 +25,8 @@ Rails.application.configure do
   config.active_storage.service = :local
 
   # Assume all access to the app is happening through a SSL-terminating reverse proxy.
+  # Enable once DNS cutover happens and proxy.ssl is turned on in config/deploy.yml
+  # (see MikeReader's config/environments/production.rb history for the pattern).
   # config.assume_ssl = true
 
   # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.

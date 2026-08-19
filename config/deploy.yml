@@ -2,39 +2,40 @@
 service: streakalong
 
 # Name of the container image (use your-user/app-name on external registries).
-image: streakalong
+image: mmcrockett/streakalong
 
 # Deploy to these servers.
+# This is the same shared Debian 12 box (dreamcompute) already running
+# MikeReader -- see 07-docker-kamal-deploy.md. kamal-proxy on that box already
+# routes by host (MikeReader uses reader.mmcrockett.com), so this app's
+# distinct proxy host below avoids any collision on 80/443.
 servers:
   web:
-    - 192.168.0.1
+    - 208.113.135.206
   # job:
   #   hosts:
-  #     - 192.168.0.1
+  #     - 208.113.135.206
   #   cmd: bin/jobs
 
-# Enable SSL auto certification via Let's Encrypt and allow for multiple apps on a single web server.
-# If used with Cloudflare, set encryption mode in SSL/TLS setting to "Full" to enable CF-to-app encryption.
-#
-# Using an SSL proxy like this requires turning on config.assume_ssl and config.force_ssl in production.rb!
-#
-# Don't use this when deploying to multiple web servers (then you have to terminate SSL at your load balancer).
-#
-# proxy:
-#   ssl: true
-#   host: app.example.com
+# No ssl yet: DNS (streakalong.com) still points at the old streakalong.com
+# box, so Let's Encrypt's HTTP-01 challenge would fail here. Setting host
+# (without ssl) still lets kamal-proxy route by Host header immediately --
+# validate via curl -H "Host: streakalong.com" http://208.113.135.206/ or a
+# temporary /etc/hosts entry. Set proxy.ssl once DNS cutover actually
+# happens (kamal-proxy has its own Let's Encrypt client, no nginx/Certbot
+# needed on this box) -- see MikeReader's config/deploy.yml history for the
+# exact pattern.
+proxy:
+  host: streakalong.com
 
 # Where you keep your container images.
 registry:
-  # Alternatives: hub.docker.com / registry.digitalocean.com / ghcr.io / ...
-  server: localhost:5555
-
-  # Needed for authenticated registries.
-  # username: your-user
+  server: ghcr.io
+  username: mmcrockett
 
   # Always use an access token rather than real password when possible.
-  # password:
-  #   - KAMAL_REGISTRY_PASSWORD
+  password:
+    - KAMAL_REGISTRY_PASSWORD
 
 # Inject ENV variables into containers (secrets come from .kamal/secrets).
 env:
@@ -51,9 +52,9 @@ env:
     # Set number of cores available to the application on each server (default: 1).
     # WEB_CONCURRENCY: 2
 
-    # Match this to any external database server to configure Active Record correctly
-    # Use streakalong-db for a db accessory server on same machine via local kamal docker network.
-    # DB_HOST: 192.168.0.2
+    # The app's primary database lives on the existing production MySQL host
+    # (mysql.streakalong.com), not a Kamal-managed accessory -- see
+    # config/database.yml. No DB_HOST override needed here.
 
     # Log everything from Rails
     # RAILS_LOG_LEVEL: debug
@@ -90,30 +91,17 @@ builder:
   #   - GITHUB_TOKEN
   #   - RAILS_MASTER_KEY
 
-# Use a different ssh user than root
-# ssh:
-#   user: app
+# This box's SSH access is via a non-root "debian" user. Relies on ssh-agent
+# rather than an explicit `keys:` file -- specifying `keys:` makes net-ssh
+# decrypt the file itself (prompting for the passphrase every time) instead
+# of delegating to the already-unlocked agent.
+ssh:
+  user: debian
+  # Agent forwarding isn't needed (the box never needs to SSH anywhere using
+  # our local keys) -- see MikeReader's config/deploy.yml for why this
+  # caused a real hang on this same box when left on.
+  forward_agent: false
 
 # Use accessory services (secrets come from .kamal/secrets).
-# accessories:
-#   db:
-#     image: mysql:8.0
-#     host: 192.168.0.2
-#     # Change to 3306 to expose port to the world instead of just local network.
-#     port: "127.0.0.1:3306:3306"
-#     env:
-#       clear:
-#         MYSQL_ROOT_HOST: '%'
-#       secret:
-#         - MYSQL_ROOT_PASSWORD
-#     files:
-#       - config/mysql/production.cnf:/etc/mysql/my.cnf
-#       - db/production.sql:/docker-entrypoint-initdb.d/setup.sql
-#     directories:
-#       - data:/var/lib/mysql
-#   redis:
-#     image: valkey/valkey:8
-#     host: 192.168.0.2
-#     port: 6379
-#     directories:
-#       - data:/data
+# No accessories needed: MySQL is the existing production host
+# (mysql.streakalong.com), external and not managed by Kamal.

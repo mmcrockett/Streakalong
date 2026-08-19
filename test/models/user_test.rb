@@ -1,4 +1,4 @@
-require 'test_helper'
+require "test_helper"
 
 class UserTest < ActiveSupport::TestCase
   setup do
@@ -120,42 +120,42 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test "serializing preferences works" do
-    @user.preferences.item_tab = 'activities'
-    @user.preferences.recent = [4,5,6]
+    @user.preferences.item_tab = "activities"
+    @user.preferences.recent = [ 4, 5, 6 ]
     @user.save!
     @user.reload
-    assert_equal([4,5,6], @user.preferences.recent)
-    assert_equal('activities', @user.preferences.item_tab)
+    assert_equal([ 4, 5, 6 ], @user.preferences.recent)
+    assert_equal("activities", @user.preferences.item_tab)
   end
 
   test "saving preferences with equals works" do
-    @user.preferences = {'item_tab' => 'foods', 'dasdfasdf' => 'floff'}
+    @user.preferences = { "item_tab" => "foods", "dasdfasdf" => "floff" }
     @user.save!
     assert(@user.errors.empty?)
-    assert_equal('foods', @user.preferences.item_tab)
+    assert_equal("foods", @user.preferences.item_tab)
   end
 
   test "assigning preferences with new works" do
-    user1 = User.new({:username => '123456', :password => '123456', :name => '123', :preferences => {'item_tab' => 'foods'}})
+    user1 = User.new({ username: "123456", password: "123456", name: "123", preferences: { "item_tab" => "foods" } })
     user1.save!
     assert(user1.errors.empty?)
-    assert_equal('foods', user1.preferences.item_tab)
+    assert_equal("foods", user1.preferences.item_tab)
   end
 
   test "assigning preferences by adding to the object works" do
-    @user.preferences.item_tab = 'activities'
+    @user.preferences.item_tab = "activities"
     @user.save!
     assert(@user.errors.empty?)
-    assert_equal('activities', @user.preferences.item_tab)
+    assert_equal("activities", @user.preferences.item_tab)
   end
 
   test "assigning no preferences gives defaults" do
-    user1 = User.new({:username => '123456', :password => '123456', :name => '123'})
+    user1 = User.new({ username: "123456", password: "123456", name: "123" })
     user1.save!
     assert(user1.errors.empty?)
 
-    Preference::DEFAULTS.each do |k,v|
-      if (true == v.is_a?(Symbol))
+    Preference::DEFAULTS.each do |k, v|
+      if true == v.is_a?(Symbol)
         v = "#{v}"
       end
 
@@ -164,54 +164,54 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test "back to back saves with preferences works" do
-    @user.preferences['item_tab'] = 'other'
+    @user.preferences["item_tab"] = "other"
     @user.save
     assert(@user.errors.empty?)
-    assert_equal('other', @user.preferences.item_tab)
-    @user.preferences['item_tab'] = 'foods'
+    assert_equal("other", @user.preferences.item_tab)
+    @user.preferences["item_tab"] = "foods"
     @user.save
     assert(@user.errors.empty?)
-    assert_equal('foods', @user.preferences.item_tab)
+    assert_equal("foods", @user.preferences.item_tab)
   end
 
   test "user can load their activities" do
     assert_equal(6, @user.activities.length)
   end
 
-  test "user can register and authenticate" do 
-    registered_user = User.register('testperson', 'testpassword', 'realname')
-    assert_equal('testperson', registered_user.username)
-    assert_equal('realname', registered_user.name)
+  test "user can register and authenticate" do
+    registered_user = User.register("testperson", "testpassword", "realname")
+    assert_equal("testperson", registered_user.username)
+    assert_equal("realname", registered_user.name)
 
-    user_authenticate = User.authenticate('testperson', 'testpassword')
+    user_authenticate = User.authenticate("testperson", "testpassword")
     assert_equal(registered_user.id, user_authenticate.id)
   end
 
-  test "bad authenticate returns nil" do 
-    [nil, "", "baduser"].each do |uname|
-      user = User.authenticate(uname, 'password')
+  test "bad authenticate returns nil" do
+    [ nil, "", "baduser" ].each do |uname|
+      user = User.authenticate(uname, "password")
       assert_nil(user)
     end
   end
 
-  test "username is case insensitive, password is case sensitive" do 
-    registered_user = User.register('testperson', 'testpassword', 'realname')
-    user = User.authenticate('TESTpERsON', 'testpassword')
+  test "username is case insensitive, password is case sensitive" do
+    registered_user = User.register("testperson", "testpassword", "realname")
+    user = User.authenticate("TESTpERsON", "testpassword")
     assert_equal(registered_user.id, user.id)
-    user = User.authenticate('testperson', 'testPassword')
+    user = User.authenticate("testperson", "testPassword")
     assert_nil(user)
   end
 
-  test "bad password or bad username returns nil" do 
-    registered_user = User.register('testperson', 'testpassword', 'realname')
+  test "bad password or bad username returns nil" do
+    registered_user = User.register("testperson", "testpassword", "realname")
 
-    user = User.authenticate('estperson', 'testpassword')
+    user = User.authenticate("estperson", "testpassword")
     assert_nil(user)
 
-    user = User.authenticate('testperson', 'tstpassword')
+    user = User.authenticate("testperson", "tstpassword")
     assert_nil(user)
 
-    user = User.authenticate('testperson', registered_user.hashed_password)
+    user = User.authenticate("testperson", registered_user.hashed_password)
     assert_nil(user)
   end
 
@@ -221,7 +221,7 @@ class UserTest < ActiveSupport::TestCase
 
   test "age is correct" do
     expected_age  = 25
-    birthday = Date.today.change(:year => (Date.today.year - expected_age))
+    birthday = Date.today.change(year: (Date.today.year - expected_age))
     @user.birthday = birthday
 
     assert_equal(expected_age, @user.age)

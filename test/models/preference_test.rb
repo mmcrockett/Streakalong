@@ -1,4 +1,4 @@
-require 'test_helper'
+require "test_helper"
 
 class PreferenceTest < ActiveSupport::TestCase
   def setup
@@ -16,13 +16,13 @@ class PreferenceTest < ActiveSupport::TestCase
   end
 
   test "load from json string creates a new object merged with defaults" do
-    non_default = {Preference::ITEM_TAB => 'other', Preference::RECENT => [1,2,3]}
+    non_default = { Preference::ITEM_TAB => "other", Preference::RECENT => [ 1, 2, 3 ] }
     p = Preference.load("#{non_default.to_json}")
     assert_equal(@defaults.merge(non_default).to_json, p.to_json)
   end
 
   test "dump produces json" do
-    non_default = {Preference::ITEM_TAB => 'other', Preference::RECENT => [1,2,3]}
+    non_default = { Preference::ITEM_TAB => "other", Preference::RECENT => [ 1, 2, 3 ] }
     p = Preference.load("#{non_default.to_json}")
     assert_equal(@defaults.merge(non_default).to_json, Preference.dump(p))
   end
@@ -35,30 +35,30 @@ class PreferenceTest < ActiveSupport::TestCase
   test "internal state can't be altered by read" do
     p = Preference.new
     a = p[Preference::RECENT]
-    a << [2,1,3]
+    a << [ 2, 1, 3 ]
     assert_equal(@defaults.to_json, p.to_json)
   end
 
   test "item_tab, units, ignore settings and recent allow [] assignments" do
     p = Preference.new
-    p[Preference::RECENT] = [3]
-    p[Preference::ITEM_TAB] = 'other'
+    p[Preference::RECENT] = [ 3 ]
+    p[Preference::ITEM_TAB] = "other"
     p[Preference::UNITS] = Preference::VALID_UNITS.last
     p[Preference::IGNORE_INCOMPLETE_SETTINGS] = true
-    assert_equal([3], p.recent)
-    assert_equal('other', p.item_tab)
+    assert_equal([ 3 ], p.recent)
+    assert_equal("other", p.item_tab)
     assert_equal("#{Preference::VALID_UNITS.last}", p.units)
     assert_equal(true, p.ignore_incomplete_settings)
   end
 
   test "item_tab, units and recent allow assignments" do
     p = Preference.new
-    p.recent = [3]
-    p.item_tab = 'other'
+    p.recent = [ 3 ]
+    p.item_tab = "other"
     p.units    = Preference::VALID_UNITS.last
     p.ignore_incomplete_settings = true
-    assert_equal([3], p.recent)
-    assert_equal('other', p.item_tab)
+    assert_equal([ 3 ], p.recent)
+    assert_equal("other", p.item_tab)
     assert_equal("#{Preference::VALID_UNITS.last}", p.units)
     assert_equal(true, p.ignore_incomplete_settings)
   end
@@ -156,9 +156,9 @@ class PreferenceTest < ActiveSupport::TestCase
 
   test "adding unknown preferences with []= function is ignored." do
     p = Preference.new
-    p['mytab'] = "blah"
+    p["mytab"] = "blah"
 
-    assert_nil(p['mytab'])
+    assert_nil(p["mytab"])
   end
 
   test "preferredTab returns whether we are on the preferred tab by name or symbol" do
@@ -178,9 +178,9 @@ class PreferenceTest < ActiveSupport::TestCase
   end
 
   test "don't allow unknown preferences" do
-    p = Preference.new({:a => 'xxx'})
-    p[:b] = 'yyy'
-    o = Preference.load("#{{:c => 'zzz'}.to_json}")
+    p = Preference.new({ a: "xxx" })
+    p[:b] = "yyy"
+    o = Preference.load("#{{ c: 'zzz' }.to_json}")
 
     assert_nil(p[:a])
     assert_nil(p[:b])

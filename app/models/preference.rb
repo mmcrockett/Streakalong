@@ -1,14 +1,14 @@
 class Preference
-  ITEM_TAB = 'item_tab'
-  RECENT   = 'recent'
-  UNITS    = 'units'
-  IGNORE_INCOMPLETE_SETTINGS = 'ignore_incomplete_settings'
+  ITEM_TAB = "item_tab"
+  RECENT   = "recent"
+  UNITS    = "units"
+  IGNORE_INCOMPLETE_SETTINGS = "ignore_incomplete_settings"
   MAX_RECENT = 16
 
   IMPERIAL_UNITS = :imperial.to_s
   METRIC_UNITS   = :metric.to_s
 
-  VALID_UNITS = [IMPERIAL_UNITS, METRIC_UNITS]
+  VALID_UNITS = [ IMPERIAL_UNITS, METRIC_UNITS ]
 
   DEFAULTS = {
     ITEM_TAB => :all,
@@ -18,47 +18,47 @@ class Preference
   }
 
   def initialize(values = {})
-    if ((true == values.is_a?(String)) && (true == values.include?("{")))
+    if (true == values.is_a?(String)) && (true == values.include?("{"))
       values = JSON.parse(values)
     end
 
-    if (false == values.is_a?(Hash))
+    if false == values.is_a?(Hash)
       Rails.logger.warn("Trying to initialize preference with non-hash '#{values.class}':'#{values}'.")
       values = {}
     end
 
     @preferences = JSON.parse(Preference::DEFAULTS.to_json)
 
-    values.each do |k,v|
+    values.each do |k, v|
       self[k] = v
     end
   end
 
-  def []=(k,v)
+  def []=(k, v)
     k = "#{k}"
 
-    if ("#{Preference::ITEM_TAB}" == k)
+    if "#{Preference::ITEM_TAB}" == k
       self.item_tab = v
-    elsif ("#{Preference::RECENT}" == k)
+    elsif "#{Preference::RECENT}" == k
       self.recent = v
-    elsif ("#{Preference::UNITS}" == k)
+    elsif "#{Preference::UNITS}" == k
       self.units = v
-    elsif ("#{Preference::IGNORE_INCOMPLETE_SETTINGS}" == k)
+    elsif "#{Preference::IGNORE_INCOMPLETE_SETTINGS}" == k
       self.ignore_incomplete_settings = v
     else
       Rails.logger.warn("Ignoring key that isn't a known preference '#{k}'.")
     end
 
-    return self
+    self
   end
 
   def [](k)
     k = "#{k}"
 
-    if (false == @preferences.include?(k))
-      return nil
+    if false == @preferences.include?(k)
+      nil
     else
-      return JSON.parse(@preferences.to_json)[k]
+      JSON.parse(@preferences.to_json)[k]
     end
   end
 
@@ -67,72 +67,72 @@ class Preference
   end
 
   def ignore_incomplete_settings
-    return self[Preference::IGNORE_INCOMPLETE_SETTINGS]
+    self[Preference::IGNORE_INCOMPLETE_SETTINGS]
   end
 
   def ignore_incomplete_settings=(v)
-    if (true == [true, false].include?(v))
+    if true == [ true, false ].include?(v)
       @preferences[Preference::IGNORE_INCOMPLETE_SETTINGS] = v
     end
 
-    return self
+    self
   end
 
   def units
-    return self[Preference::UNITS]
+    self[Preference::UNITS]
   end
 
   def units=(v)
     v = "#{v}"
 
-    if (true == matching_type?(Preference::UNITS, v))
-      if (true == VALID_UNITS.include?(v))
+    if true == matching_type?(Preference::UNITS, v)
+      if true == VALID_UNITS.include?(v)
         @preferences[Preference::UNITS] = v
       else
         Rails.logger.warn("Ignoring units because invalid unit type '#{v}'.")
       end
     end
 
-    return self
+    self
   end
 
   def imperial?
-    return (false == self.metric?)
+    (false == self.metric?)
   end
 
   def metric?
-    return (METRIC_UNITS == self.units)
+    (METRIC_UNITS == self.units)
   end
 
   def item_tab=(v)
     v = "#{v}"
 
-    if (true == matching_type?(Preference::ITEM_TAB, v))
+    if true == matching_type?(Preference::ITEM_TAB, v)
       Item.categorized_items.each do |category|
-        if ("#{category.keys.first}" == "#{v}")
+        if "#{category.keys.first}" == "#{v}"
           @preferences[Preference::ITEM_TAB] = v
           break
         end
       end
 
-      if (v != self[Preference::ITEM_TAB])
+      if v != self[Preference::ITEM_TAB]
         Rails.logger.warn("Ignoring item_tab because invalid tab name '#{v}'.")
       end
     end
 
-    return self
+    self
   end
 
   def item_tab
-    return self[Preference::ITEM_TAB]
+    self[Preference::ITEM_TAB]
   end
 
   def recent=(v)
-    if (true == matching_type?(Preference::RECENT, v))
-      if (true == v.is_a?(Array))
+    if true == matching_type?(Preference::RECENT, v)
+      if true == v.is_a?(Array)
         remove_elements = v.size - Preference::MAX_RECENT
 
-        if (0 < remove_elements)
+        if 0 < remove_elements
           v = v.drop(remove_elements)
         end
       end
@@ -140,42 +140,42 @@ class Preference
       @preferences[Preference::RECENT] = v
     end
 
-    return self
+    self
   end
 
   def recent
-    return self[Preference::RECENT]
+    self[Preference::RECENT]
   end
 
   def preferredTab?(name)
-    if (true == name.is_a?(Symbol))
+    if true == name.is_a?(Symbol)
       name = "#{name}"
     end
 
-    if (false == name.is_a?(String))
+    if false == name.is_a?(String)
       raise "!ERROR: name is not a string. Type: '#{name.class}'. Value: '#{name}'."
     end
 
-    return (self.item_tab == name)
+    (self.item_tab == name)
   end
 
   def self.load(string_value)
-    return Preference.new(string_value)
+    Preference.new(string_value)
   end
 
   def self.dump(preference_object)
-    return preference_object.to_json
+    preference_object.to_json
   end
 
   private
-  def matching_type?(k,v)
+  def matching_type?(k, v)
     current_v = @preferences[k]
 
-    if (false == v.is_a?(current_v.class))
+    if false == v.is_a?(current_v.class)
       Rails.logger.warn("Ignoring preference '#{k}' '#{current_v.class}' because class doesn't match '#{v.class}':'#{v}'.")
       return false
     end
 
-    return true
+    true
   end
 end

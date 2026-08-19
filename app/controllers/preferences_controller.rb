@@ -15,6 +15,6 @@ class PreferencesController < ApplicationController
 
   private
   def preference_params
-    return params.require(:preference)
+    params.require(:preference)
   end
 end

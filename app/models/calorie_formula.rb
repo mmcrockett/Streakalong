@@ -1,7 +1,7 @@
 class CalorieFormula
   GENDER_COMPONENT = {
-    :male => 5,
-    :female => -161
+    male: 5,
+    female: -161
   }
 
   DEFAULT_WEIGHT_IN_KG = 80
@@ -24,7 +24,7 @@ class CalorieFormula
 
   def gender_component
     gender_component = GENDER_COMPONENT[@gender]
-    if (nil == gender_component)
+    if nil == gender_component
       gender_component = 0
 
       GENDER_COMPONENT.values.each do |v|
@@ -34,22 +34,22 @@ class CalorieFormula
       gender_component = gender_component / GENDER_COMPONENT.size
     end
 
-    return gender_component
+    gender_component
   end
 
   def weight_component
-    return (@weight * WEIGHT_COMPONENT)
+    (@weight * WEIGHT_COMPONENT)
   end
 
   def height_component
-    return (@height * HEIGHT_COMPONENT)
+    (@height * HEIGHT_COMPONENT)
   end
 
   def age_component
-    return (@age * AGE_COMPONENT)
+    (@age * AGE_COMPONENT)
   end
 
   def daily_kcal
-    return -((self.weight_component + self.height_component + self.age_component + self.gender_component) * SEDENTARY_ACTIVITY_MULTIPLIER).ceil.round(-1)
+    -((self.weight_component + self.height_component + self.age_component + self.gender_component) * SEDENTARY_ACTIVITY_MULTIPLIER).ceil.round(-1)
   end
 end

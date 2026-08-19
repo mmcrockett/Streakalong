@@ -1,4 +1,4 @@
-require 'test_helper'
+require "test_helper"
 
 class ItemsControllerTest < ActionController::TestCase
   test "json index should get item data" do
@@ -9,7 +9,7 @@ class ItemsControllerTest < ActionController::TestCase
     expected = []
 
     Item::ALL.each do |name|
-      expected << {:name => name, :id => Item.id(name), :kcal => Item.kcal(name)}
+      expected << { name: name, id: Item.id(name), kcal: Item.kcal(name) }
     end
 
     assert_response :success

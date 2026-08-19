@@ -1,18 +1,18 @@
-require 'test_helper'
+require "test_helper"
 
 class ActivitiesControllerTest < ActionController::TestCase
-  def activity_from_response()
+  def activity_from_response
     json_object = JSON.parse(@response.body)
 
-    return Activity.new(json_object)
+    Activity.new(json_object)
   end
 
   setup do
     @activities = []
     @activity   = activities(:one)
-    
-    [activities(:one), activities(:four)].each do |activity|
-      @activities << {:id => activity.id, :amount => activity.amount, :date => activity.date, :item_id => activity.item_id}
+
+    [ activities(:one), activities(:four) ].each do |activity|
+      @activities << { id: activity.id, amount: activity.amount, date: activity.date, item_id: activity.item_id }
     end
 
     @june_sixth    = Date.new(2016, 6, 6)
@@ -23,7 +23,7 @@ class ActivitiesControllerTest < ActionController::TestCase
     request_json
     logged_in
 
-    get :index, params: {:date => @june_sixth_ms}
+    get :index, params: { date: @june_sixth_ms }
 
     assert_response :success
     assert_equal(JSON.parse(@activities.to_json), JSON.parse(@response.body))
@@ -37,10 +37,10 @@ class ActivitiesControllerTest < ActionController::TestCase
     activity_date_with_changed_weight_ms = (activity_date_with_changed_weight.to_time.to_i * 1000)
     activity_2016_07_02 = activities(:u1_a1)
 
-    get :calories, params: {:date => activity_date_with_changed_weight_ms}
+    get :calories, params: { date: activity_date_with_changed_weight_ms }
 
     assert_response :success
-    assert_equal(JSON.parse({:date => activity_date_with_changed_weight, :kcalest => activity_2016_07_02.kcalest}.to_json), JSON.parse(@response.body))
+    assert_equal(JSON.parse({ date: activity_date_with_changed_weight, kcalest: activity_2016_07_02.kcalest }.to_json), JSON.parse(@response.body))
   end
 
   test "json calories should return a default when no activities on that date" do
@@ -49,10 +49,10 @@ class ActivitiesControllerTest < ActionController::TestCase
     no_activity_date = Date.new(2000, 6, 6)
     no_activity_date_ms = (no_activity_date.to_time.to_i * 1000)
 
-    get :calories, params: {:date => no_activity_date_ms}
+    get :calories, params: { date: no_activity_date_ms }
 
     assert_response :success
-    assert_equal(JSON.parse({:date => no_activity_date, :kcalest => CalorieFormula.new.daily_kcal}.to_json), JSON.parse(@response.body))
+    assert_equal(JSON.parse({ date: no_activity_date, kcalest: CalorieFormula.new.daily_kcal }.to_json), JSON.parse(@response.body))
   end
 
   test "index should get" do
@@ -66,7 +66,7 @@ class ActivitiesControllerTest < ActionController::TestCase
   test "index should redirect when not logged in" do
     get :index
 
-    assert_redirected_to('/welcome')
+    assert_redirected_to("/welcome")
     assert(session[:return_url])
   end
 
@@ -86,7 +86,7 @@ class ActivitiesControllerTest < ActionController::TestCase
     date_as_str = @activity.date.strftime("%Y-%m-%d")
     date_as_str = "#{date_as_str}T05:00:00.000Z"
 
-    assert_no_difference('Activity.count') do
+    assert_no_difference("Activity.count") do
       post :create, params: { amount: @activity.amount + 1, date: date_as_str, item_id: @activity.item_id }
     end
 
@@ -106,7 +106,7 @@ class ActivitiesControllerTest < ActionController::TestCase
     date_as_str = @activity.date.strftime("%Y-%m-%d")
     date_as_str = "#{date_as_str}T05:00:00.000Z"
 
-    assert_difference('Activity.count') do
+    assert_difference("Activity.count") do
       post :create, params: { amount: @activity.amount, date: date_as_str, item_id: @activity.item_id + 1 }
     end
 
@@ -149,7 +149,7 @@ class ActivitiesControllerTest < ActionController::TestCase
     request_json
     logged_in
 
-    post :create, params: { amount: @activity.amount + 1, date: 9, item_id: 9, id: @activity.id, :user_id => 9 }
+    post :create, params: { amount: @activity.amount + 1, date: 9, item_id: 9, id: @activity.id, user_id: 9 }
 
     assert_response :success
 
@@ -165,7 +165,7 @@ class ActivitiesControllerTest < ActionController::TestCase
     request_json
     logged_in
 
-    post :create, params: { amount: @activity.amount + 1, date: 9, item_id: 9, id: @activity.id, :user_id => 9 }
+    post :create, params: { amount: @activity.amount + 1, date: 9, item_id: 9, id: @activity.id, user_id: 9 }
 
     assert_response :success
 
@@ -182,7 +182,7 @@ class ActivitiesControllerTest < ActionController::TestCase
 
     get :index
 
-    assert_redirected_to('/logout')
+    assert_redirected_to("/logout")
   end
 
   test "should not redirect when user is invalid and request is json" do
