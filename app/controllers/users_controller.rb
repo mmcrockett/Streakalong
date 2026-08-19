@@ -1,7 +1,7 @@
 class UsersController < ApplicationController
-  before_filter :streakalong_load_user, :except => [:logout]
-  before_filter :streakalong_authorize, :except => [:login, :create, :welcome, :logout]
-  before_filter :streakalong_redirect,  :only => [:welcome]
+  before_action :streakalong_load_user, :except => [:logout]
+  before_action :streakalong_authorize, :except => [:login, :create, :welcome, :logout]
+  before_action :streakalong_redirect,  :only => [:welcome]
 
   def welcome
   end

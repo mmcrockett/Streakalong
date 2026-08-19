@@ -1,6 +1,6 @@
 class PreferencesController < ApplicationController
-  before_filter :streakalong_load_user
-  before_filter :streakalong_authorize
+  before_action :streakalong_load_user
+  before_action :streakalong_authorize
 
   def create
     @user.preferences = preference_params

@@ -1,6 +1,6 @@
 class ActivitiesController < ApplicationController
-  before_filter :streakalong_load_user
-  before_filter :streakalong_authorize
+  before_action :streakalong_load_user
+  before_action :streakalong_authorize
 
   # GET /activities
   # GET /activities.json
