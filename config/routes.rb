@@ -1,19 +1,14 @@
 Rails.application.routes.draw do
-  mount JasmineRails::Engine => '/specs' if defined?(JasmineRails)
-  match '/' => redirect('welcome'), via: :get
-  match 'welcome',  :to => 'users#welcome', :via => [:get]
-  match 'users',    :to => 'users#create',  :via => [:post]
-  match 'users',    :to => 'users#login',   :via => [:get]
-  match 'settings', :to => 'users#settings', :via => [:get]
-  match 'settings', :to => 'users#update', :via => [:post]
-  match 'logout',   :to => 'users#logout',  :via => [:get]
+  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
-  match 'items',    :to => 'items#index', :via => [:get]
+  # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
+  # Can be used by load balancers and uptime monitors to verify that the app is live.
+  get "up" => "rails/health#show", as: :rails_health_check
 
-  match 'preferences', :to => 'preferences#index', :via => [:get]
-  match 'preferences', :to => 'preferences#create', :via => [:post]
+  # Render dynamic PWA files from app/views/pwa/* (remember to link manifest in application.html.erb)
+  # get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
+  # get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
 
-  match 'activities', :to => 'activities#index', :via => [:get]
-  match 'calories',   :to => 'activities#calories', :via => [:get]
-  match 'activities', :to => 'activities#create', :via => [:post]
+  # Defines the root path route ("/")
+  # root "posts#index"
 end
