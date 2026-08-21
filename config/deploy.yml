@@ -17,15 +17,10 @@ servers:
   #     - 208.113.135.206
   #   cmd: bin/jobs
 
-# No ssl yet: DNS (streakalong.com) still points at the old streakalong.com
-# box, so Let's Encrypt's HTTP-01 challenge would fail here. Setting host
-# (without ssl) still lets kamal-proxy route by Host header immediately --
-# validate via curl -H "Host: streakalong.com" http://208.113.135.206/ or a
-# temporary /etc/hosts entry. Set proxy.ssl once DNS cutover actually
-# happens (kamal-proxy has its own Let's Encrypt client, no nginx/Certbot
-# needed on this box) -- see MikeReader's config/deploy.yml history for the
-# exact pattern.
+# kamal-proxy has its own Let's Encrypt client (HTTP-01), no nginx/Certbot
+# needed on this box.
 proxy:
+  ssl: true
   host: streakalong.com
 
 # Where you keep your container images.
