@@ -1,7 +1,7 @@
 class UsersController < ApplicationController
-  before_filter :streakalong_load_user, :except => [:logout]
-  before_filter :streakalong_authorize, :except => [:login, :create, :welcome, :logout]
-  before_filter :streakalong_redirect,  :only => [:welcome]
+  before_action :streakalong_load_user, except: [ :logout ]
+  before_action :streakalong_authorize, except: [ :login, :create, :welcome, :logout ]
+  before_action :streakalong_redirect,  only: [ :welcome ]
 
   def welcome
   end
@@ -15,7 +15,7 @@ class UsersController < ApplicationController
     respond_to do |format|
       if user.valid?
         session[:user_id] = user.id
-        format.json { render json: {}, status: :accepted}
+        format.json { render json: {}, status: :accepted }
       else
         format.json { render json: user.errors, status: :unprocessable_entity }
       end
@@ -24,7 +24,7 @@ class UsersController < ApplicationController
 
   def update
     respond_to do |format|
-      if (true == @user.update(user_params))
+      if true == @user.update(user_params)
         format.json { render :settings }
       else
         format.json { render json: @user.errors, status: :unprocessable_entity }
@@ -48,7 +48,7 @@ class UsersController < ApplicationController
   def logout
     reset_session
     @user = nil
-    redirect_to(:action => "welcome")
+    redirect_to(action: "welcome")
   end
 
   private

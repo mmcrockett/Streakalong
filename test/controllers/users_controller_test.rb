@@ -1,4 +1,4 @@
-require 'test_helper'
+require "test_helper"
 
 class UsersControllerTest < ActionController::TestCase
   test "should get welcome" do
@@ -11,8 +11,8 @@ class UsersControllerTest < ActionController::TestCase
 
     assert_nil(session[:user_id])
 
-    assert_difference('User.count') do
-      post :create, { password: 'somepassword', name: 'somename', username: 'someuser'}
+    assert_difference("User.count") do
+      post :create, params: { password: "somepassword", name: "somename", username: "someuser" }
     end
 
     assert_response :success
@@ -26,22 +26,22 @@ class UsersControllerTest < ActionController::TestCase
     get :settings
 
     assert_response :success
-    assert_equal({"name"=>"Bob Bobberson", "height"=>nil, "birthday"=>nil, "gender"=>nil}, JSON.parse(@response.body))
+    assert_equal({ "name"=>"Bob Bobberson", "height"=>nil, "birthday"=>nil, "gender"=>nil }, JSON.parse(@response.body))
   end
 
   test "update should set settings" do
     request_json
     logged_in
 
-    post :update, {"name"=>"Bob Bobberson", "height"=>180, "birthday"=>nil, "gender"=>"male"}
+    post :update, params: { "name"=>"Bob Bobberson", "height"=>180, "birthday"=>nil, "gender"=>"male" }
 
     assert_response :success
-    assert_equal({"name"=>"Bob Bobberson", "height"=>180, "birthday"=>nil, "gender"=>"male"}, JSON.parse(@response.body))
+    assert_equal({ "name"=>"Bob Bobberson", "height"=>180, "birthday"=>nil, "gender"=>"male" }, JSON.parse(@response.body))
   end
 
   test "should be logged in to see settings" do
     get :settings
-    assert_redirected_to(:action => "welcome")
+    assert_redirected_to(action: "welcome")
 
     request_json
     get :settings
@@ -55,19 +55,19 @@ class UsersControllerTest < ActionController::TestCase
 
     assert_nil(session[:user_id])
 
-    assert_no_difference('User.count') do
-      post :create, { password: 'abc', name: 'somename', username: 'someuser'}
+    assert_no_difference("User.count") do
+      post :create, params: { password: "abc", name: "somename", username: "someuser" }
     end
 
-    assert_nil(assigns['user'])
+    assert_nil(assigns["user"])
     assert_response :unprocessable_entity
-    assert_equal({"password" => ["is too short (minimum is 6 characters)"]}, JSON.parse(@response.body))
+    assert_equal({ "password" => [ "is too short (minimum is 6 characters)" ] }, JSON.parse(@response.body))
   end
 
   test "should login user" do
     request_json
 
-    post :login, credentials()
+    post :login, params: credentials()
 
     assert_response :success
     assert_equal(1, session[:user_id])
@@ -77,11 +77,11 @@ class UsersControllerTest < ActionController::TestCase
   test "should fail login user" do
     request_json
 
-    post :login, { password: 'badpassword', username: 'bbobberson'}
+    post :login, params: { password: "badpassword", username: "bbobberson" }
 
     assert_response :unauthorized
     assert_equal({}, JSON.parse(@response.body))
-    assert_nil(assigns['user'])
+    assert_nil(assigns["user"])
     assert_nil(session[:user_id])
   end
 
@@ -89,8 +89,8 @@ class UsersControllerTest < ActionController::TestCase
     get :logout
 
     assert_nil(session[:user_id])
-    assert_nil(assigns['user'])
-    assert_redirected_to(:action => "welcome")
+    assert_nil(assigns["user"])
+    assert_redirected_to(action: "welcome")
   end
 
   test "should redirect to activities if already logged in" do
@@ -98,8 +98,8 @@ class UsersControllerTest < ActionController::TestCase
 
     get :welcome
 
-    assert_equal(2, assigns['user'].id)
-    assert_redirected_to('/activities')
+    assert_equal(2, assigns["user"].id)
+    assert_redirected_to("/activities")
   end
 
   test "should redirect to acitivities if already logged in and settings are incomplete and ignore_incomplete_settings is true" do
@@ -107,8 +107,8 @@ class UsersControllerTest < ActionController::TestCase
 
     get :welcome
 
-    assert_equal(3, assigns['user'].id)
-    assert_redirected_to('/activities')
+    assert_equal(3, assigns["user"].id)
+    assert_redirected_to("/activities")
   end
 
   test "should redirect to settings if already logged in and settings are incomplete" do
@@ -116,28 +116,28 @@ class UsersControllerTest < ActionController::TestCase
 
     get :welcome
 
-    assert_equal(1, assigns['user'].id)
-    assert_redirected_to('/settings')
+    assert_equal(1, assigns["user"].id)
+    assert_redirected_to("/settings")
   end
 
   test "should redirect to settings if redirect supplied and if already logged in but is incomplete" do
     logged_in
-    @request.session[:return_url] = ('/streaks')
+    @request.session[:return_url] = ("/streaks")
 
     get :welcome
 
-    assert_equal(1, assigns['user'].id)
-    assert_redirected_to('/settings')
+    assert_equal(1, assigns["user"].id)
+    assert_redirected_to("/settings")
   end
 
   test "should redirect to specific url if supplied and if already logged in and is considered 'complete'" do
     logged_in(2)
-    @request.session[:return_url] = ('/streaks')
+    @request.session[:return_url] = ("/streaks")
 
     get :welcome
 
-    assert_equal(2, assigns['user'].id)
-    assert_redirected_to('/streaks')
+    assert_equal(2, assigns["user"].id)
+    assert_redirected_to("/streaks")
   end
 
   test "should logout when user is invalid" do
@@ -146,7 +146,7 @@ class UsersControllerTest < ActionController::TestCase
     get :logout
 
     assert_equal(0, session.keys.size)
-    assert_nil(assigns['user'])
-    assert_redirected_to('/welcome')
+    assert_nil(assigns["user"])
+    assert_redirected_to("/welcome")
   end
 end

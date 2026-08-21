@@ -7,7 +7,11 @@
   <title>Streak Along : <%= @page_title %> - Helping you stay healthy.</title>
 
   <%= render :partial => "common/header/header_includes" %>
-  <%= javascript_include_tag("application") %>
+  <%= javascript_include_tag "date_extension" %>
+  <%= javascript_include_tag "streakalong_angular_app" %>
+  <% Dir.glob(Rails.root.join("app/assets/javascripts/angular/**/*.js")).sort.each do |f| %>
+    <%= javascript_include_tag f.sub("#{Rails.root}/app/assets/javascripts/", "").sub(/\.js$/, "") %>
+  <% end %>
   <%= csrf_meta_tags %>
 </head>
 <body>
@@ -19,11 +23,5 @@
 <%= yield %>
     </div>
   </div>
-  <%= javascript_tag("
-    jQuery(document).ready(
-      function() {
-        FastClick.attach(document.body);
-      })
-    ") %>
 </body>
 </html>

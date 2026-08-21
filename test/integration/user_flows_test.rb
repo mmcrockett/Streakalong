@@ -1,4 +1,4 @@
-require 'test_helper'
+require "test_helper"
 
 class UserFlowsTest < ActionDispatch::IntegrationTest
   test "can see the welcome page from base url when not logged in" do
@@ -13,7 +13,7 @@ class UserFlowsTest < ActionDispatch::IntegrationTest
   end
 
   test "welcome page when logged in goes to activities" do
-    get "/users.json", credentials('mikemikerson')
+    get "/users.json", params: credentials("mikemikerson")
     assert_response :accepted
     get "/welcome"
     assert_response :redirect
@@ -26,7 +26,7 @@ class UserFlowsTest < ActionDispatch::IntegrationTest
     assert_response :redirect
     follow_redirect!
     assert_select "title", /Login/
-    get "/users.json", credentials()
+    get "/users.json", params: credentials()
     assert_response :accepted
     get "/"
     assert_response :redirect
@@ -41,7 +41,7 @@ class UserFlowsTest < ActionDispatch::IntegrationTest
     assert_response :redirect
     follow_redirect!
     assert_select "title", /Login/
-    get "/users.json", credentials('rrobberson')
+    get "/users.json", params: credentials("rrobberson")
     assert_response :accepted
     get "/"
     assert_response :redirect
@@ -56,7 +56,7 @@ class UserFlowsTest < ActionDispatch::IntegrationTest
     assert_response :redirect
     follow_redirect!
     assert_select "title", /Login/
-    get "/users.json", credentials('mikemikerson')
+    get "/users.json", params: credentials("mikemikerson")
     assert_response :accepted
     get "/"
     assert_response :redirect

@@ -1,4 +1,4 @@
-require 'test_helper'
+require "test_helper"
 
 class ItemTest < ActiveSupport::TestCase
   test "name should get the name by id" do
@@ -20,7 +20,7 @@ class ItemTest < ActiveSupport::TestCase
     end
 
     assert_raises do
-      Item.id('blah')
+      Item.id("blah")
     end
   end
 

@@ -1,4 +1,4 @@
-require 'test_helper'
+require "test_helper"
 
 class PreferencesControllerTest < ActionController::TestCase
   setup do
@@ -12,7 +12,7 @@ class PreferencesControllerTest < ActionController::TestCase
     get :index
 
     assert_response :success
-    assert_equal(JSON.parse(assigns['user'].preferences.to_json), JSON.parse(@response.body))
+    assert_equal(JSON.parse(assigns["user"].preferences.to_json), JSON.parse(@response.body))
   end
 
   test "should fail if we're not logged in" do
@@ -26,7 +26,7 @@ class PreferencesControllerTest < ActionController::TestCase
   test "should not modify preference if we're not logged in" do
     request_json
 
-    post :create, { :item_tab => 'foods' }
+    post :create, params: { item_tab: "foods" }
 
     assert_response :unauthorized
   end
@@ -35,26 +35,26 @@ class PreferencesControllerTest < ActionController::TestCase
     request_json
     logged_in
 
-    data = { :item_tab => 'foods', :recent => [1,2,3] }
+    data = { item_tab: "foods", recent: [ 1, 2, 3 ] }
 
-    post :create, data
+    post :create, params: data
 
     assert_response :created
 
     preferences = JSON.parse(@response.body)
-    assert_equal('foods', preferences[Preference::ITEM_TAB])
+    assert_equal("foods", preferences[Preference::ITEM_TAB])
     assert_equal(3, preferences[Preference::RECENT].length)
-    assert_equal(JSON.parse(assigns['user'].preferences.to_json), JSON.parse(@response.body))
+    assert_equal(JSON.parse(assigns["user"].preferences.to_json), JSON.parse(@response.body))
   end
 
   test "should ignore invalid preference" do
     request_json
     logged_in
 
-    post :create, { :fake_pref => 'newvalueyes1' }
+    post :create, params: { fake_pref: "newvalueyes1" }
 
     assert_response :created
-    assert_not(@response.body.include?('newvalueyes1'))
-    assert_equal(JSON.parse(assigns['user'].preferences.to_json), JSON.parse(@response.body))
+    assert_not(@response.body.include?("newvalueyes1"))
+    assert_equal(JSON.parse(assigns["user"].preferences.to_json), JSON.parse(@response.body))
   end
 end

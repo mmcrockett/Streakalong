@@ -1,6 +1,6 @@
 class UserPreference
-  ITEM_TAB = 'item_tab'
-  RECENT   = 'recent'
+  ITEM_TAB = "item_tab"
+  RECENT   = "recent"
   MAX_RECENT = 16
 
   DEFAULTS = {

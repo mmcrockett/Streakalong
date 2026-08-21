@@ -1,1 +1,1 @@
-json.partial! 'activity', activity: @activity
+json.partial! "activity", activity: @activity

@@ -1,4 +1,4 @@
-require 'test_helper'
+require "test_helper"
 
 class ActivityTest < ActiveSupport::TestCase
   def setup
@@ -24,7 +24,7 @@ class ActivityTest < ActiveSupport::TestCase
     weight_activity_2016_07_10 = activities(:u2_w1)
     activity_2016_07_12 = activities(:u2_a2)
 
-    assert_equal(nil, activity_2016_06_25.weight_at_the_time)
+    assert_nil(activity_2016_06_25.weight_at_the_time)
     assert_equal(90, weight_activity_2016_07_01.weight_at_the_time)
     assert_equal(90, activity_2016_07_02.weight_at_the_time)
     assert_equal(60, weight_activity_2016_07_10.weight_at_the_time)
@@ -36,8 +36,8 @@ class ActivityTest < ActiveSupport::TestCase
     activity_2016_06_05 = activities(:five)
     activity_2016_07_02 = activities(:u1_a1)
     weight_activity_2016_07_01 = activities(:u1_w0)
-    user_calorie_default_lb = CalorieFormula.new({:height => user.height, :gender => user.gender, :age => user.age})
-    user_calorie_200lb      = CalorieFormula.new({:height => user.height, :gender => user.gender, :age => user.age, :weight => (200/Activity::LB_IN_KG).ceil})
+    user_calorie_default_lb = CalorieFormula.new({ height: user.height, gender: user.gender, age: user.age })
+    user_calorie_200lb      = CalorieFormula.new({ height: user.height, gender: user.gender, age: user.age, weight: (200/Activity::LB_IN_KG).ceil })
 
     assert_equal(user_calorie_default_lb.daily_kcal, activity_2016_06_05.kcalest)
     assert_equal(user_calorie_200lb.daily_kcal, weight_activity_2016_07_01.kcalest)
@@ -51,9 +51,9 @@ class ActivityTest < ActiveSupport::TestCase
     activity_2016_07_02 = activities(:u2_a1)
     weight_activity_2016_07_10 = activities(:u2_w1)
     activity_2016_07_12 = activities(:u2_a2)
-    user_calorie_default_kg = CalorieFormula.new({:height => user.height, :gender => user.gender, :age => user.age})
-    user_calorie_90kg       = CalorieFormula.new({:height => user.height, :gender => user.gender, :age => user.age, :weight => 90})
-    user_calorie_60kg       = CalorieFormula.new({:height => user.height, :gender => user.gender, :age => user.age, :weight => 60})
+    user_calorie_default_kg = CalorieFormula.new({ height: user.height, gender: user.gender, age: user.age })
+    user_calorie_90kg       = CalorieFormula.new({ height: user.height, gender: user.gender, age: user.age, weight: 90 })
+    user_calorie_60kg       = CalorieFormula.new({ height: user.height, gender: user.gender, age: user.age, weight: 60 })
 
     assert_equal(user_calorie_default_kg.daily_kcal, activity_2016_06_25.kcalest)
     assert_equal(user_calorie_90kg.daily_kcal, weight_activity_2016_07_01.kcalest)
