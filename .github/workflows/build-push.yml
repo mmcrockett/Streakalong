@@ -41,21 +41,17 @@ jobs:
 
       # Only main, so a feature branch can't evict main's own deployable tags.
       # continue-on-error: cleanup is best-effort, must not block deploy.yml.
-      - name: Delete untagged image versions (attestation/provenance noise)
+      #
+      # A hand-rolled gh api version of this (deleting untagged, then pruning
+      # tagged versions beyond 5) 404'd on every delete: this package has
+      # multi-arch/attestation versions with parent/child links, and deleting
+      # them out of order without manifest awareness breaks. This action is
+      # purpose-built for that (also targets node24, no deprecation warning).
+      - name: Prune old image versions in GHCR
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         continue-on-error: true
-        uses: actions/delete-package-versions@e5bc658cc4c965c472efe991f8beea3981499c55 # v5.0.0
+        uses: dataaxiom/ghcr-cleanup-action@d52806a0dc70b430571a37da1fde39733ffd640f # v1.2.2
         with:
-          package-name: streakalong
-          package-type: container
-          min-versions-to-keep: 0
-          delete-only-untagged-versions: true
-
-      - name: Keep only the 5 most recent tagged image builds
-        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-        continue-on-error: true
-        uses: actions/delete-package-versions@e5bc658cc4c965c472efe991f8beea3981499c55 # v5.0.0
-        with:
-          package-name: streakalong
-          package-type: container
-          min-versions-to-keep: 5
+          package: streakalong
+          delete-untagged: true
+          keep-n-tagged: 5

@@ -45,7 +45,7 @@ jobs:
       - name: Add box to known_hosts
         run: |
           mkdir -p ~/.ssh
-          ssh-keyscan 208.113.135.206 >> ~/.ssh/known_hosts
+          ssh-keyscan 34.71.24.199 >> ~/.ssh/known_hosts
 
       - name: kamal deploy
         env:
