@@ -5,16 +5,15 @@ service: streakalong
 image: mmcrockett/streakalong
 
 # Deploy to these servers.
-# This is the same shared Debian 12 box (dreamcompute) already running
-# MikeReader -- see 07-docker-kamal-deploy.md. kamal-proxy on that box already
-# routes by host (MikeReader uses reader.mmcrockett.com), so this app's
-# distinct proxy host below avoids any collision on 80/443.
+# This box hosts more than one Kamal-deployed app. kamal-proxy routes by
+# host, so this app's distinct proxy host below avoids any collision on
+# 80/443 with the others.
 servers:
   web:
-    - 208.113.135.206
+    - 34.71.24.199
   # job:
   #   hosts:
-  #     - 208.113.135.206
+  #     - 34.71.24.199
   #   cmd: bin/jobs
 
 # kamal-proxy has its own Let's Encrypt client (HTTP-01), no nginx/Certbot
@@ -86,15 +85,15 @@ builder:
   #   - GITHUB_TOKEN
   #   - RAILS_MASTER_KEY
 
-# This box's SSH access is via a non-root "debian" user. Relies on ssh-agent
-# rather than an explicit `keys:` file -- specifying `keys:` makes net-ssh
-# decrypt the file itself (prompting for the passphrase every time) instead
-# of delegating to the already-unlocked agent.
+# This box's SSH access is via the "github" system user (the one GCP
+# provisioned for the DEPLOY_SSH_KEY's key, distinct from a personal login).
+# Relies on ssh-agent rather than an explicit `keys:` file -- specifying
+# `keys:` makes net-ssh decrypt the file itself (prompting for the
+# passphrase every time) instead of delegating to the already-unlocked agent.
 ssh:
-  user: debian
+  user: github
   # Agent forwarding isn't needed (the box never needs to SSH anywhere using
-  # our local keys) -- see MikeReader's config/deploy.yml for why this
-  # caused a real hang on this same box when left on.
+  # our local keys) -- leaving it on has caused real hangs on shared boxes.
   forward_agent: false
 
 # Use accessory services (secrets come from .kamal/secrets).
