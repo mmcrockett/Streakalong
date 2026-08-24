@@ -5,10 +5,9 @@ service: streakalong
 image: mmcrockett/streakalong
 
 # Deploy to these servers.
-# This is the same GCP Compute Engine box already running MikeReader.
-# kamal-proxy on that box already routes by host (MikeReader uses
-# reader.mmcrockett.com), so this app's distinct proxy host below avoids
-# any collision on 80/443.
+# This box hosts more than one Kamal-deployed app. kamal-proxy routes by
+# host, so this app's distinct proxy host below avoids any collision on
+# 80/443 with the others.
 servers:
   web:
     - 34.71.24.199
@@ -94,8 +93,7 @@ builder:
 ssh:
   user: github
   # Agent forwarding isn't needed (the box never needs to SSH anywhere using
-  # our local keys) -- see MikeReader's config/deploy.yml for why this
-  # caused a real hang on this same box when left on.
+  # our local keys) -- leaving it on has caused real hangs on shared boxes.
   forward_agent: false
 
 # Use accessory services (secrets come from .kamal/secrets).
